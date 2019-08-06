@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Assignment Solution</title>
+</head>
+<body>
+    <ul>
+        <th:block th:each="as : ${assignmentSolutions}">
+            <li th:utext="${as.getAssignment()}">..</li>
+            <li th:utext="${as.getSolution()}">..</li>
+        </th:block>
+    </ul>
+</body>
+</html>

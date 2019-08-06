@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="/webjars/jquery/3.0.0/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.31./js/bootstrap.min.js"></script>
+</head>
+<body>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">First name</th>
+                <th scope="col">Last name</th>
+                <th scope="col">Faculty</th>
+                <th scope="col">Year</th>
+            </tr>
+        </thead>
+        <tbody>
+            <th:block th:each="student : ${students}">
+                <tr>
+                    <td th:utext="${student.getId()}"></td>
+                    <td th:utext="${student.getFirstName()}"></td>
+                    <td th:utext="${student.getLastName()}"></td>
+                    <td th:utext="${student.getFaculty()}"></td>
+                    <td th:utext="${student.getCurrentYear()}"></td>
+                </tr>
+            </th:block>
+        </tbody>
+    </table>
+</body>
+</html>

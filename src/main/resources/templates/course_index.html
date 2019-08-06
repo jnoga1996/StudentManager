@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Courses</title>
+</head>
+<body>
+<a href="/Course/Create">Create new course</a>
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Title</th>
+        <th>Ects</th>
+    </tr>
+    <th:block th:each="course : ${courses}">
+        <tr>
+            <td th:utext="${course.getId()}"></td>
+            <td th:utext="${course.getTitle()}"></td>
+            <td th:utext="${course.getEcts()}"></td>
+        </tr>
+    </th:block>
+</table>
+</body>
+</html>

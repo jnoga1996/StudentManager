@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="/webjars/jquery/3.0.0/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.31./js/bootstrap.min.js"></script>
+</head>
+<body>
+<table class="table table-striped">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Student</th>
+        <th scope="col">Content</th>
+        <th scope="col">Grade</th>
+        <th scope="col">Assignments</th>
+    </tr>
+    </thead>
+    <tbody>
+    <th:block th:each="solution : ${solutions}">
+        <tr>
+            <td th:utext="${solution.getId()}"></td>
+            <td th:utext="${solution.getStudent().toString()}"></td>
+            <td th:utext="${solution.getContent()}"></td>
+            <td th:utext="${solution.getGrade()}"></td>
+            <th:block th:each="assignment : ${solution.getAssignments()}">
+                <td th:utext="${assignment.toString()}"></td>
+            </th:block>
+        </tr>
+    </th:block>
+    </tbody>
+</table>
+</body>
+</html>
