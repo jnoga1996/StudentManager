@@ -2,23 +2,28 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Course create</title>
+    <title>Assignment create</title>
 </head>
 <body>
-<form action="#" th:action="@{/Course/Create}" th:object="${course}" method="post">
+<form action="#" th:action="@{/Assignment/Create}" th:object="${assignment}" enctype="multipart/form-data" method="post">
     <table>
         <tr>
             <td>Title:</td>
             <td><input type="text" th:field="*{title}" /></td>
         </tr>
         <tr>
-            <td>ECTS:</td>
-            <td><input type="number" th:field="*{ects}" /></td>
+            <td>Content:</td>
+            <td><input type="text" th:field="*{content}" /></td>
+        </tr>
+        <tr>
+            <td>Attachment:</td>
+            <td><input type="file" name="file"/></td>
         </tr>
         <tr>
             <td><button type="submit">Submit</button></td>
         </tr>
     </table>
 </form>
+
 </body>
 </html>

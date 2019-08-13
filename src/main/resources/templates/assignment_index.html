@@ -1,10 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Assignments</title>
 </head>
 <body>
-
+<a href="/Assignment/Create">Create new course</a>
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Title</th>
+        <th>Content</th>
+    </tr>
+    <th:block th:each="assignment : ${assignments}">
+        <tr>
+            <td th:utext="${assignment.getId()}"></td>
+            <td th:utext="${assignment.getTitle()}"></td>
+            <td th:utext="${assignment.getContent()}"></td>
+        </tr>
+    </th:block>
+</table>
 </body>
 </html>

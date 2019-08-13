@@ -18,4 +18,8 @@ public class StorageProperties {
         this.location = location;
     }
 
+    public String getLocation(Long id) {
+        return location + "/" + id;
+    }
+
 }

@@ -21,8 +21,6 @@ public class Assignment {
     @NotBlank
     private String content;
 
-    private Byte[] attachment;
-
     @OneToMany(mappedBy = "solution", targetEntity = AssignmentSolution.class)
     private Set<AssignmentSolution> solutions;
 
@@ -32,10 +30,9 @@ public class Assignment {
 
     public Assignment() {}
 
-    public Assignment(String title, String content, Byte[] attachment) {
+    public Assignment(String title, String content) {
         this.title = title;
         this.content = content;
-        this.attachment = attachment;
     }
 
     public Long getId() {
@@ -62,14 +59,6 @@ public class Assignment {
         this.content = content;
     }
 
-    public Byte[] getAttachment() {
-        return attachment;
-    }
-
-    public void setAttachment(Byte[] attachment) {
-        this.attachment = attachment;
-    }
-
     public Set<AssignmentSolution> getSolutions() {
         return solutions;
     }
@@ -88,13 +77,6 @@ public class Assignment {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Id: " + getId() + ", title: " + getTitle() + ", content: " + getContent() + "\n");
-        for (AssignmentSolution as : getSolutions()) {
-            sb.append(as.toString());
-            sb.append("\n");
-        }
-
-        return sb.toString();
+        return "Id: " + getId() + ", title: " + getTitle() + ", content: " + getContent();
     }
 }

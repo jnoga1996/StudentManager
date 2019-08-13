@@ -1,5 +1,6 @@
 package com.smanager.storage;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -29,7 +30,19 @@ public class FileSystemStorageService implements StorageService {
 
     @Override
     public void store(MultipartFile file) {
-        String filename = StringUtils.cleanPath(file.getOriginalFilename());
+        storeFile(file, Long.valueOf(-1));
+    }
+
+    @Override
+    public void store(MultipartFile file, Long id) {
+        storeFile(file, id);
+    }
+
+    private void storeFile(MultipartFile file, Long id) {
+        String path = (id > 0) ?
+                (id + "." + file.getOriginalFilename())
+                : file.getOriginalFilename();
+        String filename = StringUtils.cleanPath(path);
         try {
             if (file.isEmpty()) {
                 throw new StorageException("Failed to store empty file " + filename);
@@ -42,10 +55,9 @@ public class FileSystemStorageService implements StorageService {
             }
             try (InputStream inputStream = file.getInputStream()) {
                 Files.copy(inputStream, this.rootLocation.resolve(filename),
-                    StandardCopyOption.REPLACE_EXISTING);
+                        StandardCopyOption.REPLACE_EXISTING);
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new StorageException("Failed to store file " + filename, e);
         }
     }
@@ -101,4 +113,5 @@ public class FileSystemStorageService implements StorageService {
             throw new StorageException("Could not initialize storage", e);
         }
     }
+
 }
