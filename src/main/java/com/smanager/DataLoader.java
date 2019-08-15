@@ -37,13 +37,20 @@ public class DataLoader implements ApplicationRunner {
     @Override
     @Transactional
     public void run(ApplicationArguments args) {
-        initializeStudents();
-        initializeTeachers();
-        initializeAssignments();
-        initializeSolutions();
-        initializeAssignmentSolutions();
-        initializeCourses();
-        initializeGroups();
+        if (studentRepository.findAll().isEmpty())
+            initializeStudents();
+        if (teacherRepository.findAll().isEmpty())
+            initializeTeachers();
+        if (assignmentRepository.findAll().isEmpty())
+            initializeAssignments();
+        if (solutionRepository.findAll().isEmpty())
+            initializeSolutions();
+        if (assignmentSolutionRepository.findAll().isEmpty())
+            initializeAssignmentSolutions();
+        if (courseRepository.findAll().isEmpty())
+            initializeCourses();
+        if (groupRepository.findAll().isEmpty())
+            initializeGroups();
     }
 
     private void initializeStudents() {
