@@ -9,18 +9,24 @@
 </head>
 <body>
 <div th:insert="header :: header"></div>
-<a href="/Course/Create">Create new course</a>
-<table>
+<a href="/Course/Create" class="btn-light">Create new course</a>
+<table class="table table-striped">
+    <thead class="thead-dark">
     <tr>
         <th>Id</th>
         <th>Title</th>
         <th>Ects</th>
+        <th>Edit</th>
+        <th>Delete</th>
     </tr>
+    </thead>
     <th:block th:each="course : ${courses}">
         <tr>
             <td th:utext="${course.getId()}"></td>
             <td th:utext="${course.getTitle()}"></td>
             <td th:utext="${course.getEcts()}"></td>
+            <td><a th:href="@{/Course/Edit(id=${course.getId()})}"/>Edit</td>
+            <td><a th:href="@{/Course/Delete(id=${course.getId()})}"/>Delete</td>
         </tr>
     </th:block>
 </table>

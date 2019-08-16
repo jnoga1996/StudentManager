@@ -5,8 +5,12 @@
     <title>Course create</title>
 </head>
 <body>
-<form action="#" th:action="@{/Course/Create}" th:object="${course}" method="post">
+<form action="#" th:action="${isCreate} ? @{/Course/Create} : @{/Course/Edit}" th:object="${course}" method="post">
     <table>
+        <tr>
+            <td>Id:</td>
+            <td><input type="hidden" th:field="*{id}" /></td>
+        </tr>
         <tr>
             <td>Title:</td>
             <td><input type="text" th:field="*{title}" /></td>
