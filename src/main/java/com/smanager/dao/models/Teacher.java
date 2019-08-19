@@ -53,6 +53,6 @@ public class Teacher {
 
     @Override
     public String toString() {
-        return "Name: " + getFirstName() + " " + getLastName();
+        return getFirstName() + " " + getLastName();
     }
 }

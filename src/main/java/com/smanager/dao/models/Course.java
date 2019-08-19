@@ -46,4 +46,9 @@ public class Course {
     public void setEcts(int ects) {
         this.ects = ects;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s, ECTS: %s", getTitle(), getEcts());
+    }
 }

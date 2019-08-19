@@ -31,6 +31,9 @@ public class Assignment {
     @OneToOne
     private Course course;
 
+    @OneToOne
+    private Teacher teacher;
+
     public Assignment() {}
 
     public Assignment(String title, String content) {
@@ -81,6 +84,14 @@ public class Assignment {
     public Course getCourse() { return course; }
 
     public void setCourse(Course course) { this.course = course; }
+
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
+    }
 
     @Override
     public String toString() {

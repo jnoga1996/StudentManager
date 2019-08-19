@@ -16,6 +16,10 @@
         <th>Id</th>
         <th>Title</th>
         <th>Content</th>
+        <th>Teacher</th>
+        <th>Course</th>
+        <th>Edit</th>
+        <th>Delete</th>
     </tr>
     </thead>
     <th:block th:each="assignment : ${assignments}">
@@ -23,6 +27,8 @@
             <td th:utext="${assignment.getId()}"></td>
             <td th:utext="${assignment.getTitle()}"></td>
             <td th:utext="${assignment.getContent()}"></td>
+            <td th:utext="${assignment.getTeacher()}"></td>
+            <td th:utext="${assignment.getCourse()}"></td>
             <td><a th:href="@{/Assignment/Edit(id=${assignment.getId()})}"/>Edit</td>
             <td><a th:href="@{/Assignment/Delete(id=${assignment.getId()})}"/>Delete</td>
         </tr>
