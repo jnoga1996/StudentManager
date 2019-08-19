@@ -1,6 +1,5 @@
 package com.smanager.storage;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -34,11 +33,11 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
-    public void store(MultipartFile file, Long id) {
-        storeFile(file, id);
+    public String store(MultipartFile file, Long id) {
+        return storeFile(file, id);
     }
 
-    private void storeFile(MultipartFile file, Long id) {
+    private String storeFile(MultipartFile file, Long id) {
         String path = (id > 0) ?
                 (id + "." + file.getOriginalFilename())
                 : file.getOriginalFilename();
@@ -56,6 +55,7 @@ public class FileSystemStorageService implements StorageService {
             try (InputStream inputStream = file.getInputStream()) {
                 Files.copy(inputStream, this.rootLocation.resolve(filename),
                         StandardCopyOption.REPLACE_EXISTING);
+                return path;
             }
         } catch (IOException e) {
             throw new StorageException("Failed to store file " + filename, e);

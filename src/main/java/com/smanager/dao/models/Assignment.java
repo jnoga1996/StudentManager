@@ -28,6 +28,9 @@ public class Assignment {
     @JoinColumn(name = "student_id", referencedColumnName = "student_id")
     private Student student;
 
+    @OneToOne
+    private Course course;
+
     public Assignment() {}
 
     public Assignment(String title, String content) {
@@ -74,6 +77,10 @@ public class Assignment {
     public void setStudent(Student student) {
         this.student = student;
     }
+
+    public Course getCourse() { return course; }
+
+    public void setCourse(Course course) { this.course = course; }
 
     @Override
     public String toString() {

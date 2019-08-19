@@ -1,5 +1,6 @@
 package com.smanager.controllers;
 
+import com.smanager.dao.models.Solution;
 import com.smanager.dao.repositories.SolutionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,5 +19,10 @@ public class SolutionController {
     public String index(Model model) {
         model.addAttribute("solutions", solutionRepository.findAll());
         return "solution_index";
+    }
+
+    @GetMapping
+    public String showForm() {
+        return "solution_form";
     }
 }

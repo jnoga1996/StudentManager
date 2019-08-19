@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Solution</title>
+</head>
+<body>
+<form action="#" th:action="${isCreate} ? @{/Solution/Create} : @{/Solution/Edit}" th:object="${solution}" method="post">
+    <table>
+        <tr>
+            <td><input type="hidden" th:field="*{id}" /></td>
+        </tr>
+        <tr>
+            <td>Content:</td>
+            <td><input class="form-text" type="text" th:field="*{content}" /></td>
+        </tr>
+        <tr>
+            <td><button type="submit">Submit</button></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
