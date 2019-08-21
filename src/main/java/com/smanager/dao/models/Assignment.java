@@ -31,6 +31,7 @@ public class Assignment {
     @ManyToOne
     private Course course;
 
+    @OneToOne
     private Teacher teacher;
 
     public Assignment() {}
