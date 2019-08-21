@@ -88,11 +88,11 @@ public class DataLoader implements ApplicationRunner {
 
     private void initializeSolutions() {
         List<Solution> solutions = Arrays.asList(new Solution[] {
-                createSolution(1L, "Jan solution 1"),
-                createSolution(1L, "Jan solution 2"),
-                createSolution(1L, "Jan solution2 1"),
-                createSolution(1L, "Jan solution2 2"),
-                createSolution(2L, "Ewa solution 1")
+                createSolution(studentRepository.getOne(1L).getId(), "Jan solution 1"),
+                createSolution(studentRepository.getOne(1L).getId(), "Jan solution 2"),
+                createSolution(studentRepository.getOne(1L).getId(), "Jan solution2 1"),
+                createSolution(studentRepository.getOne(1L).getId(), "Jan solution2 2"),
+                createSolution(studentRepository.getOne(2L).getId(), "Ewa solution 1")
         });
 
         solutionRepository.saveAll(solutions);
@@ -100,11 +100,11 @@ public class DataLoader implements ApplicationRunner {
 
     private void initializeAssignmentSolutions() {
         List<AssignmentSolution> assignmentSolutions = Arrays.asList(new AssignmentSolution[] {
-                createAssignmentSolution(1L, 1L),
-                createAssignmentSolution(1L, 2L),
-                createAssignmentSolution(1L, 5L),
-                createAssignmentSolution(2L, 3L),
-                createAssignmentSolution(2L, 4L)
+                createAssignmentSolution(assignmentRepository.getOne(1L).getId(), solutionRepository.getOne(1L).getId()),
+                createAssignmentSolution(assignmentRepository.getOne(1L).getId(), solutionRepository.getOne(2L).getId()),
+                createAssignmentSolution(assignmentRepository.getOne(1L).getId(), solutionRepository.getOne(5L).getId()),
+                createAssignmentSolution(assignmentRepository.getOne(2L).getId(), solutionRepository.getOne(3L).getId()),
+                createAssignmentSolution(assignmentRepository.getOne(2L).getId(), solutionRepository.getOne(4L).getId())
         });
 
         assignmentSolutionRepository.saveAll(assignmentSolutions);
@@ -122,11 +122,11 @@ public class DataLoader implements ApplicationRunner {
 
     private void initializeGroups() {
         List<Group> groups = Arrays.asList(new Group[] {
-                createGroup(1L, 1L),
-                createGroup(1L, 2L),
-                createGroup(2L, 1L),
-                createGroup(2L, 2L),
-                createGroup(3L, 2L)
+                createGroup(courseRepository.getOne(1L).getId(), teacherRepository.getOne(1L).getId()),
+                createGroup(courseRepository.getOne(1L).getId(), teacherRepository.getOne(2L).getId()),
+                createGroup(courseRepository.getOne(2L).getId(), teacherRepository.getOne(1L).getId()),
+                createGroup(courseRepository.getOne(2L).getId(), teacherRepository.getOne(2L).getId()),
+                createGroup(courseRepository.getOne(3L).getId(), teacherRepository.getOne(2L).getId())
         });
 
         groupRepository.saveAll(groups);
