@@ -7,3 +7,12 @@ Engineering degree project
 3) File -> Open -> App/smanager/pom.xml and open as project
 4) Run application (Shift + F10)
 5) Application should be available under http://localhost:8080/
+
+* Before first launch go to application.properties and change from
+```
+spring.jpa.hibernate.ddl-auto = update
+```
+to
+```
+spring.jpa.hibernate.ddl-auto = create
+```
