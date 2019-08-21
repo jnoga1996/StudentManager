@@ -2,6 +2,7 @@ package com.smanager.dao.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.Set;
 
 @Entity
 @Table(name = "COURSES")
@@ -15,6 +16,9 @@ public class Course {
     private String title;
 
     private int ects;
+
+    @OneToMany(mappedBy = "course", targetEntity = Assignment.class, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Assignment> assignments;
 
     public Course() {}
 
@@ -45,6 +49,14 @@ public class Course {
 
     public void setEcts(int ects) {
         this.ects = ects;
+    }
+
+    public Set<Assignment> getAssignments() {
+        return assignments;
+    }
+
+    public void setAssignments(Set<Assignment> assignments) {
+        this.assignments = assignments;
     }
 
     @Override

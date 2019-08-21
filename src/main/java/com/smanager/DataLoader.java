@@ -83,6 +83,9 @@ public class DataLoader implements ApplicationRunner {
                 new Assignment("Title", "Content")
         });
 
+        assignments.get(0).setCourse(courseRepository.getOne(1L));
+        assignments.get(1).setCourse(courseRepository.getOne(2L));
+
         assignmentRepository.saveAll(assignments);
     }
 

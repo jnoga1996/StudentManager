@@ -21,17 +21,16 @@ public class Assignment {
     @NotBlank
     private String content;
 
-    @OneToMany(mappedBy = "solution", targetEntity = AssignmentSolution.class)
+    @OneToMany(mappedBy = "solution", targetEntity = AssignmentSolution.class, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AssignmentSolution> solutions;
 
     @ManyToOne
     @JoinColumn(name = "student_id", referencedColumnName = "student_id")
     private Student student;
 
-    @OneToOne
+    @ManyToOne
     private Course course;
 
-    @OneToOne
     private Teacher teacher;
 
     public Assignment() {}

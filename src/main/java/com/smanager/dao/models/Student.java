@@ -28,7 +28,7 @@ public class Student {
     @Range(min = 0, max = 5)
     private int currentYear;
 
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Solution> solutions;
 
     public Student() {};

@@ -23,7 +23,7 @@ public class Solution {
     @Range(min = 2, max = 5)
     private Double grade;
 
-    @OneToMany(mappedBy = "assignment")
+    @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AssignmentSolution> assignments;
 
     public Solution() {};
