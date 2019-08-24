@@ -21,7 +21,7 @@ public class Assignment {
     @NotBlank
     private String content;
 
-    @OneToMany(mappedBy = "solution", targetEntity = AssignmentSolution.class, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "solution", targetEntity = AssignmentSolution.class)
     private Set<AssignmentSolution> solutions;
 
     @ManyToOne
@@ -31,7 +31,7 @@ public class Assignment {
     @ManyToOne
     private Course course;
 
-    @OneToOne
+    @ManyToOne
     private Teacher teacher;
 
     public Assignment() {}
@@ -69,7 +69,7 @@ public class Assignment {
         return solutions;
     }
 
-    public void setSolutions(Set<AssignmentSolution> assignmentSolutions) {
+    public void setSolutions(Set<Solution> assignmentSolutions) {
         this.solutions = solutions;
     }
 

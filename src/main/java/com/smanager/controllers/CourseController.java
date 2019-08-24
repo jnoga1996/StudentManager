@@ -1,7 +1,13 @@
 package com.smanager.controllers;
 
+import com.smanager.dao.models.Assignment;
+import com.smanager.dao.models.AssignmentSolution;
 import com.smanager.dao.models.Course;
+import com.smanager.dao.models.Solution;
+import com.smanager.dao.repositories.AssignmentRepository;
+import com.smanager.dao.repositories.AssignmentSolutionRepository;
 import com.smanager.dao.repositories.CourseRepository;
+import com.smanager.dao.repositories.SolutionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +25,12 @@ public class CourseController {
 
     @Autowired
     private CourseRepository courseRepository;
+    @Autowired
+    private AssignmentRepository assignmentRepository;
+    @Autowired
+    private AssignmentSolutionRepository assignmentSolutionRepository;
+    @Autowired
+    private SolutionRepository solutionRepository;
 
     @GetMapping("Index")
     public String index(Model model) {
@@ -72,6 +84,17 @@ public class CourseController {
     public String delete(Long id) {
         Course course = courseRepository.getOne(id);
         if (course != null) {
+            for (Assignment assignment : course.getAssignments()) {
+                System.out.println(String.format("Removed assignment %s", assignment));
+                assignmentRepository.delete(assignment);
+                for (AssignmentSolution as : assignment.getSolutions()) {
+                    System.out.println(String.format("Removed assignment_solution %s", as));
+                    assignmentSolutionRepository.delete(as);
+                    Solution solution = solutionRepository.getOne(as.getSolution().getId());
+                    System.out.println(String.format("Removed solution %s", solution));
+                    solutionRepository.delete(solution);
+                }
+            }
             courseRepository.delete(course);
         }
 
