@@ -28,19 +28,24 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
+    public String storeSolution(MultipartFile file, Long id) {
+        return storeFile("solution", file, id);
+    }
+
+    @Override
     public void store(MultipartFile file) {
-        storeFile(file, Long.valueOf(-1));
+        storeFile("assignment", file, Long.valueOf(-1));
     }
 
     @Override
     public String store(MultipartFile file, Long id) {
-        return storeFile(file, id);
+        return storeFile("assignment", file, id);
     }
 
-    private String storeFile(MultipartFile file, Long id) {
+    private String storeFile(String prefix, MultipartFile file, Long id) {
         String path = (id > 0) ?
-                (id + "." + file.getOriginalFilename())
-                : file.getOriginalFilename();
+                (prefix + "." + id + "." + file.getOriginalFilename())
+                : prefix + "." + file.getOriginalFilename();
         String filename = StringUtils.cleanPath(path);
         try {
             if (file.isEmpty()) {
