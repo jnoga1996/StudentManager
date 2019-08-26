@@ -8,17 +8,21 @@ import com.smanager.dao.repositories.StudentRepository;
 import com.smanager.dao.repositories.TeacherRepository;
 import com.smanager.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.nio.file.Path;
 import java.util.Date;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Controller
 @RequestMapping("/Solution")
@@ -44,6 +48,12 @@ public class SolutionController {
     @GetMapping("Index")
     public String index(Model model) {
         model.addAttribute("solutions", solutionRepository.findAll());
+        Stream<Path> stream = storageService.loadAll();
+        model.addAttribute("files", storageService.loadAll().map(
+                path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
+                        "serveFile", path.getFileName().toString()).build().toString())
+                .collect(Collectors.toList()));
+
         return "solution_index";
     }
 
@@ -71,8 +81,11 @@ public class SolutionController {
             fileHistory.setPath(path);
 
             fileHistoryRepository.save(fileHistory);
+            solution.setPath(path);
+            solutionRepository.save(solution);
         }
 
         return "redirect:/Solution/Index";
     }
+
 }

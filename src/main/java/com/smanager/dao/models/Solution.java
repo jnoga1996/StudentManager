@@ -26,6 +26,8 @@ public class Solution {
     @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AssignmentSolution> assignments;
 
+    private String path;
+
     public Solution() {};
 
     public Solution(Student student, String content) {
@@ -71,5 +73,13 @@ public class Solution {
 
     public void setStudent(Student student) {
         this.student = student;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }
