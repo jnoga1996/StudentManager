@@ -10,6 +10,7 @@
 <body>
 <div th:insert="header :: header"></div>
 <form action="#" th:action="${isCreate} ? @{/Course/Create} : @{/Course/Edit}" th:object="${course}" method="post">
+    <input type="hidden" th:field="*{id}">
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">Title:</label>
         <div class="col-sm-6">

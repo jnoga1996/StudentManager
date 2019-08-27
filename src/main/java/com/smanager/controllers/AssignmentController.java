@@ -9,6 +9,7 @@ import com.smanager.dao.repositories.FileHistoryRepository;
 import com.smanager.dao.repositories.TeacherRepository;
 import com.smanager.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.query.Jpa21Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,9 +18,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.nio.file.Path;
 import java.util.Date;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Controller
 @RequestMapping("/Assignment")
@@ -45,6 +50,11 @@ public class AssignmentController {
     @GetMapping("Index")
     public String index(Model model) {
         model.addAttribute("assignments", assignmentRepository.findAll());
+        Stream<Path> stream = storageService.loadAll();
+        model.addAttribute("files", storageService.loadAll().map(
+                path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
+                        "serveFile", path.getFileName().toString()).build().toString())
+                .collect(Collectors.toList()));
         return "assignment_index";
     }
 
@@ -81,7 +91,7 @@ public class AssignmentController {
             return "redirect:/Assignment/Edit?id=" + id;
         }
         fillModel(model, assignment, false);
-
+        model.addAttribute("id", id);
         return "assignment_form";
     }
 
@@ -91,13 +101,16 @@ public class AssignmentController {
             return "redirect:/Assignment/Index";
         }
 
-        Assignment assignmentFromDb = assignmentRepository.getOne(assignment.getId());
-        assignmentFromDb.setTitle(assignment.getTitle());
-        assignmentFromDb.setContent(assignment.getContent());
-        assignmentFromDb.setCourse(assignment.getCourse());
-        assignmentFromDb.setTeacher(assignment.getTeacher());
+        if (assignment != null) {
+            Assignment assignmentFromDb = assignmentRepository.getOne(assignment.getId());
+            assignmentFromDb.setTitle(assignment.getTitle());
+            assignmentFromDb.setContent(assignment.getContent());
+            assignmentFromDb.setCourse(assignment.getCourse());
+            assignmentFromDb.setTeacher(assignment.getTeacher());
 
-        assignmentRepository.save(assignmentFromDb);
+            assignmentRepository.save(assignmentFromDb);
+        }
+
         return "redirect:/Assignment/Index";
     }
 

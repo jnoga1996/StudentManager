@@ -34,5 +34,13 @@
         </tr>
     </th:block>
 </table>
+<div>
+    <p class="h3">Uploaded files:</p>
+    <ul class="list-group">
+        <th:block th:each="file : ${files}">
+            <li class="list-group-item">
+                <a th:href="${file}" th:text="${file}" />
+            </li>
+        </th:block>
 </body>
 </html>

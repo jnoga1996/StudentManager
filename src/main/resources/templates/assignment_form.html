@@ -10,6 +10,7 @@
 <body>
 <div th:insert="header :: header"></div>
 <form action="#" th:action="${isCreateAction} ? @{/Assignment/Create} : @{/Assignment/Edit}" th:object="${assignment}" enctype="multipart/form-data" method="post">
+    <input type="hidden" th:field="*{id}">
     <div class="form-group row">
         <label for="titleInput" class="col-sm-2 col-form-label">Title:</label>
         <div class="col-sm-6">
