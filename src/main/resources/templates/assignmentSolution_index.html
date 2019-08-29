@@ -9,11 +9,16 @@
 </head>
 <body>
 <div th:insert="header :: header"></div>
-    <ul>
+    <div class="list-group">
         <th:block th:each="as : ${assignmentSolutions}">
-            <li th:utext="${as.getAssignment()}">..</li>
-            <li th:utext="${as.getSolution()}">..</li>
+            <div class="list-group">
+                <div class="list-group-item list-group-item-primary" th:utext="${as.getAssignment()}"></div>
+
+                <th:block th:each="sol : ${solutionsForAssignment.get(as.getAssignment())}">
+                    <div  th:replace="solution_fragment :: div_view(solution=${sol})"></div>
+                </th:block>
+            </div>
         </th:block>
-    </ul>
+    </div>
 </body>
 </html>

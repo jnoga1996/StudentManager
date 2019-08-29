@@ -17,20 +17,11 @@
         <th scope="col">Student</th>
         <th scope="col">Content</th>
         <th scope="col">Grade</th>
-        <th scope="col">Assignments</th>
     </tr>
     </thead>
     <tbody>
     <th:block th:each="solution : ${solutions}">
-        <tr>
-            <td th:utext="${solution.getId()}"></td>
-            <td th:utext="${solution.getStudent().toString()}"></td>
-            <td th:utext="${solution.getContent()}"></td>
-            <td th:utext="${solution.getGrade()}"></td>
-            <th:block th:each="assignment : ${solution.getAssignments()}">
-                <td th:utext="${assignment.toString()}"></td>
-            </th:block>
-        </tr>
+        <tr th:replace="solution_fragment :: row_view(solution=${solution})"></tr>
     </th:block>
     </tbody>
 </table>

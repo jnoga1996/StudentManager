@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Solution fragment</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="/webjars/jquery/3.0.0/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<tr th:fragment="row_view(solution)">
+    <td th:utext="${solution.getId()}"></td>
+    <td th:utext="${solution.getStudent().toString()}"></td>
+    <td th:utext="${solution.getContent()}"></td>
+    <td th:utext="${solution.getGrade()}"></td>
+</tr>
+
+<div th:fragment="div_view(solution)" class="list-group-item list-group-item-light">
+    <div class="form-group row">
+        <p class="col-sm-2">Id:</p>
+        <p th:utext="${solution.getId()}" class="col-sm-6"></p>
+    </div>
+    <div class="form-group row">
+        <p class="col-sm-2">Student:</p>
+        <p th:utext="${solution.getStudent().toString()}" class="col-sm-6"></p>
+    </div>
+    <div class="form-group row">
+        <p class="col-sm-2">Content:</p>
+        <p th:utext="${solution.getContent()}" class="col-sm-6"></p>
+    </div>
+    <div class="form-group row">
+        <p class="col-sm-2">Grade:</p>
+        <p th:utext="${solution.getGrade()}" class="col-sm-6"></p>
+    </div>
+</div>
+
+</body>
+</html>
