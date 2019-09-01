@@ -3,6 +3,7 @@ package com.smanager.controllers;
 
 import com.smanager.dao.models.Assignment;
 import com.smanager.dao.models.FileHistory;
+import com.smanager.dao.models.FileType;
 import com.smanager.dao.repositories.AssignmentRepository;
 import com.smanager.dao.repositories.CourseRepository;
 import com.smanager.dao.repositories.FileHistoryRepository;
@@ -77,8 +78,12 @@ public class AssignmentController {
             fileHistory.setFileName(file.getOriginalFilename());
             fileHistory.setModificationDate(new Date(System.currentTimeMillis()));
             fileHistory.setPath(path);
+            fileHistory.setReferencedId(assignment.getId());
+            fileHistory.setFileType(FileType.ASSIGNMENT.getName());
 
             fileHistoryRepository.save(fileHistory);
+            assignment.setFilename(path);
+            assignmentRepository.save(assignment);
         }
 
         return "redirect:/Assignment/Index";
@@ -96,7 +101,7 @@ public class AssignmentController {
     }
 
     @PostMapping("/Edit")
-    public String edit(@Valid Assignment assignment, BindingResult binding, Model model) {
+    public String edit(@Valid Assignment assignment, @RequestParam MultipartFile file, BindingResult binding, Model model) {
         if (binding.hasErrors()) {
             return "redirect:/Assignment/Index";
         }
@@ -107,7 +112,18 @@ public class AssignmentController {
             assignmentFromDb.setContent(assignment.getContent());
             assignmentFromDb.setCourse(assignment.getCourse());
             assignmentFromDb.setTeacher(assignment.getTeacher());
+            assignmentFromDb.setFilename(assignment.getFilename());
 
+            storageService.delete(assignmentFromDb.getFilename());
+            String path = storageService.store(file, assignment.getId());
+            FileHistory fileHistory = new FileHistory();
+            fileHistory.setFileName(file.getOriginalFilename());
+            fileHistory.setModificationDate(new Date(System.currentTimeMillis()));
+            fileHistory.setPath(path);
+            fileHistory.setReferencedId(assignmentFromDb.getId());
+            fileHistory.setFileType(FileType.ASSIGNMENT.getName());
+
+            fileHistoryRepository.save(fileHistory);
             assignmentRepository.save(assignmentFromDb);
         }
 

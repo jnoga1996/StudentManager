@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Fragments</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="/webjars/jquery/3.0.0/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<tr th:fragment="row_view(fh = ${fh})">
+    <td th:utext="${fh.getId()}"></td>
+    <td th:utext="${fh.getFileName()}"></td>
+    <td th:utext="${fh.getPath()}"></td>
+    <td th:utext="${fh.getModificationDate()}"></td>
+    <td th:utext="${fh.getFileType()}"></td>
+    <td th:utext="${fh.getReferencedId()}"></td>
+</tr>
+
+</body>
+</html>

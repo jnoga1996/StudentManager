@@ -4,7 +4,6 @@ import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.Set;
 
 @Entity
 @Table(name = "SOLUTIONS")
@@ -23,8 +22,8 @@ public class Solution {
     @Range(min = 2, max = 5)
     private Double grade;
 
-    @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<AssignmentSolution> assignments;
+    @ManyToOne
+    private Assignment assignment;
 
     private String path;
 
@@ -59,12 +58,12 @@ public class Solution {
         this.grade = grade;
     }
 
-    public Set<AssignmentSolution> getAssignments() {
-        return assignments;
+    public Assignment getAssignment() {
+        return assignment;
     }
 
-    public void setAssignments(Set<AssignmentSolution> assignments) {
-        this.assignments = assignments;
+    public void setAssignment(Assignment assignment) {
+        this.assignment = assignment;
     }
 
     public Student getStudent() {

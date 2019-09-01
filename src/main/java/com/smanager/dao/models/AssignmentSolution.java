@@ -52,7 +52,7 @@ public class AssignmentSolution {
 
     @Override
     public String toString() {
-        return "Id: " + getId() + ", assignmentId: " + getAssignment().getId() + ", solutionId: " + getSolution().getId();
+        return "assignmentId: " + getAssignment().getId() + ", solutionId: " + getSolution().getId();
     }
 
 }

@@ -21,8 +21,10 @@ public class Assignment {
     @NotBlank
     private String content;
 
-    @OneToMany(mappedBy = "solution", targetEntity = AssignmentSolution.class)
-    private Set<AssignmentSolution> solutions;
+    private String filename;
+
+    @OneToMany(mappedBy = "assignment")
+    private Set<Solution> solutions;
 
     @ManyToOne
     @JoinColumn(name = "student_id", referencedColumnName = "student_id")
@@ -65,7 +67,7 @@ public class Assignment {
         this.content = content;
     }
 
-    public Set<AssignmentSolution> getSolutions() {
+    public Set<Solution> getSolutions() {
         return solutions;
     }
 
@@ -91,6 +93,14 @@ public class Assignment {
 
     public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 
     @Override

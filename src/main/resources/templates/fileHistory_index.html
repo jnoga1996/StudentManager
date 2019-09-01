@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="/webjars/jquery/3.0.0/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div th:insert="header :: header"></div>
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>Id</th>
+            <th>File name</th>
+            <th>Path</th>
+            <th>Modification date</th>
+            <th>File type</th>
+            <th>Referenced id</th>
+        </tr>
+    </thead>
+    <th:block th:each="fh : ${fileHistory}">
+        <div th:insert="fileHistory_fragments :: row_view(fh)"></div>
+    </th:block>
+</table>
+</body>
+</html>

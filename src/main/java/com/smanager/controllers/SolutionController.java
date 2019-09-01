@@ -2,10 +2,7 @@ package com.smanager.controllers;
 
 import com.smanager.dao.models.FileHistory;
 import com.smanager.dao.models.Solution;
-import com.smanager.dao.repositories.FileHistoryRepository;
-import com.smanager.dao.repositories.SolutionRepository;
-import com.smanager.dao.repositories.StudentRepository;
-import com.smanager.dao.repositories.TeacherRepository;
+import com.smanager.dao.repositories.*;
 import com.smanager.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -32,17 +29,19 @@ public class SolutionController {
     private TeacherRepository teacherRepository;
     private StudentRepository studentRepository;
     private FileHistoryRepository fileHistoryRepository;
+    private AssignmentRepository assignmentRepository;
     private StorageService storageService;
 
     @Autowired
     public SolutionController(SolutionRepository solutionRepository, TeacherRepository teacherRepository,
                               StudentRepository studentRepository, FileHistoryRepository fileHistoryRepository,
-                              StorageService storageService) {
+                              StorageService storageService, AssignmentRepository assignmentRepository) {
         this.solutionRepository = solutionRepository;
         this.teacherRepository = teacherRepository;
         this.studentRepository = studentRepository;
         this.fileHistoryRepository = fileHistoryRepository;
         this.storageService = storageService;
+        this.assignmentRepository = assignmentRepository;
     }
 
     @GetMapping("Index")
@@ -63,6 +62,7 @@ public class SolutionController {
         model.addAttribute("isCreate", true);
         model.addAttribute("teachers", teacherRepository.findAll());
         model.addAttribute("students", studentRepository.findAll());
+        model.addAttribute("assignments", assignmentRepository.findAll());
         return "solution_form";
     }
 

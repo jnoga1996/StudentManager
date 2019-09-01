@@ -37,7 +37,7 @@ public class AssignmentSolutionController {
                 assignmentSolutionsMap.get(asol.getAssignment()).add(asol.getSolution());
             }
         }
-        
+
         model.addAttribute("assignmentSolutions", distinctAssignmentSolutionList);
         model.addAttribute("solutionsForAssignment", assignmentSolutionsMap);
         return "assignmentSolution_index";

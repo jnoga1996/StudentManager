@@ -91,11 +91,11 @@ public class DataLoader implements ApplicationRunner {
 
     private void initializeSolutions() {
         List<Solution> solutions = Arrays.asList(new Solution[] {
-                createSolution(studentRepository.getOne(1L).getId(), "Jan solution 1"),
-                createSolution(studentRepository.getOne(1L).getId(), "Jan solution 2"),
-                createSolution(studentRepository.getOne(1L).getId(), "Jan solution2 1"),
-                createSolution(studentRepository.getOne(1L).getId(), "Jan solution2 2"),
-                createSolution(studentRepository.getOne(2L).getId(), "Ewa solution 1")
+                createSolution(studentRepository.getOne(1L).getId(), "Jan solution 1", assignmentSolutionRepository.getOne(1L).getId()),
+                createSolution(studentRepository.getOne(1L).getId(), "Jan solution 2", assignmentSolutionRepository.getOne(1L).getId()),
+                createSolution(studentRepository.getOne(1L).getId(), "Jan solution2 1", assignmentSolutionRepository.getOne(1L).getId()),
+                createSolution(studentRepository.getOne(1L).getId(), "Jan solution2 2", assignmentSolutionRepository.getOne(2L).getId()),
+                createSolution(studentRepository.getOne(2L).getId(), "Ewa solution 1", assignmentSolutionRepository.getOne(2L).getId())
         });
 
         solutionRepository.saveAll(solutions);
@@ -142,10 +142,15 @@ public class DataLoader implements ApplicationRunner {
         return new AssignmentSolution(assignment, solution);
     }
 
-    private Solution createSolution(Long studentId, String content) {
+    private Solution createSolution(Long studentId, String content, Long assignmentId) {
+        Solution solution = new Solution();
         Student student = studentRepository.getOne(studentId);
+        //solution.setAssignment(assignmentSolutionRepository.getOne(assignmentId));
+        solution.setAssignment(assignmentRepository.getOne(assignmentId));
+        solution.setContent(content);
+        solution.setStudent(student);
 
-        return new Solution(student, content);
+        return solution;
     }
 
     private Group createGroup(Long courseId, Long teacherId) {

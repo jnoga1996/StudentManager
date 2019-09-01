@@ -17,6 +17,10 @@ public class FileHistory {
 
     private Date modificationDate;
 
+    private String fileType;
+
+    private Long referencedId;
+
     public FileHistory() {}
 
     public Long getId() {
@@ -49,5 +53,21 @@ public class FileHistory {
 
     public void setModificationDate(Date modificationDate) {
         this.modificationDate = modificationDate;
+    }
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
+    }
+
+    public Long getReferencedId() {
+        return referencedId;
+    }
+
+    public void setReferencedId(Long referencedId) {
+        this.referencedId = referencedId;
     }
 }

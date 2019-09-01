@@ -35,6 +35,17 @@
         </div>
     </div>
     <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Assignment:</label>
+        <div class="col-sm-6">
+            <select th:field="*{assignment}" class="form-control">
+                <option th:each="as : ${assignments}" th:value="${as.getId()}"
+                        th:text="${as}"
+                        th:selected="${assignments.get(0)}">
+                </option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
         <label class="col-sm-2 col-form-label">Attachment:</label>
         <div class="col-sm-6">
             <input type="file" name="file" class="form-control-file"/>
