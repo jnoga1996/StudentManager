@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "SOLUTIONS")
-public class Solution {
+public class Solution implements ISaveable{
     @Column(name = "solution_id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

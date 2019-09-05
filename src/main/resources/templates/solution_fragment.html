@@ -14,6 +14,8 @@
     <td th:utext="${solution.getContent()}"></td>
     <td th:utext="${solution.getGrade()}"></td>
     <td th:utext="${solution.getAssignment()}"></td>
+    <td><a th:href="@{/Solution/Edit(id=${solution.getId()})}"/>Edit</td>
+    <td><a th:href="@{/Solution/Delete(id=${solution.getId()})}"/>Delete</td>
 </tr>
 
 <div th:fragment="div_view(solution)" class="list-group-item list-group-item-light">

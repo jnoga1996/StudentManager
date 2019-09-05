@@ -9,6 +9,9 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
+import com.smanager.dao.models.Assignment;
+import com.smanager.dao.models.ISaveable;
+import com.smanager.dao.models.Solution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -77,7 +80,19 @@ public class FileSystemStorageService implements StorageService {
         catch (IOException e) {
             throw new StorageException("Failed to read stored files", e);
         }
+    }
 
+    @Override
+    public Stream<Path> loadAllByType(Class entryClass) {
+            String prefix = "";
+            if (entryClass == Assignment.class) {
+                prefix = "assignment";
+            } else if (entryClass == Solution.class) {
+                prefix = "solution";
+            }
+            final String className = prefix;
+            Stream<Path> files = loadAll();
+            return files.filter(file -> file.getFileName().toString().contains(className));
     }
 
     @Override

@@ -8,9 +8,9 @@ import com.smanager.dao.repositories.AssignmentRepository;
 import com.smanager.dao.repositories.CourseRepository;
 import com.smanager.dao.repositories.FileHistoryRepository;
 import com.smanager.dao.repositories.TeacherRepository;
+import com.smanager.services.FileUploadHelper;
 import com.smanager.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.query.Jpa21Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,11 +31,14 @@ import java.util.stream.Stream;
 @RequestMapping("/Assignment")
 public class AssignmentController {
 
+    private final static String INDEX_REDIRECT_STRING = "redirect:/Assignment/Index";
+
     private AssignmentRepository assignmentRepository;
     private FileHistoryRepository fileHistoryRepository;
     private StorageService storageService;
     private TeacherRepository teacherRepository;
     private CourseRepository courseRepository;
+    private FileUploadHelper fileUploadHelper;
 
     @Autowired
     public AssignmentController(AssignmentRepository assignmentRepository, FileHistoryRepository fileHistoryRepository,
@@ -46,13 +49,14 @@ public class AssignmentController {
         this.storageService = storageService;
         this.teacherRepository = teacherRepository;
         this.courseRepository = courseRepository;
+        fileUploadHelper = new FileUploadHelper(fileHistoryRepository, storageService);
     }
 
     @GetMapping("Index")
     public String index(Model model) {
         model.addAttribute("assignments", assignmentRepository.findAll());
         Stream<Path> stream = storageService.loadAll();
-        model.addAttribute("files", storageService.loadAll().map(
+        model.addAttribute("files", storageService.loadAllByType(Assignment.class).map(
                 path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
                         "serveFile", path.getFileName().toString()).build().toString())
                 .collect(Collectors.toList()));
@@ -71,22 +75,9 @@ public class AssignmentController {
             return "assignment_form";
         }
 
-        assignmentRepository.save(assignment);
-        if (file != null) {
-            String path = storageService.store(file, assignment.getId());
-            FileHistory fileHistory = new FileHistory();
-            fileHistory.setFileName(file.getOriginalFilename());
-            fileHistory.setModificationDate(new Date(System.currentTimeMillis()));
-            fileHistory.setPath(path);
-            fileHistory.setReferencedId(assignment.getId());
-            fileHistory.setFileType(FileType.ASSIGNMENT.getName());
+        fileUploadHelper.saveFileToRepository(assignmentRepository, file, assignment);
 
-            fileHistoryRepository.save(fileHistory);
-            assignment.setFilename(path);
-            assignmentRepository.save(assignment);
-        }
-
-        return "redirect:/Assignment/Index";
+        return INDEX_REDIRECT_STRING;
     }
 
     @GetMapping("/Edit")
@@ -103,7 +94,7 @@ public class AssignmentController {
     @PostMapping("/Edit")
     public String edit(@Valid Assignment assignment, @RequestParam MultipartFile file, BindingResult binding, Model model) {
         if (binding.hasErrors()) {
-            return "redirect:/Assignment/Index";
+            return INDEX_REDIRECT_STRING;
         }
 
         if (assignment != null) {
@@ -112,22 +103,12 @@ public class AssignmentController {
             assignmentFromDb.setContent(assignment.getContent());
             assignmentFromDb.setCourse(assignment.getCourse());
             assignmentFromDb.setTeacher(assignment.getTeacher());
-            assignmentFromDb.setFilename(assignment.getFilename());
 
-            storageService.delete(assignmentFromDb.getFilename());
-            String path = storageService.store(file, assignment.getId());
-            FileHistory fileHistory = new FileHistory();
-            fileHistory.setFileName(file.getOriginalFilename());
-            fileHistory.setModificationDate(new Date(System.currentTimeMillis()));
-            fileHistory.setPath(path);
-            fileHistory.setReferencedId(assignmentFromDb.getId());
-            fileHistory.setFileType(FileType.ASSIGNMENT.getName());
-
-            fileHistoryRepository.save(fileHistory);
+            fileUploadHelper.updateFileHistory(assignmentFromDb, file);
             assignmentRepository.save(assignmentFromDb);
         }
 
-        return "redirect:/Assignment/Index";
+        return INDEX_REDIRECT_STRING;
     }
 
     @GetMapping("/Delete")
@@ -137,7 +118,7 @@ public class AssignmentController {
             assignmentRepository.delete(assignment);
         }
 
-        return "redirect:/Assignment/Index";
+        return INDEX_REDIRECT_STRING;
     }
 
     private void fillModel(Model model, Assignment assignment, boolean isCreateAction) {

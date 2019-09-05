@@ -9,7 +9,7 @@ import java.util.Set;
 @Entity
 @Table(name = "ASSIGNMENTS")
 @EntityListeners(AuditingEntityListener.class)
-public class Assignment {
+public class Assignment implements ISaveable {
     @Column(name = "assignment_id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +21,7 @@ public class Assignment {
     @NotBlank
     private String content;
 
-    private String filename;
+    private String path;
 
     @OneToMany(mappedBy = "assignment")
     private Set<Solution> solutions;
@@ -95,12 +95,12 @@ public class Assignment {
         this.teacher = teacher;
     }
 
-    public String getFilename() {
-        return filename;
+    public String getPath() {
+        return path;
     }
 
-    public void setFilename(String filename) {
-        this.filename = filename;
+    public void setPath(String path) {
+        this.path = path;
     }
 
     @Override
