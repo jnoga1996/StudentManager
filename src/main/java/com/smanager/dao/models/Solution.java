@@ -19,7 +19,6 @@ public class Solution implements ISaveable{
     @NotBlank
     private String content;
 
-    @Range(min = 2, max = 5)
     private Double grade;
 
     @ManyToOne
@@ -32,6 +31,11 @@ public class Solution implements ISaveable{
     public Solution(Student student, String content) {
         this.student = student;
         this.content = content;
+    }
+
+    public Solution(Student student, String content, Grades grade) {
+        this(student, content);
+        this.grade = grade.getGrade();
     }
 
     public Long getId() {

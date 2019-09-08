@@ -1,6 +1,7 @@
 package com.smanager.controllers;
 
 import com.smanager.dao.models.FileHistory;
+import com.smanager.dao.models.Grades;
 import com.smanager.dao.models.Solution;
 import com.smanager.dao.repositories.*;
 import com.smanager.services.FileUploadHelper;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 
 import javax.validation.Valid;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -127,6 +129,7 @@ public class SolutionController {
         model.addAttribute("teachers", teacherRepository.findAll());
         model.addAttribute("students", studentRepository.findAll());
         model.addAttribute("assignments", assignmentRepository.findAll());
+        model.addAttribute("grades", Arrays.asList(Grades.values()));
     }
 
 }

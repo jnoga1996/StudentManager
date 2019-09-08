@@ -9,6 +9,7 @@
 </head>
 <body>
 <div th:insert="header :: header"></div>
+<h2></h2>
 <form action="#" th:action="${isCreate} ? @{/Solution/Create} : @{/Solution/Edit}" th:object="${solution}" enctype="multipart/form-data" method="post">
     <input type="hidden" th:field="*{id}">
     <div class="form-group row">
@@ -20,7 +21,12 @@
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">Grade:</label>
         <div class="col-sm-6">
-            <input type="number" th:field="*{grade}" class="form-control"/>
+            <select th:field="*{grade}" class="form-control">
+                <option th:each="gr : ${grades}" th:value="${gr.getGrade()}"
+                        th:text="${gr}"
+                        th:selected="${grades.get(0)}">
+                </option>
+            </select>
         </div>
     </div>
     <div class="form-group row">

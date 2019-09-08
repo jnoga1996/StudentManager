@@ -54,34 +54,31 @@ public class DataLoader implements ApplicationRunner {
     }
 
     private void initializeStudents() {
-        List<Student> students = Arrays.asList(new Student[] {
+        List<Student> students = Arrays.asList(
                 new Student("Jan", "Kowalski", "Fizyka", 1),
                 new Student("Ewa", "Kowalska", "Astronomia", 2),
                 new Student("Krystian", "Brodaty", "Informatyka", 1),
                 new Student("Agata", "Herbata", "Fizyka", 1),
                 new Student("Tomasz", "Plecak", "Fizyka", 2),
                 new Student("Ewelina", "Lina", "Informatyka", 1),
-                new Student("Eustachy", "Rzeka", "Fizyka", 2)
-        });
+                new Student("Eustachy", "Rzeka", "Fizyka", 2));
 
         studentRepository.saveAll(students);
     }
 
     private void initializeTeachers() {
-        List<Teacher> teachers = Arrays.asList(new Teacher[] {
+        List<Teacher> teachers = Arrays.asList(
                 new Teacher("Marian", "Jezioro"),
                 new Teacher("Joanna", "Talerz"),
-                new Teacher("Edmund", "Gruszka")
-        });
+                new Teacher("Edmund", "Gruszka"));
 
         teacherRepository.saveAll(teachers);
     }
 
     private void initializeAssignments() {
-        List<Assignment> assignments = Arrays.asList(new Assignment[] {
+        List<Assignment> assignments = Arrays.asList(
                 new Assignment("Wstęp do sortowania", "Zaimplementuj 3 dowolne metody sortowania"),
-                new Assignment("Title", "Content")
-        });
+                new Assignment("Title", "Content"));
 
         assignments.get(0).setCourse(courseRepository.getOne(1L));
         assignments.get(1).setCourse(courseRepository.getOne(2L));
@@ -90,47 +87,43 @@ public class DataLoader implements ApplicationRunner {
     }
 
     private void initializeSolutions() {
-        List<Solution> solutions = Arrays.asList(new Solution[] {
-                createSolution(studentRepository.getOne(1L).getId(), "Jan solution 1", assignmentSolutionRepository.getOne(1L).getId()),
-                createSolution(studentRepository.getOne(1L).getId(), "Jan solution 2", assignmentSolutionRepository.getOne(1L).getId()),
-                createSolution(studentRepository.getOne(1L).getId(), "Jan solution2 1", assignmentSolutionRepository.getOne(1L).getId()),
-                createSolution(studentRepository.getOne(1L).getId(), "Jan solution2 2", assignmentSolutionRepository.getOne(2L).getId()),
-                createSolution(studentRepository.getOne(2L).getId(), "Ewa solution 1", assignmentSolutionRepository.getOne(2L).getId())
-        });
+        List<Solution> solutions = Arrays.asList(
+                createSolution(studentRepository.getOne(1L).getId(), "Jan solution 1", assignmentSolutionRepository.getOne(1L).getId(), Grades.A),
+                createSolution(studentRepository.getOne(1L).getId(), "Jan solution 2", assignmentSolutionRepository.getOne(1L).getId(), Grades.E),
+                createSolution(studentRepository.getOne(1L).getId(), "Jan solution2 1", assignmentSolutionRepository.getOne(1L).getId(), Grades.B),
+                createSolution(studentRepository.getOne(1L).getId(), "Jan solution2 2", assignmentSolutionRepository.getOne(2L).getId(), Grades.D),
+                createSolution(studentRepository.getOne(2L).getId(), "Ewa solution 1", assignmentSolutionRepository.getOne(2L).getId(), Grades.C));
 
         solutionRepository.saveAll(solutions);
     }
 
     private void initializeAssignmentSolutions() {
-        List<AssignmentSolution> assignmentSolutions = Arrays.asList(new AssignmentSolution[] {
+        List<AssignmentSolution> assignmentSolutions = Arrays.asList(
                 createAssignmentSolution(assignmentRepository.getOne(1L).getId(), solutionRepository.getOne(1L).getId()),
                 createAssignmentSolution(assignmentRepository.getOne(1L).getId(), solutionRepository.getOne(2L).getId()),
                 createAssignmentSolution(assignmentRepository.getOne(1L).getId(), solutionRepository.getOne(5L).getId()),
                 createAssignmentSolution(assignmentRepository.getOne(2L).getId(), solutionRepository.getOne(3L).getId()),
-                createAssignmentSolution(assignmentRepository.getOne(2L).getId(), solutionRepository.getOne(4L).getId())
-        });
+                createAssignmentSolution(assignmentRepository.getOne(2L).getId(), solutionRepository.getOne(4L).getId()));
 
         assignmentSolutionRepository.saveAll(assignmentSolutions);
     }
 
     private void initializeCourses() {
-        List<Course> courses = Arrays.asList(new Course[] {
+        List<Course> courses = Arrays.asList(
                 new Course("Analiza matematyczna 1", 5),
                 new Course("Podstawy programowania", 3),
-                new Course("Matematyka dyskretna", 4)
-        });
+                new Course("Matematyka dyskretna", 4));
 
         courseRepository.saveAll(courses);
     }
 
     private void initializeGroups() {
-        List<Group> groups = Arrays.asList(new Group[] {
+        List<Group> groups = Arrays.asList(
                 createGroup(courseRepository.getOne(1L).getId(), teacherRepository.getOne(1L).getId()),
                 createGroup(courseRepository.getOne(1L).getId(), teacherRepository.getOne(2L).getId()),
                 createGroup(courseRepository.getOne(2L).getId(), teacherRepository.getOne(1L).getId()),
                 createGroup(courseRepository.getOne(2L).getId(), teacherRepository.getOne(2L).getId()),
-                createGroup(courseRepository.getOne(3L).getId(), teacherRepository.getOne(2L).getId())
-        });
+                createGroup(courseRepository.getOne(3L).getId(), teacherRepository.getOne(2L).getId()));
 
         groupRepository.saveAll(groups);
     }
@@ -142,13 +135,13 @@ public class DataLoader implements ApplicationRunner {
         return new AssignmentSolution(assignment, solution);
     }
 
-    private Solution createSolution(Long studentId, String content, Long assignmentId) {
+    private Solution createSolution(Long studentId, String content, Long assignmentId, Grades grade) {
         Solution solution = new Solution();
         Student student = studentRepository.getOne(studentId);
-        //solution.setAssignment(assignmentSolutionRepository.getOne(assignmentId));
         solution.setAssignment(assignmentRepository.getOne(assignmentId));
         solution.setContent(content);
         solution.setStudent(student);
+        solution.setGrade(grade.getGrade());
 
         return solution;
     }
