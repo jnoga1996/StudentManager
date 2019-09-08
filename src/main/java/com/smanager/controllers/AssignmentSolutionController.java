@@ -3,7 +3,9 @@ package com.smanager.controllers;
 import com.smanager.dao.models.Assignment;
 import com.smanager.dao.models.AssignmentSolution;
 import com.smanager.dao.models.Solution;
+import com.smanager.dao.repositories.AssignmentRepository;
 import com.smanager.dao.repositories.AssignmentSolutionRepository;
+import com.smanager.dao.repositories.SolutionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,27 +20,27 @@ import java.util.List;
 @RequestMapping("/AssignmentSolution")
 public class AssignmentSolutionController {
 
+    private AssignmentRepository assignmentRepository;
+    private SolutionRepository solutionRepository;
+
     @Autowired
-    private AssignmentSolutionRepository assignmentSolutionRepository;
+    public AssignmentSolutionController(AssignmentRepository assignmentRepository,
+                                        SolutionRepository solutionRepository) {
+        this.assignmentRepository = assignmentRepository;
+        this.solutionRepository = solutionRepository;
+    }
 
     @GetMapping("Index")
     public String index(Model model) {
-        List<AssignmentSolution> assignmentSolutionList = assignmentSolutionRepository.findAll();
+        List<Assignment> assignments = assignmentRepository.findAll();
         HashMap<Assignment, List<Solution>> assignmentSolutionsMap = new HashMap<>();
-        List<AssignmentSolution> distinctAssignmentSolutionList = new LinkedList<>();
 
-        for (AssignmentSolution asol : assignmentSolutionList) {
-            if (!assignmentSolutionsMap.containsKey(asol.getAssignment())) {
-                List<Solution> solutions = new LinkedList<>();
-                solutions.add(asol.getSolution());
-                assignmentSolutionsMap.put(asol.getAssignment(), solutions);
-                distinctAssignmentSolutionList.add(asol);
-            } else {
-                assignmentSolutionsMap.get(asol.getAssignment()).add(asol.getSolution());
-            }
+        for (Assignment as : assignments) {
+            List<Solution> solutions = solutionRepository.findAllByAssignment_Id(as.getId());
+            assignmentSolutionsMap.put(as, solutions);
         }
 
-        model.addAttribute("assignmentSolutions", distinctAssignmentSolutionList);
+        model.addAttribute("assignmentSolutions", assignments);
         model.addAttribute("solutionsForAssignment", assignmentSolutionsMap);
         return "assignmentSolution_index";
     }

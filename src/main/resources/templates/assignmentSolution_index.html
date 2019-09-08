@@ -12,10 +12,10 @@
     <div class="list-group">
         <th:block th:each="as : ${assignmentSolutions}">
             <div class="list-group">
-                <div class="list-group-item list-group-item-primary" th:utext="${as.getAssignment()}"></div>
+                <div class="list-group-item list-group-item-primary" th:utext="${as}"></div>
 
-                <th:block th:each="sol : ${solutionsForAssignment.get(as.getAssignment())}">
-                    <div  th:replace="solution_fragment :: div_view(solution=${sol})"></div>
+                <th:block th:each="sol : ${solutionsForAssignment.get(as)}">
+                    <div th:replace="solution_fragment :: div_view(solution=${sol})"></div>
                 </th:block>
             </div>
         </th:block>

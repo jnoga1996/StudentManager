@@ -8,8 +8,5 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface SolutionRepository extends JpaRepository<Solution, Long> {
-    @Query(value = "select * from solutions s " +
-            "join assignment_solutions ass on s.solution_id = ass.solution_id " +
-            "where assignment_id = id", nativeQuery = true)
-    List<Solution> getAllByAssignmentId(@Param("id")Long id);
+    List<Solution> findAllByAssignment_Id(Long id);
 }
