@@ -1,13 +1,7 @@
 package com.smanager.controllers;
 
-import com.smanager.dao.models.Assignment;
-import com.smanager.dao.models.AssignmentSolution;
-import com.smanager.dao.models.Course;
-import com.smanager.dao.models.Solution;
-import com.smanager.dao.repositories.AssignmentRepository;
-import com.smanager.dao.repositories.AssignmentSolutionRepository;
-import com.smanager.dao.repositories.CourseRepository;
-import com.smanager.dao.repositories.SolutionRepository;
+import com.smanager.dao.models.*;
+import com.smanager.dao.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,19 +11,29 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/Course")
 public class CourseController {
+    private static final String INDEX_REDIRECT_STRING = "redirect:/Course/Index";
+
+    private CourseRepository courseRepository;
+    private AssignmentRepository assignmentRepository;
+    private SolutionRepository solutionRepository;
+    private StudentRepository studentRepository;
 
     @Autowired
-    private CourseRepository courseRepository;
-    @Autowired
-    private AssignmentRepository assignmentRepository;
-    @Autowired
-    private AssignmentSolutionRepository assignmentSolutionRepository;
-    @Autowired
-    private SolutionRepository solutionRepository;
+    public CourseController(CourseRepository courseRepository, AssignmentRepository assignmentRepository,
+                            SolutionRepository solutionRepository, StudentRepository studentRepository) {
+        this.courseRepository = courseRepository;
+        this.assignmentRepository = assignmentRepository;
+        this.solutionRepository = solutionRepository;
+        this.studentRepository = studentRepository;
+    }
 
     @GetMapping("Index")
     public String index(Model model) {
@@ -50,14 +54,14 @@ public class CourseController {
         }
         courseRepository.save(course);
 
-        return "redirect:/Course/Index";
+        return INDEX_REDIRECT_STRING;
     }
 
     @GetMapping("/Edit")
     public String edit(Model model, Long id) {
         Course course = courseRepository.getOne(id);
         if (course == null) {
-            return "redirect:/Course/Index";
+            return INDEX_REDIRECT_STRING;
         }
         model.addAttribute("course", course);
         model.addAttribute("isCreate", false);
@@ -68,7 +72,7 @@ public class CourseController {
     @PostMapping("/Edit")
     public String edit(@Valid Course course, Model model, BindingResult binding) {
         if (binding.hasErrors()) {
-            return "redirect:/Course/Index";
+            return INDEX_REDIRECT_STRING;
         }
 
         Course courseFromDb = courseRepository.getOne(course.getId());
@@ -76,7 +80,7 @@ public class CourseController {
         courseFromDb.setEcts(course.getEcts());
         courseRepository.save(courseFromDb);
 
-        return "redirect:/Course/Index";
+        return INDEX_REDIRECT_STRING;
     }
 
     @GetMapping("/Delete")
@@ -88,15 +92,42 @@ public class CourseController {
                 assignmentRepository.delete(assignment);
                 for (Solution solution : assignment.getSolutions()) {
                     System.out.println(String.format("Removed solution %s", solution));
-                    //assignmentSolutionRepository.delete(as);
-                    //Solution solution = solutionRepository.getOne(as.getSolution().getId());
-                    //System.out.println(String.format("Removed solution %s", solution));
                     solutionRepository.delete(solution);
                 }
             }
             courseRepository.delete(course);
         }
 
-        return "redirect:/Course/Index";
+        return INDEX_REDIRECT_STRING;
+    }
+
+    @GetMapping("/Register")
+    public String registerStudentToCourse(Model model) {
+        model.addAttribute("courses", courseRepository.findAll());
+        model.addAttribute("students", studentRepository.findAll());
+        model.addAttribute("mapping", new CourseStudentMapping());
+        return "courseStudentRegister_form";
+    }
+
+    @PostMapping("/Register")
+    public String registerStudentToCourse(@Valid CourseStudentMapping mapping, Model model) {
+        Course course = courseRepository.getOne(mapping.getCourse().getId());
+        Student student = studentRepository.getOne(mapping.getStudent().getId());
+        Set<Student> registeredStudents = course.getStudents();
+
+        if (registeredStudents.isEmpty()) {
+            registeredStudents = new HashSet<>();
+        }
+
+        if (student != null) {
+            registeredStudents.add(student);
+        }
+
+        if (course != null) {
+            course.setStudents(registeredStudents);
+            courseRepository.save(course);
+        }
+
+        return INDEX_REDIRECT_STRING;
     }
 }

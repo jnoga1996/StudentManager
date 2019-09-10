@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="/webjars/jquery/3.0.0/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div th:insert="header :: header"></div>
+
+<form action="#" th:action="@{/Course/Register}" th:object="${mapping}" enctype="multipart/form-data" method="post">
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Course:</label>
+        <div class="col-sm-6">
+            <select th:field="*{course}" class="form-control">
+                <option th:each="cour : ${courses}" th:value="${cour.getId()}"
+                        th:text="${cour}"
+                        th:selected="${courses.get(0)}">
+                </option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Student:</label>
+        <div class="col-sm-6">
+            <select th:field="*{student}" class="form-control">
+                <option th:each="st : ${students}" th:value="${st.getId()}"
+                        th:text="${st}"
+                        th:selected="${students.get(0)}">
+                </option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-6">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</form>
+
+</body>
+</html>

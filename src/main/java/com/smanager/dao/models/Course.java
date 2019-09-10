@@ -20,6 +20,9 @@ public class Course {
     @OneToMany(mappedBy = "course", targetEntity = Assignment.class, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Assignment> assignments;
 
+    @OneToMany(mappedBy = "course", targetEntity = Student.class)
+    private Set<Student> students;
+
     public Course() {}
 
     public Course(String title, int ects) {
@@ -57,6 +60,14 @@ public class Course {
 
     public void setAssignments(Set<Assignment> assignments) {
         this.assignments = assignments;
+    }
+
+    public Set<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(Set<Student> students) {
+        this.students = students;
     }
 
     @Override

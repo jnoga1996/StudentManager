@@ -31,6 +31,9 @@ public class Student {
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Solution> solutions;
 
+    @ManyToOne
+    private Course course;
+
     public Student() {};
 
     public Student(String firstName, String lastName, String faculty, int currentYear) {
@@ -86,6 +89,14 @@ public class Student {
 
     public void setSolutions(Set<Solution> solutions) {
         this.solutions = solutions;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
     }
 
     @Override
