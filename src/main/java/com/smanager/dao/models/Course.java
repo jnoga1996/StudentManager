@@ -20,7 +20,12 @@ public class Course {
     @OneToMany(mappedBy = "course", targetEntity = Assignment.class, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Assignment> assignments;
 
-    @OneToMany(mappedBy = "course", targetEntity = Student.class)
+    @ManyToMany
+    @JoinTable(
+            name = "course_student",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
     private Set<Student> students;
 
     public Course() {}

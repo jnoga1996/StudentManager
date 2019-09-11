@@ -9,7 +9,14 @@
 </head>
 <body>
 <div th:insert="header :: header"></div>
-<a href="/Course/Create" class="btn-light">Create new course</a>
+<div class="btn-group">
+    <a href="/Course/Create">
+        <button type="button" class="btn btn-primary btn-sm">Create course</button>
+    </a>
+    <a href="/Course/Register">
+        <button type="button" class="btn btn-primary btn-sm">Register to course</button>
+    </a>
+</div>
 <table class="table table-striped">
     <thead class="thead-dark">
     <tr>
@@ -28,6 +35,18 @@
             <td><a th:href="@{/Course/Edit(id=${course.getId()})}"/>Edit</td>
             <td><a th:href="@{/Course/Delete(id=${course.getId()})}"/>Delete</td>
         </tr>
+        <th:block th:each="student : ${course.getStudents()}">
+            <tr>
+                <td th:utext="${student}"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><a th:href="@{/Course/RemoveFromCourse(
+                    courseId=${course.getId()},
+                    studentId=${student.getId()}
+                    )}"/>Remove from course</td>
+            </tr>
+        </th:block>
     </th:block>
 </table>
 </body>

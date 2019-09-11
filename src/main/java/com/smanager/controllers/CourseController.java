@@ -130,4 +130,17 @@ public class CourseController {
 
         return INDEX_REDIRECT_STRING;
     }
+
+    @GetMapping("/RemoveFromCourse")
+    public String removerStudentFromCourse(Long courseId, Long studentId) {
+        Course course = courseRepository.getOne(courseId);
+        Student student = studentRepository.getOne(studentId);
+
+        if (course != null && student != null) {
+            course.getStudents().remove(student);
+            courseRepository.save(course);
+        }
+
+        return INDEX_REDIRECT_STRING;
+    }
 }

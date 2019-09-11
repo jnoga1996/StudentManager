@@ -31,8 +31,8 @@ public class Student {
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Solution> solutions;
 
-    @ManyToOne
-    private Course course;
+    @ManyToMany(mappedBy = "students")
+    private Set<Course> courses;
 
     public Student() {};
 
@@ -91,12 +91,12 @@ public class Student {
         this.solutions = solutions;
     }
 
-    public Course getCourse() {
-        return course;
+    public Set<Course> getCourses() {
+        return courses;
     }
 
-    public void setCourse(Course course) {
-        this.course = course;
+    public void setCourses(Set<Course> courses) {
+        this.courses = courses;
     }
 
     @Override
