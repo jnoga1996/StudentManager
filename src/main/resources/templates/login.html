@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <div th:replace="head_fragment :: scripts"></div>
+</head>
+<body>
+<div th:insert="header :: header"></div>
+<div th:if="${param.error}">
+    Invalid username and password.
+</div>
+<div th:if="${param.logout}">
+    You have been logged out.
+</div>
+<h2></h2>
+<form th:action="@{/login}" method="post" class="form-group">
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">User Name:</label>
+        <div class="col-sm-4">
+            <input type="text" name="username" class="form-control"/>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Password:</label>
+        <div class="col-sm-4">
+            <input type="password" name="password" class="form-control"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Sign In" class="btn btn-primary"/>
+    </div>
+</form>
+</body>
+</html>

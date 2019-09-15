@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Header</title>
-    <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="/webjars/jquery/3.0.0/jquery.min.js"></script>
-    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <div th:replace="head_fragment :: scripts"></div>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark" th:fragment="header">
@@ -39,6 +37,9 @@
                     <a class="dropdown-item" href="/Teacher/Index">Teacher</a>
                     <a class="dropdown-item" href="/FileHistory/Index">File history</a>
                 </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/Authentication/Logout">Sign Out</a>
             </li>
         </ul>
     </div>
