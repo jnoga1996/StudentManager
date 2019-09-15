@@ -8,5 +8,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface SolutionRepository extends JpaRepository<Solution, Long> {
+
     List<Solution> findAllByAssignment_Id(Long id);
+
+    List<Solution> findAllByAssignment_IdAndFinishedTrue(Long id);
 }

@@ -76,7 +76,9 @@ public class SolutionController {
             return "solution_index";
         }
 
-        fileUploadHelper.saveFileToRepository(solutionRepository, file, solution);
+        if (!file.isEmpty()) {
+            fileUploadHelper.saveFileToRepository(solutionRepository, file, solution);
+        }
 
         return INDEX_REDIRECT_STRING;
     }
@@ -105,8 +107,11 @@ public class SolutionController {
             solutionFromDb.setContent(solution.getContent());
             solutionFromDb.setAssignment(solution.getAssignment());
             solutionFromDb.setGrade(solution.getGrade());
+            solutionFromDb.setFinished(solution.isFinished());
 
-            fileUploadHelper.updateFileHistory(solutionFromDb, file);
+            if (!file.isEmpty()) {
+                fileUploadHelper.updateFileHistory(solutionFromDb, file);
+            }
             solutionRepository.save(solutionFromDb);
         }
 

@@ -26,6 +26,8 @@ public class Solution implements ISaveable{
 
     private String path;
 
+    private boolean finished;
+
     public Solution() {};
 
     public Solution(Student student, String content) {
@@ -84,5 +86,13 @@ public class Solution implements ISaveable{
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public boolean isFinished() {
+        return finished;
+    }
+
+    public void setFinished(boolean finished) {
+        this.finished = finished;
     }
 }

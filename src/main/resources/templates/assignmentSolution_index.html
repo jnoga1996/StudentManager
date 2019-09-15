@@ -9,16 +9,9 @@
 </head>
 <body>
 <div th:insert="header :: header"></div>
-    <div class="list-group">
-        <th:block th:each="as : ${assignmentSolutions}">
-            <div class="list-group">
-                <div class="list-group-item list-group-item-primary" th:utext="${as}"></div>
-
-                <th:block th:each="sol : ${solutionsForAssignment.get(as)}">
-                    <div th:replace="solution_fragment :: div_view(solution=${sol})"></div>
-                </th:block>
-            </div>
-        </th:block>
-    </div>
+<a href="/AssignmentSolution/SolutionsToCheck">
+    <button type="button" class="btn btn-primary btn-sm">Check solutions</button>
+</a>
+<div th:insert="assignmentSolution_fragments :: index"></div>
 </body>
 </html>
