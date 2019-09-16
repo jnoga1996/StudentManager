@@ -1,5 +1,6 @@
 package com.smanager;
 
+import com.smanager.dao.models.UserRoles;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -33,12 +34,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     @Override
     public UserDetailsService userDetailsService() {
-        UserDetails user = User.withDefaultPasswordEncoder()
-                            .username("user")
-                            .password("password")
-                            .roles("USER")
-                            .build();
+        UserDetails admin = User.withDefaultPasswordEncoder()
+                .username("admin")
+                .password("admin")
+                .roles(UserRoles.ADMIN.getRole())
+                .build();
 
-        return new InMemoryUserDetailsManager(user);
+        UserDetails student = User.withDefaultPasswordEncoder()
+                .username("student")
+                .password("student")
+                .roles(UserRoles.STUDENT.getRole())
+                .build();
+
+        UserDetails teacher = User.withDefaultPasswordEncoder()
+                .username("teacher")
+                .password("teacher")
+                .roles(UserRoles.TEACHER.getRole())
+                .build();
+
+        InMemoryUserDetailsManager userManager = new InMemoryUserDetailsManager();
+        userManager.createUser(admin);
+        userManager.createUser(student);
+        userManager.createUser(teacher);
+
+        return userManager;
     }
 }
