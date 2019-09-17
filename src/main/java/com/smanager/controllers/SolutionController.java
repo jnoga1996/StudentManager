@@ -55,7 +55,6 @@ public class SolutionController {
     @GetMapping("Index")
     public String index(Model model) {
         model.addAttribute("solutions", solutionRepository.findAll());
-        Stream<Path> stream = storageService.loadAll();
         model.addAttribute("files", storageService.loadAllByType(Solution.class).map(
                 path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
                         "serveFile", path.getFileName().toString()).build().toString())
@@ -76,9 +75,7 @@ public class SolutionController {
             return "solution_index";
         }
 
-        if (!file.isEmpty()) {
-            fileUploadHelper.saveFileToRepository(solutionRepository, file, solution);
-        }
+        fileUploadHelper.saveFileToRepository(solutionRepository, file, solution);
 
         return INDEX_REDIRECT_STRING;
     }
@@ -109,9 +106,8 @@ public class SolutionController {
             solutionFromDb.setGrade(solution.getGrade());
             solutionFromDb.setFinished(solution.isFinished());
 
-            if (!file.isEmpty()) {
-                fileUploadHelper.updateFileHistory(solutionFromDb, file);
-            }
+            fileUploadHelper.updateFileHistory(solutionFromDb, file);
+
             solutionRepository.save(solutionFromDb);
         }
 

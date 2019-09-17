@@ -54,7 +54,6 @@ public class AssignmentController {
     @GetMapping("Index")
     public String index(Model model) {
         model.addAttribute("assignments", assignmentRepository.findAll());
-        Stream<Path> stream = storageService.loadAll();
         model.addAttribute("files", storageService.loadAllByType(Assignment.class).map(
                 path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
                         "serveFile", path.getFileName().toString()).build().toString())
@@ -104,6 +103,7 @@ public class AssignmentController {
             assignmentFromDb.setTeacher(assignment.getTeacher());
 
             fileUploadHelper.updateFileHistory(assignmentFromDb, file);
+
             assignmentRepository.save(assignmentFromDb);
         }
 

@@ -22,7 +22,7 @@ public class FileUploadHelper {
 
     public void saveFileToRepository(JpaRepository repository, MultipartFile file, ISaveable entry) {
         repository.save(entry);
-        if (file != null) {
+        if (!file.isEmpty()) {
             String path = storageService.store(file, entry.getId());
             FileHistory fileHistory = new FileHistory();
             fileHistory.setFileName(file.getOriginalFilename());
@@ -44,10 +44,10 @@ public class FileUploadHelper {
         }
         String path = "";
         String fileType = "";
-        if (entry instanceof Assignment) {
+        if (entry instanceof Assignment && !file.isEmpty()) {
             path = storageService.store(file, entry.getId());
             fileType = FileType.ASSIGNMENT.getName();
-        } else if (entry instanceof Solution) {
+        } else if (entry instanceof Solution && !file.isEmpty()) {
             path = storageService.storeSolution(file, entry.getId());
             fileType = FileType.SOLUTION.getName();
         }
