@@ -10,9 +10,16 @@ Engineering degree project
 
 * Before first launch go to application.properties and change
 ```
-spring.jpa.hibernate.ddl-auto = update
+spring.jpa.hibernate.ddl-auto = validate
 ```
 to
 ```
 spring.jpa.hibernate.ddl-auto = create
 ```
+
+6) To log in use one of 3 available users:
+- admin
+- teacher
+- student
+
+7) For now, password is the same as login (for example login = student, password = student)
