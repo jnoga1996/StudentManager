@@ -31,6 +31,7 @@ public class Assignment implements ISaveable {
     private Student student;
 
     @ManyToOne
+    @JoinColumn(name = "assignment_course_id", referencedColumnName = "course_id")
     private Course course;
 
     @ManyToOne

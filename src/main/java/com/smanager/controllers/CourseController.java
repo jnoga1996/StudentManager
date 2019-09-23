@@ -42,6 +42,12 @@ public class CourseController {
         return "course_index";
     }
 
+    @GetMapping("MyCourses")
+    public String myCourses(Model model, Long studentId) {
+        model.addAttribute("courses", courseRepository.findCoursesByStudentId(studentId));
+        return "course_index";
+    }
+
     @GetMapping("/Create")
     public String showForm(Course course, Model model) {
         model.addAttribute("isCreate", true);

@@ -95,4 +95,15 @@ public class Solution implements ISaveable{
     public void setFinished(boolean finished) {
         this.finished = finished;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Id:");
+        sb.append(getId());
+        sb.append(", content:");
+        sb.append(getContent());
+
+        return sb.toString();
+    }
 }

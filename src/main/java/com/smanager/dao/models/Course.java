@@ -12,7 +12,7 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "Title can not be empty!")
     private String title;
 
     private int ects;

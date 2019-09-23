@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>My work</title>
+    <div th:replace="head_fragment :: scripts"></div>
+</head>
+<body>
+<div th:insert="header :: header"></div>
+<div class="h3">
+    <p th:utext="${student}"></p>
+</div>
+<div class="list-group">
+    <th:block th:each="course : ${courses}">
+        <div class="list-group-item-primary">
+            <p th:utext="${course}"></p>
+        </div>
+        <div class="list-group">
+            <th:block th:each="assignment : ${courseAssignments.get(course)}">
+                <div class="list-group-item-secondary">
+                    <p th:utext="${assignment}"></p>
+                    <th:block th:each="solution : ${assignmentsSolutions.get(assignment)}">
+                        <div class="list-group-item">
+                            <p th:utext="${solution}"></p>
+                        </div>
+                    </th:block>
+                </div>
+            </th:block>
+        </div>
+    </th:block>
+</div>
+</body>
+</html>

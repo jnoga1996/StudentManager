@@ -2,6 +2,7 @@ package com.smanager.controllers;
 
 
 import com.smanager.dao.models.Assignment;
+import com.smanager.dao.models.Course;
 import com.smanager.dao.models.FileHistory;
 import com.smanager.dao.models.FileType;
 import com.smanager.dao.repositories.AssignmentRepository;
@@ -23,6 +24,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 
 import javax.validation.Valid;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -125,5 +127,18 @@ public class AssignmentController {
         model.addAttribute("isCreateAction", isCreateAction);
         model.addAttribute("teachers", teacherRepository.findAll());
         model.addAttribute("courses", courseRepository.findAll());
+    }
+
+    @GetMapping("/CourseAssignments")
+    public String getAssignmentsForCourse(Model model, Long courseId) {
+        Course course = courseRepository.getOne(courseId);
+        if (course == null) {
+            return INDEX_REDIRECT_STRING;
+        }
+        List<Assignment> assignments = assignmentRepository.findAllByCourseId(courseId);
+        model.addAttribute("course", course);
+        model.addAttribute("assignments", assignments);
+
+        return "courseAssignments_index";
     }
 }

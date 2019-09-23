@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Course assignments</title>
+    <div th:replace="head_fragment :: scripts"></div>
+</head>
+<body>
+<div th:insert="header :: header"></div>
+<div class="list-group">
+    <div class="list-group-item">
+        <p th:utext="${course}"></p>
+    </div>
+    <div class="list-group">
+        <th:block th:each="assignment : ${assignments}">
+            <div class="list-group-item">
+                <p th:utext="${assignment}"></p>
+            </div>
+        </th:block>
+    </div>
+</div>
+</body>
+</html>
