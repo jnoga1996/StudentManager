@@ -1,6 +1,8 @@
 package com.smanager;
 
 import com.smanager.dao.models.UserRoles;
+import com.smanager.dao.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,6 +16,10 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers("/webjars/**").permitAll();
@@ -34,29 +40,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     @Override
     public UserDetailsService userDetailsService() {
-        UserDetails admin = User.withDefaultPasswordEncoder()
-                .username("admin")
-                .password("admin")
+        InMemoryUserDetailsManager userManager = new InMemoryUserDetailsManager();
+
+        for (com.smanager.dao.models.User user : userRepository.findAll()) {
+            UserDetails userDetails = User.withDefaultPasswordEncoder()
+                    .username(user.getUsername())
+                    .password(user.getPassword())
+                    .roles(user.getRole().toString())
+                    .build();
+
+            userManager.createUser(userDetails);
+        }
+
+        UserDetails root = User.withDefaultPasswordEncoder()
+                .username("root")
+                .password("root")
                 .roles(UserRoles.ADMIN.getRole())
                 .build();
-
-        UserDetails student = User.withDefaultPasswordEncoder()
-                .username("student")
-                .password("student")
-                .roles(UserRoles.STUDENT.getRole())
-                .build();
-
-        UserDetails teacher = User.withDefaultPasswordEncoder()
-                .username("teacher")
-                .password("teacher")
-                .roles(UserRoles.TEACHER.getRole())
-                .build();
-
-        InMemoryUserDetailsManager userManager = new InMemoryUserDetailsManager();
-        userManager.createUser(admin);
-        userManager.createUser(student);
-        userManager.createUser(teacher);
+        userManager.createUser(root);
 
         return userManager;
     }
+
 }

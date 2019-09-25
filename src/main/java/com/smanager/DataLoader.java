@@ -20,11 +20,12 @@ public class DataLoader implements ApplicationRunner {
     private AssignmentSolutionRepository assignmentSolutionRepository;
     private CourseRepository courseRepository;
     private GroupRepository groupRepository;
+    private UserRepository userRepository;
 
     @Autowired
     public DataLoader(StudentRepository studentRepository, TeacherRepository teacherRepository, AssignmentRepository assignmentRepository,
                       SolutionRepository solutionRepository, AssignmentSolutionRepository assignmentSolutionRepository,
-                      CourseRepository courseRepository, GroupRepository groupRepository) {
+                      CourseRepository courseRepository, GroupRepository groupRepository, UserRepository userRepository) {
         this.studentRepository = studentRepository;
         this.teacherRepository = teacherRepository;
         this.assignmentRepository = assignmentRepository;
@@ -32,6 +33,7 @@ public class DataLoader implements ApplicationRunner {
         this.assignmentSolutionRepository = assignmentSolutionRepository;
         this.courseRepository = courseRepository;
         this.groupRepository = groupRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -51,6 +53,8 @@ public class DataLoader implements ApplicationRunner {
             initializeCourses();
         if (groupRepository.findAll().isEmpty())
             initializeGroups();
+        if (userRepository.findAll().isEmpty())
+            initializeUsers();
     }
 
     private void initializeStudents() {
@@ -151,5 +155,15 @@ public class DataLoader implements ApplicationRunner {
         Teacher teacher = teacherRepository.getOne(teacherId);
 
         return new Group(course, teacher);
+    }
+
+    private void initializeUsers() {
+        List<User> users = Arrays.asList(
+                new User("student", "student", UserType.STUDENT, true),
+                new User("teacher", "teacher", UserType.TEACHER, true),
+                new User("admin", "admin", UserType.ADMINISTRATOR, true)
+        );
+
+        userRepository.saveAll(users);
     }
 }
