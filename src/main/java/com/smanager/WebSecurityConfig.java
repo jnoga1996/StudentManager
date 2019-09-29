@@ -1,6 +1,5 @@
 package com.smanager;
 
-import com.smanager.dao.models.UserRoles;
 import com.smanager.dao.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -51,13 +50,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
             userManager.createUser(userDetails);
         }
-
-        UserDetails root = User.withDefaultPasswordEncoder()
-                .username("root")
-                .password("root")
-                .roles(UserRoles.ADMIN.getRole())
-                .build();
-        userManager.createUser(root);
 
         return userManager;
     }

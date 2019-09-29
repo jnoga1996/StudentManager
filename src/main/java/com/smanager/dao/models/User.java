@@ -21,12 +21,30 @@ public class User {
 
     private Integer role;
 
+    @OneToOne
+    @JoinColumn(name = "student_id")
+    private Student studentUser;
+
+    @OneToOne
+    @JoinColumn(name = "teacher_id")
+    private Teacher teacherUser;
+
     public User() {}
 
     public User(String userName, String password, UserType userType, boolean enabled) {
         this.username = userName;
         this.password = password;
         this.role = UserType.valueOf(userType.toString()).ordinal();
+    }
+
+    public User(String userName, String password, UserType userType, boolean enabled, Student student) {
+        this(userName, password, userType, enabled);
+        this.studentUser = student;
+    }
+
+    public User(String userName, String password, UserType userType, boolean enabled, Teacher teacher) {
+        this(userName, password, userType, enabled);
+        this.teacherUser = teacher;
     }
 
     public Long getId() {
@@ -67,5 +85,21 @@ public class User {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public Student getStudentUser() {
+        return studentUser;
+    }
+
+    public void setStudentUser(Student studentUser) {
+        this.studentUser = studentUser;
+    }
+
+    public Teacher getTeacherUser() {
+        return teacherUser;
+    }
+
+    public void setTeacherUser(Teacher teacherUser) {
+        this.teacherUser = teacherUser;
     }
 }

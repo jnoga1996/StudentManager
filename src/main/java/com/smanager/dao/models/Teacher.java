@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 @Entity
 @Table(name = "TEACHERS")
 @EntityListeners(AuditingEntityListener.class)
-public class Teacher {
+public class Teacher implements IUser {
     @Column(name = "teacher_id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +19,17 @@ public class Teacher {
 
     @NotBlank
     private String lastName;
+
+    @OneToOne(mappedBy = "teacherUser")
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Long getId() {
         return id;
@@ -54,5 +65,9 @@ public class Teacher {
     @Override
     public String toString() {
         return getFirstName() + " " + getLastName();
+    }
+
+    public String getUsername() {
+        return String.format("%s.%s", getFirstName(), getLastName());
     }
 }

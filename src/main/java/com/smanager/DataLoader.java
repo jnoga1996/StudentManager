@@ -7,8 +7,8 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.Arrays;
-import java.util.List;
+
+import java.util.*;
 
 @Component
 public class DataLoader implements ApplicationRunner {
@@ -49,12 +49,16 @@ public class DataLoader implements ApplicationRunner {
             initializeSolutions();
         if (assignmentSolutionRepository.findAll().isEmpty())
             initializeAssignmentSolutions();
-        if (courseRepository.findAll().isEmpty())
+        if (courseRepository.findAll().isEmpty()) {
             initializeCourses();
+            registerStudents();
+        }
         if (groupRepository.findAll().isEmpty())
             initializeGroups();
-        if (userRepository.findAll().isEmpty())
-            initializeUsers();
+        if (!userRepository.findAll().isEmpty()) {
+            userRepository.deleteAll();
+        }
+        initializeUsers();
     }
 
     private void initializeStudents() {
@@ -165,5 +169,61 @@ public class DataLoader implements ApplicationRunner {
         );
 
         userRepository.saveAll(users);
+        userRepository.saveAll(getStudentUsers());
+        userRepository.saveAll(getTeacherUsers());
     }
+
+    private List<User> getStudentUsers() {
+        List<User> students = new LinkedList<>();
+        for (Student student : studentRepository.findAll()) {
+            String username = student.getUsername();
+            String password = "123456";
+            User user = new User(username, password, UserType.STUDENT, true, student);
+            students.add(user);
+        }
+
+        return students;
+    }
+
+    private List<User> getTeacherUsers() {
+        List<User> teachers = new LinkedList<>();
+        for (Teacher teacher : teacherRepository.findAll()) {
+            String username = teacher.getUsername();
+            String password = "123456";
+            User user = new User(username, password, UserType.TEACHER, true, teacher);
+            teachers.add(user);
+        }
+
+        return teachers;
+    }
+
+    private void registerStudentToCourse(Long studentId, Long courseId) {
+        Course course = courseRepository.getOne(courseId);
+        Student student = studentRepository.getOne(studentId);
+        Set<Student> registeredStudents = course.getStudents();
+
+        if (registeredStudents == null) {
+            registeredStudents = new HashSet<>();
+        }
+
+        if (student != null) {
+            registeredStudents.add(student);
+        }
+
+        if (course != null) {
+            course.setStudents(registeredStudents);
+            courseRepository.save(course);
+        }
+    }
+
+    private void registerStudents() {
+        List<Course> courses = courseRepository.findAll();
+        for (Student student : studentRepository.findAll()) {
+            registerStudentToCourse(student.getId(), courses.get(0).getId());
+            if (student.getId() % 2 == 0) {
+                registerStudentToCourse(student.getId(), courses.get(1).getId());
+            }
+        }
+    }
+
 }

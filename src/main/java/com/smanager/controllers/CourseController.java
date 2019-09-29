@@ -1,9 +1,12 @@
 package com.smanager.controllers;
 
+import com.smanager.WebSecurityConfig;
 import com.smanager.dao.models.*;
 import com.smanager.dao.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,14 +29,17 @@ public class CourseController {
     private AssignmentRepository assignmentRepository;
     private SolutionRepository solutionRepository;
     private StudentRepository studentRepository;
+    private WebSecurityConfig webSecurityConfig;
 
     @Autowired
     public CourseController(CourseRepository courseRepository, AssignmentRepository assignmentRepository,
-                            SolutionRepository solutionRepository, StudentRepository studentRepository) {
+                            SolutionRepository solutionRepository, StudentRepository studentRepository,
+                            WebSecurityConfig webSecurityConfig) {
         this.courseRepository = courseRepository;
         this.assignmentRepository = assignmentRepository;
         this.solutionRepository = solutionRepository;
         this.studentRepository = studentRepository;
+        this.webSecurityConfig = webSecurityConfig;
     }
 
     @GetMapping("Index")
@@ -44,6 +50,8 @@ public class CourseController {
 
     @GetMapping("MyCourses")
     public String myCourses(Model model, Long studentId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
         model.addAttribute("courses", courseRepository.findCoursesByStudentId(studentId));
         return "course_index";
     }

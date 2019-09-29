@@ -10,7 +10,7 @@ import java.util.Set;
 @Entity
 @Table(name = "STUDENTS")
 @EntityListeners(AuditingEntityListener.class)
-public class Student {
+public class Student implements IUser {
     @Column(name = "student_id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +33,17 @@ public class Student {
 
     @ManyToMany(mappedBy = "students")
     private Set<Course> courses;
+
+    @OneToOne(mappedBy = "studentUser")
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User userId) {
+        this.user = user;
+    }
 
     public Student() {};
 
@@ -103,5 +114,9 @@ public class Student {
     public String toString() {
         return "Name: " + getFirstName() + " " + getLastName()
                 + ", faculty: " + getFaculty() + ", year: " + getCurrentYear();
+    }
+
+    public String getUsername() {
+        return String.format("%s.%s", getFirstName(), getLastName());
     }
 }

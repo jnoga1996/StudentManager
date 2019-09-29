@@ -1,14 +1,10 @@
 package com.smanager.controllers;
 
-import com.smanager.dao.models.Assignment;
-import com.smanager.dao.models.Course;
-import com.smanager.dao.models.Solution;
-import com.smanager.dao.models.Student;
-import com.smanager.dao.repositories.AssignmentRepository;
-import com.smanager.dao.repositories.CourseRepository;
-import com.smanager.dao.repositories.SolutionRepository;
-import com.smanager.dao.repositories.StudentRepository;
+import com.smanager.dao.models.*;
+import com.smanager.dao.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,22 +21,39 @@ public class WorkController {
     private AssignmentRepository assignmentRepository;
     private SolutionRepository solutionRepository;
     private StudentRepository studentRepository;
+    private UserRepository userRepository;
 
     @Autowired
     public WorkController(CourseRepository courseRepository, AssignmentRepository assignmentRepository,
-                          SolutionRepository solutionRepository, StudentRepository studentRepository) {
+                          SolutionRepository solutionRepository, StudentRepository studentRepository,
+                          UserRepository userRepository) {
         this.courseRepository = courseRepository;
         this.assignmentRepository = assignmentRepository;
         this.solutionRepository = solutionRepository;
         this.studentRepository = studentRepository;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/Index")
-    public String index(Model model, Long studentId) {
+    public String index(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        User user = userRepository.getUserByUsername(currentUsername);
+        Student student = null;
+        if (user != null) {
+            if (user.getStudentUser() != null) {
+                student = studentRepository.getOne(user.getStudentUser().getId());
+            } else {
+                return "redirect:/Index";
+            }
+        }
+        Long studentId = student.getId();
+        /*
         Student student = studentRepository.getOne(studentId);
         if (student == null) {
             return "redirect:/Index";
         }
+         */
 
         List<Course> courses = courseRepository.findCoursesByStudentId(studentId);
         Map<Course, List<Assignment>> courseAssignmentsMap = new HashMap<>();
