@@ -19,7 +19,7 @@ public class User {
     @Column(name = "enabled")
     private boolean enabled;
 
-    private Integer role;
+    private String role;
 
     @OneToOne
     @JoinColumn(name = "student_id")
@@ -31,19 +31,19 @@ public class User {
 
     public User() {}
 
-    public User(String userName, String password, UserType userType, boolean enabled) {
+    public User(String userName, String password, String role, boolean enabled) {
         this.username = userName;
         this.password = password;
-        this.role = UserType.valueOf(userType.toString()).ordinal();
+        this.role = role;
     }
 
-    public User(String userName, String password, UserType userType, boolean enabled, Student student) {
-        this(userName, password, userType, enabled);
+    public User(String userName, String password, String role, boolean enabled, Student student) {
+        this(userName, password, role, enabled);
         this.studentUser = student;
     }
 
-    public User(String userName, String password, UserType userType, boolean enabled, Teacher teacher) {
-        this(userName, password, userType, enabled);
+    public User(String userName, String password, String role, boolean enabled, Teacher teacher) {
+        this(userName, password, role, enabled);
         this.teacherUser = teacher;
     }
 
@@ -71,11 +71,11 @@ public class User {
         this.password = password;
     }
 
-    public Integer getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(Integer role) {
+    public void setRole(String role) {
         this.role = role;
     }
 

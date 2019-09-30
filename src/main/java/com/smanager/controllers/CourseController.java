@@ -22,6 +22,7 @@ import java.util.Set;
 
 @Controller
 @RequestMapping("/Course")
+@PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
 public class CourseController {
     private static final String INDEX_REDIRECT_STRING = "redirect:/Course/Index";
 

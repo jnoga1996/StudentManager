@@ -12,6 +12,7 @@ import com.smanager.dao.repositories.TeacherRepository;
 import com.smanager.services.FileUploadHelper;
 import com.smanager.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,10 +24,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Controller
 @RequestMapping("/Assignment")
@@ -70,6 +69,7 @@ public class AssignmentController {
     }
 
     @PostMapping("Create")
+    @PreAuthorize("hasAnyRole('TEACHER', 'ADMIN')")
     public String create(@Valid Assignment assignment, @RequestParam MultipartFile file, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "assignment_form";
@@ -92,6 +92,7 @@ public class AssignmentController {
     }
 
     @PostMapping("/Edit")
+    @PreAuthorize("hasAnyRole('TEACHER', 'ADMIN')")
     public String edit(@Valid Assignment assignment, @RequestParam MultipartFile file, BindingResult binding, Model model) {
         if (binding.hasErrors()) {
             return INDEX_REDIRECT_STRING;
@@ -113,6 +114,7 @@ public class AssignmentController {
     }
 
     @GetMapping("/Delete")
+    @PreAuthorize("hasAnyRole('TEACHER', 'ADMIN')")
     public String delete(Long id) {
         Assignment assignment = assignmentRepository.getOne(id);
         if (assignment != null) {

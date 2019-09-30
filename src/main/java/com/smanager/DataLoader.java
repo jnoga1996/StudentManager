@@ -166,9 +166,9 @@ public class DataLoader implements ApplicationRunner {
 
     private void initializeUsers() {
         List<User> users = Arrays.asList(
-                new User("student", "student", UserType.STUDENT, true),
-                new User("teacher", "teacher", UserType.TEACHER, true),
-                new User("admin", "admin", UserType.ADMINISTRATOR, true)
+                new User("student", "student", UserType.STUDENT.toString(), true),
+                new User("teacher", "teacher", UserType.TEACHER.toString(), true),
+                new User("admin", "admin", UserType.ADMIN.toString(), true)
         );
 
         userRepository.saveAll(users);
@@ -181,7 +181,7 @@ public class DataLoader implements ApplicationRunner {
         for (Student student : studentRepository.findAll()) {
             String username = student.getUsername();
             String password = "123456";
-            User user = new User(username, password, UserType.STUDENT, true, student);
+            User user = new User(username, password, UserType.STUDENT.toString(), true, student);
             students.add(user);
         }
 
@@ -193,7 +193,7 @@ public class DataLoader implements ApplicationRunner {
         for (Teacher teacher : teacherRepository.findAll()) {
             String username = teacher.getUsername();
             String password = "123456";
-            User user = new User(username, password, UserType.TEACHER, true, teacher);
+            User user = new User(username, password, UserType.TEACHER.toString(), true, teacher);
             teachers.add(user);
         }
 
