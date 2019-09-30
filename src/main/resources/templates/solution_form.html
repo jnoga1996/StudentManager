@@ -10,6 +10,7 @@
 <h2></h2>
 <form action="#" th:action="${isCreate} ? @{/Solution/Create} : @{/Solution/Edit}" th:object="${solution}" enctype="multipart/form-data" method="post">
     <input type="hidden" th:field="*{id}">
+    <input type="hidden" th:field="*{creationDate}">
     <div class="form-group row">
         <label for="titleInput" class="col-sm-2 col-form-label">Content:</label>
         <div class="col-sm-6">

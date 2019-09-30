@@ -27,9 +27,17 @@ public class FileUploadHelper {
             FileHistory fileHistory = new FileHistory();
             fileHistory.setFileName(file.getOriginalFilename());
             fileHistory.setModificationDate(new Date(System.currentTimeMillis()));
-            fileHistory.setPath(path);
             fileHistory.setReferencedId(entry.getId());
-            fileHistory.setFileType(FileType.ASSIGNMENT.getName());
+            String fileType = "";
+            if (entry instanceof Assignment && !file.isEmpty()) {
+                path = storageService.storeAssignment(file, entry.getId());
+                fileType = FileType.ASSIGNMENT.getName();
+            } else if (entry instanceof Solution && !file.isEmpty()) {
+                path = storageService.storeSolution(file, entry.getId());
+                fileType = FileType.SOLUTION.getName();
+            }
+            fileHistory.setPath(path);
+            fileHistory.setFileType(fileType);
 
             fileHistoryRepository.save(fileHistory);
             entry.setPath(path);
@@ -39,13 +47,13 @@ public class FileUploadHelper {
 
     public void updateFileHistory(ISaveable entry, MultipartFile file) {
         String oldFilePath = entry.getPath();
-        if (oldFilePath != null) {
+        if (!oldFilePath.isEmpty()) {
             storageService.delete(entry.getPath());
         }
         String path = "";
         String fileType = "";
         if (entry instanceof Assignment && !file.isEmpty()) {
-            path = storageService.store(file, entry.getId());
+            path = storageService.storeAssignment(file, entry.getId());
             fileType = FileType.ASSIGNMENT.getName();
         } else if (entry instanceof Solution && !file.isEmpty()) {
             path = storageService.storeSolution(file, entry.getId());

@@ -2,6 +2,7 @@ package com.smanager.controllers;
 
 import com.smanager.dao.models.*;
 import com.smanager.dao.repositories.*;
+import com.smanager.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +23,7 @@ public class WorkController {
     private SolutionRepository solutionRepository;
     private StudentRepository studentRepository;
     private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     public WorkController(CourseRepository courseRepository, AssignmentRepository assignmentRepository,
@@ -36,9 +38,8 @@ public class WorkController {
 
     @GetMapping("/Index")
     public String index(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        User user = userRepository.getUserByUsername(currentUsername);
+        userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
+        User user = userService.getLoggedUser();
         Student student = null;
         if (user != null) {
             if (user.getStudentUser() != null) {
@@ -48,13 +49,6 @@ public class WorkController {
             }
         }
         Long studentId = student.getId();
-        /*
-        Student student = studentRepository.getOne(studentId);
-        if (student == null) {
-            return "redirect:/Index";
-        }
-         */
-
         List<Course> courses = courseRepository.findCoursesByStudentId(studentId);
         Map<Course, List<Assignment>> courseAssignmentsMap = new HashMap<>();
         Map<Assignment, Set<Solution>> assignmentSolutionsMap = new HashMap<>();

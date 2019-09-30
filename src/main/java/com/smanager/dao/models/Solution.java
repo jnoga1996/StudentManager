@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "SOLUTIONS")
@@ -28,9 +29,14 @@ public class Solution implements ISaveable{
 
     private boolean finished;
 
-    public Solution() {};
+    private LocalDateTime creationDate;
+
+    public Solution() {
+        this.creationDate = LocalDateTime.now();
+    };
 
     public Solution(Student student, String content) {
+        this();
         this.student = student;
         this.content = content;
     }
@@ -38,6 +44,11 @@ public class Solution implements ISaveable{
     public Solution(Student student, String content, Grades grade) {
         this(student, content);
         this.grade = grade.getGrade();
+    }
+
+    public Solution(Student student, String content, Grades grade, LocalDateTime creationDate) {
+        this(student, content, grade);
+        this.creationDate = creationDate;
     }
 
     public Long getId() {
@@ -94,6 +105,14 @@ public class Solution implements ISaveable{
 
     public void setFinished(boolean finished) {
         this.finished = finished;
+    }
+
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
     }
 
     @Override

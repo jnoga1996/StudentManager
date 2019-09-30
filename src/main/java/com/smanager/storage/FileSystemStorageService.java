@@ -42,6 +42,11 @@ public class FileSystemStorageService implements StorageService {
 
     @Override
     public String store(MultipartFile file, Long id) {
+        return null;
+    }
+
+    @Override
+    public String storeAssignment(MultipartFile file, Long id) {
         return storeFile("assignment", file, id);
     }
 

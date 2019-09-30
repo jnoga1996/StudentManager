@@ -8,6 +8,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Component
@@ -96,11 +97,12 @@ public class DataLoader implements ApplicationRunner {
 
     private void initializeSolutions() {
         List<Solution> solutions = Arrays.asList(
-                createSolution(studentRepository.getOne(1L).getId(), "Jan solution 1", assignmentSolutionRepository.getOne(1L).getId(), Grades.A),
-                createSolution(studentRepository.getOne(1L).getId(), "Jan solution 2", assignmentSolutionRepository.getOne(1L).getId(), Grades.E),
-                createSolution(studentRepository.getOne(1L).getId(), "Jan solution2 1", assignmentSolutionRepository.getOne(1L).getId(), Grades.B),
-                createSolution(studentRepository.getOne(1L).getId(), "Jan solution2 2", assignmentSolutionRepository.getOne(2L).getId(), Grades.D),
-                createSolution(studentRepository.getOne(2L).getId(), "Ewa solution 1", assignmentSolutionRepository.getOne(2L).getId(), Grades.C));
+                createSolution(studentRepository.getOne(1L).getId(), "Jan solution 1", assignmentSolutionRepository.getOne(1L).getId(), Grades.A, LocalDateTime.now()),
+                createSolution(studentRepository.getOne(1L).getId(), "Jan solution 2", assignmentSolutionRepository.getOne(1L).getId(), Grades.E, LocalDateTime.now()),
+                createSolution(studentRepository.getOne(1L).getId(), "Jan solution2 1", assignmentSolutionRepository.getOne(1L).getId(), Grades.B, LocalDateTime.of(2019, 7, 28, 22, 10)),
+                createSolution(studentRepository.getOne(1L).getId(), "Jan solution2 2", assignmentSolutionRepository.getOne(2L).getId(), Grades.D, LocalDateTime.of(2019, 6, 15, 16, 25)),
+                createSolution(studentRepository.getOne(2L).getId(), "Ewa solution 1", assignmentSolutionRepository.getOne(2L).getId(), Grades.C, LocalDateTime.of(2019, 9, 25, 21, 37))
+        );
 
         solutionRepository.saveAll(solutions);
     }
@@ -143,13 +145,14 @@ public class DataLoader implements ApplicationRunner {
         return new AssignmentSolution(assignment, solution);
     }
 
-    private Solution createSolution(Long studentId, String content, Long assignmentId, Grades grade) {
+    private Solution createSolution(Long studentId, String content, Long assignmentId, Grades grade, LocalDateTime localDateTime) {
         Solution solution = new Solution();
         Student student = studentRepository.getOne(studentId);
         solution.setAssignment(assignmentRepository.getOne(assignmentId));
         solution.setContent(content);
         solution.setStudent(student);
         solution.setGrade(grade.getGrade());
+        solution.setCreationDate(localDateTime);
 
         return solution;
     }

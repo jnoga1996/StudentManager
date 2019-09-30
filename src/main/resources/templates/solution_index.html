@@ -17,6 +17,7 @@
         <th scope="col">Grade</th>
         <th scope="col">Assignment</th>
         <th scope="col">Finished</th>
+        <th scope="col">Creation date</th>
         <th scope="col">Edit</th>
         <th scope="col">Delete</th>
     </tr>
@@ -29,13 +30,13 @@
 </table>
 <div>
     <p class="h3">Uploaded files:</p>
-<ul class="list-group">
-<th:block th:each="file : ${files}">
-    <li class="list-group-item">
-        <a th:href="${file}" th:text="${file}" />
-    </li>
-</th:block>
-</ul>
+    <ul class="list-group">
+    <th:block th:each="file : ${files}">
+        <li class="list-group-item">
+            <a th:href="${file}" th:text="${file}" />
+        </li>
+    </th:block>
+    </ul>
 </div>
 </body>
 </html>
