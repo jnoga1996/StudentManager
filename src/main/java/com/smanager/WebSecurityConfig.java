@@ -42,15 +42,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         InMemoryUserDetailsManager userManager = new InMemoryUserDetailsManager();
 
         for (com.smanager.dao.models.User user : userRepository.findAll()) {
-            UserDetails userDetails = User.withDefaultPasswordEncoder()
+            UserDetails userDetails = org.springframework.security.core.userdetails.User.withDefaultPasswordEncoder()
                     .username(user.getUsername())
                     .password(user.getPassword())
-                    .roles(user.getRole().toString())
+                    .roles(user.getRole())
                     .build();
 
             userManager.createUser(userDetails);
         }
-
         return userManager;
     }
 

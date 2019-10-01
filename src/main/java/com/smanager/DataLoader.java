@@ -22,11 +22,13 @@ public class DataLoader implements ApplicationRunner {
     private CourseRepository courseRepository;
     private GroupRepository groupRepository;
     private UserRepository userRepository;
+    private CommentRepository commentRepository;
 
     @Autowired
     public DataLoader(StudentRepository studentRepository, TeacherRepository teacherRepository, AssignmentRepository assignmentRepository,
                       SolutionRepository solutionRepository, AssignmentSolutionRepository assignmentSolutionRepository,
-                      CourseRepository courseRepository, GroupRepository groupRepository, UserRepository userRepository) {
+                      CourseRepository courseRepository, GroupRepository groupRepository, UserRepository userRepository,
+                      CommentRepository commentRepository) {
         this.studentRepository = studentRepository;
         this.teacherRepository = teacherRepository;
         this.assignmentRepository = assignmentRepository;
@@ -35,6 +37,7 @@ public class DataLoader implements ApplicationRunner {
         this.courseRepository = courseRepository;
         this.groupRepository = groupRepository;
         this.userRepository = userRepository;
+        this.commentRepository = commentRepository;
     }
 
     @Override
@@ -59,7 +62,10 @@ public class DataLoader implements ApplicationRunner {
         if (!userRepository.findAll().isEmpty()) {
             userRepository.deleteAll();
         }
+
         initializeUsers();
+        initializeComments();
+
     }
 
     private void initializeStudents() {
@@ -174,6 +180,7 @@ public class DataLoader implements ApplicationRunner {
         userRepository.saveAll(users);
         userRepository.saveAll(getStudentUsers());
         userRepository.saveAll(getTeacherUsers());
+
     }
 
     private List<User> getStudentUsers() {
@@ -229,4 +236,15 @@ public class DataLoader implements ApplicationRunner {
         }
     }
 
+    private void initializeComments() {
+        List<Comment> comments = Arrays.asList(
+                new Comment("Comment 1", LocalDateTime.now(), solutionRepository.getOne(1L), studentRepository.findAll().get(0), null),
+                new Comment("Comment 2", LocalDateTime.now(), solutionRepository.getOne(1L), null, teacherRepository.findAll().get(0)),
+                new Comment("Comment 3", LocalDateTime.now(), solutionRepository.getOne(1L), studentRepository.findAll().get(0), null),
+                new Comment("Comment 4", LocalDateTime.now(), solutionRepository.getOne(2L), studentRepository.findAll().get(0), null),
+                new Comment("Comment 5", LocalDateTime.now(), solutionRepository.getOne(2L), null, teacherRepository.findAll().get(0))
+        );
+
+        commentRepository.saveAll(comments);
+    }
 }

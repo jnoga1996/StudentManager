@@ -34,6 +34,10 @@ public class Student implements IUser {
     @ManyToMany(mappedBy = "students")
     private Set<Course> courses;
 
+    @OneToMany
+    @JoinColumn(name = "student_comment_id")
+    private Set<Comment> comments;
+
     @OneToOne(mappedBy = "studentUser")
     private User user;
 
@@ -108,6 +112,14 @@ public class Student implements IUser {
 
     public void setCourses(Set<Course> courses) {
         this.courses = courses;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 
     @Override

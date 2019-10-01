@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.Range;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "SOLUTIONS")
@@ -30,6 +31,9 @@ public class Solution implements ISaveable{
     private boolean finished;
 
     private LocalDateTime creationDate;
+
+    @OneToMany(mappedBy = "solution")
+    private Set<Comment> comments;
 
     public Solution() {
         this.creationDate = LocalDateTime.now();

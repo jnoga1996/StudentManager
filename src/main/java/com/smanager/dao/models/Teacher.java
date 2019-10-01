@@ -4,6 +4,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.Set;
 
 @Entity
 @Table(name = "TEACHERS")
@@ -22,6 +23,10 @@ public class Teacher implements IUser {
 
     @OneToOne(mappedBy = "teacherUser")
     private User user;
+
+    @OneToMany
+    @JoinColumn(name = "teacher_comment_id")
+    private Set<Comment> comments;
 
     public User getUser() {
         return user;
@@ -69,5 +74,13 @@ public class Teacher implements IUser {
 
     public String getUsername() {
         return String.format("%s.%s", getFirstName(), getLastName());
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 }

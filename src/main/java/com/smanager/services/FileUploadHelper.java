@@ -47,7 +47,7 @@ public class FileUploadHelper {
 
     public void updateFileHistory(ISaveable entry, MultipartFile file) {
         String oldFilePath = entry.getPath();
-        if (!oldFilePath.isEmpty()) {
+        if (oldFilePath != null) {
             storageService.delete(entry.getPath());
         }
         String path = "";
