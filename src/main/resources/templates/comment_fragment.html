@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Comment</title>
+    <div th:replace="head_fragment :: scripts"></div>
+</head>
+<body>
+<div th:fragment="div_view(comment)" class="list-group-item list-group-item-light">
+    <div class="form-group row">
+        <p class="col-sm-2">Id:</p>
+        <p th:utext="${comment.getId()}" class="col-sm-6"></p>
+    </div>
+    <div class="form-group row">
+        <p class="col-sm-2">Content:</p>
+        <p th:utext="${comment.getContent()}" class="col-sm-6"></p>
+    </div>
+    <div class="form-group row">
+        <p class="col-sm-2">Creation date:</p>
+        <p th:utext="${comment.getCreationDate()}" class="col-sm-6"></p>
+    </div>
+    <div class="form-group row">
+        <p class="col-sm-2">Solution:</p>
+        <p th:utext="${comment.getSolution()}" class="col-sm-6"></p>
+    </div>
+    <div class="form-group row">
+        <div th:if="${comment.getStudent() != null}">
+            <p class="col-sm-2" >Student:</p>
+            <p th:utext="${comment.getStudent()}" class="col-sm-6"></p>
+        </div>
+        <div th:unless="${comment.getStudent() != null}">
+            <p class="col-sm-2" >Teacher:</p>
+            <p th:utext="${comment.getTeacher()}" class="col-sm-6"></p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

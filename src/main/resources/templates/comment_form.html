@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Comment</title>
+    <div th:replace="head_fragment :: scripts"></div>
+</head>
+<body>
+<div th:insert="header :: header"></div>
+<h2></h2>
+<form action="#" th:action="@{/Comment/Create}" th:object="${comment}" method="post">
+    <input type="hidden" th:field="*{id}">
+    <input type="hidden" name="solutionId" th:value="${solutionId}">
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Content:</label>
+        <div class="col-sm-6">
+            <input type="text" th:field="*{content}" class="form-control"/>
+            <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="text-danger"></p>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-6">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</form>
+</body>
+</html>

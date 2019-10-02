@@ -4,6 +4,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,7 +25,7 @@ public class Assignment implements ISaveable {
     private String path;
 
     @OneToMany(mappedBy = "assignment")
-    private Set<Solution> solutions;
+    private List<Solution> solutions;
 
     @ManyToOne
     @JoinColumn(name = "student_id", referencedColumnName = "student_id")
@@ -68,11 +69,11 @@ public class Assignment implements ISaveable {
         this.content = content;
     }
 
-    public Set<Solution> getSolutions() {
+    public List<Solution> getSolutions() {
         return solutions;
     }
 
-    public void setSolutions(Set<Solution> assignmentSolutions) {
+    public void setSolutions(List<Solution> assignmentSolutions) {
         this.solutions = solutions;
     }
 

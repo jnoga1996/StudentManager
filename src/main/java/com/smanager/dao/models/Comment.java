@@ -83,4 +83,12 @@ public class Comment {
     public void setStudent(Student student) {
         this.student = student;
     }
+
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
+    }
 }

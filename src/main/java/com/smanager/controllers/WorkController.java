@@ -3,6 +3,7 @@ package com.smanager.controllers;
 import com.smanager.dao.models.*;
 import com.smanager.dao.repositories.*;
 import com.smanager.services.UserService;
+import com.smanager.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -11,9 +12,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.thymeleaf.expression.Sets;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/Work")
@@ -24,17 +27,22 @@ public class WorkController {
     private SolutionRepository solutionRepository;
     private StudentRepository studentRepository;
     private UserRepository userRepository;
+    private CommentRepository commentRepository;
     private UserService userService;
+    private StorageService storageService;
 
     @Autowired
     public WorkController(CourseRepository courseRepository, AssignmentRepository assignmentRepository,
                           SolutionRepository solutionRepository, StudentRepository studentRepository,
-                          UserRepository userRepository) {
+                          CommentRepository commentRepository, UserRepository userRepository,
+                          StorageService storageService) {
         this.courseRepository = courseRepository;
         this.assignmentRepository = assignmentRepository;
         this.solutionRepository = solutionRepository;
         this.studentRepository = studentRepository;
+        this.commentRepository = commentRepository;
         this.userRepository = userRepository;
+        this.storageService = storageService;
     }
 
     @GetMapping("/Index")
@@ -53,7 +61,8 @@ public class WorkController {
         Long studentId = student.getId();
         List<Course> courses = courseRepository.findCoursesByStudentId(studentId);
         Map<Course, List<Assignment>> courseAssignmentsMap = new HashMap<>();
-        Map<Assignment, Set<Solution>> assignmentSolutionsMap = new HashMap<>();
+        Map<Assignment, List<Solution>> assignmentSolutionsMap = new HashMap<>();
+        Map<Solution, List<Comment>> solutionCommentsMap = new HashMap<>();
         
         for (Course course : courses) {
             if (!courseAssignmentsMap.containsKey(course)) {
@@ -61,7 +70,7 @@ public class WorkController {
                 courseAssignmentsMap.put(course, courseAssignments);
 
                 for (Assignment assignment : courseAssignments) {
-                    Set<Solution> assignmentSolutions = assignment.getSolutions();
+                    List<Solution> assignmentSolutions = assignment.getSolutions();
                     assignmentSolutions.removeIf(s -> !s.getStudent().getId().equals(studentId));
                     if (!assignmentSolutionsMap.containsKey(assignment)) {
                         assignmentSolutionsMap.put(assignment, assignmentSolutions);
@@ -74,7 +83,8 @@ public class WorkController {
         model.addAttribute("courses", courses);
         model.addAttribute("courseAssignments", courseAssignmentsMap);
         model.addAttribute("assignmentsSolutions", assignmentSolutionsMap);
-
+        
         return "work_index";
     }
+
 }

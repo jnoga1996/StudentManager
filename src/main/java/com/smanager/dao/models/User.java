@@ -103,4 +103,8 @@ public class User {
     public void setTeacherUser(Teacher teacherUser) {
         this.teacherUser = teacherUser;
     }
+
+    public boolean isStudent() {
+        return (getStudentUser() != null && getTeacherUser() == null);
+    }
 }

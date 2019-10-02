@@ -64,7 +64,10 @@ public class DataLoader implements ApplicationRunner {
         }
 
         initializeUsers();
-        initializeComments();
+
+        if (commentRepository.findAll().isEmpty()) {
+            initializeComments();
+        }
 
     }
 

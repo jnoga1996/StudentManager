@@ -23,7 +23,7 @@
             <input type="checkbox" id="isFinished" th:field="*{finished}" class="form-control"/>
         </div>
     </div>
-    <div class="form-group row">
+    <div class="form-group row" th:if="${}">
         <label class="col-sm-2 col-form-label">Grade:</label>
         <div class="col-sm-6">
             <select th:field="*{grade}" class="form-control">

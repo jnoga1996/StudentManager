@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Comments</title>
+    <div th:replace="head_fragment :: scripts"></div>
+</head>
+<body>
+<div th:insert="header :: header"></div>
+<div>
+    <div th:if="${comments.isEmpty()}">
+        <h2>No comments available</h2>
+    </div>
+    <th:block th:each="comment : ${comments}">
+        <div th:insert="comment_fragment :: div_view(comment=${comment})"></div>
+    </th:block>
+</div>
+
+</body>
+</html>

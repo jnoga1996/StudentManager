@@ -21,7 +21,7 @@
                     <p th:utext="${assignment}"></p>
                     <th:block th:each="solution : ${assignmentsSolutions.get(assignment)}">
                         <div class="list-group-item">
-                            <p th:utext="${solution}"></p>
+                            <div th:insert="solution_fragment :: div_view(solution=${solution})"></div>
                         </div>
                     </th:block>
                 </div>
