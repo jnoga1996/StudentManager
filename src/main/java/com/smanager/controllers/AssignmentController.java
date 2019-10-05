@@ -59,6 +59,7 @@ public class AssignmentController {
                 path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
                         "serveFile", path.getFileName().toString()).build().toString())
                 .collect(Collectors.toList()));
+
         return "assignment_index";
     }
 

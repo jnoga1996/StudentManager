@@ -12,18 +12,22 @@
 </div>
 <div class="list-group">
     <th:block th:each="course : ${courses}">
-        <div class="list-group-item-primary">
+        <div class="list-group-item list-group-item-primary">
             <p th:utext="${course}"></p>
         </div>
         <div class="list-group">
-            <th:block th:each="assignment : ${courseAssignments.get(course)}">
-                <div class="list-group-item-secondary">
+            <th:block th:each="assignment, i : ${courseAssignments.get(course)}">
+                <div class="list-group-item">
                     <p th:utext="${assignment}"></p>
-                    <th:block th:each="solution : ${assignmentsSolutions.get(assignment)}">
-                        <div class="list-group-item">
-                            <div th:insert="solution_fragment :: div_view(solution=${solution})"></div>
-                        </div>
-                    </th:block>
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" th:href="'#solutions-container-' + ${i.count}"
+                        role="button" aria-controls="'solutions-container-' + ${i.count}">Show solutions</button>
+                    <div class="collapse" th:id="'solutions-container-' + ${i.count}">
+                        <th:block th:each="solution : ${assignmentsSolutions.get(assignment)}">
+                            <div class="list-group-item">
+                                <div th:insert="solution_fragment :: div_view(solution=${solution})"></div>
+                            </div>
+                        </th:block>
+                    </div>
                 </div>
             </th:block>
         </div>

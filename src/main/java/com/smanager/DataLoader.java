@@ -56,6 +56,7 @@ public class DataLoader implements ApplicationRunner {
         if (courseRepository.findAll().isEmpty()) {
             initializeCourses();
             registerStudents();
+            registerTeachers();
         }
         if (groupRepository.findAll().isEmpty())
             initializeGroups();
@@ -88,7 +89,11 @@ public class DataLoader implements ApplicationRunner {
         List<Teacher> teachers = Arrays.asList(
                 new Teacher("Marian", "Jezioro"),
                 new Teacher("Joanna", "Talerz"),
-                new Teacher("Edmund", "Gruszka"));
+                new Teacher("Edmund", "Gruszka"),
+                new Teacher("Teacher", "Teacher"),
+                new Teacher("Teacher2", "Teacher2"),
+                new Teacher("Teacher3", "Teacher3")
+        );
 
         teacherRepository.saveAll(teachers);
     }
@@ -229,12 +234,41 @@ public class DataLoader implements ApplicationRunner {
         }
     }
 
+    private void registerTeacherToCourse(Long teacherId, Long courseId) {
+        Course course = courseRepository.getOne(courseId);
+        Teacher teacher = teacherRepository.getOne(teacherId);
+        Set<Teacher> registeredTeachers = course.getTeachers();
+
+        if (registeredTeachers == null) {
+            registeredTeachers = new HashSet<>();
+        }
+
+        if (teacher != null) {
+            registeredTeachers.add(teacher);
+        }
+
+        if (course != null) {
+            course.setTeachers(registeredTeachers);
+            courseRepository.save(course);
+        }
+    }
+
     private void registerStudents() {
         List<Course> courses = courseRepository.findAll();
         for (Student student : studentRepository.findAll()) {
             registerStudentToCourse(student.getId(), courses.get(0).getId());
             if (student.getId() % 2 == 0) {
                 registerStudentToCourse(student.getId(), courses.get(1).getId());
+            }
+        }
+    }
+
+    private void registerTeachers() {
+        List<Course> courses = courseRepository.findAll();
+        for (Teacher teacher : teacherRepository.findAll()) {
+            registerTeacherToCourse(teacher.getId(), courses.get(0).getId());
+            if (teacher.getId() % 2 == 0) {
+                registerTeacherToCourse(teacher.getId(), courses.get(1).getId());
             }
         }
     }

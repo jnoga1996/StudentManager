@@ -28,6 +28,9 @@ public class Teacher implements IUser {
     @JoinColumn(name = "teacher_comment_id")
     private Set<Comment> comments;
 
+    @ManyToMany(mappedBy = "teachers")
+    private Set<Course> courses;
+
     public User getUser() {
         return user;
     }
@@ -82,5 +85,13 @@ public class Teacher implements IUser {
 
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
+    }
+
+    public Set<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(Set<Course> courses) {
+        this.courses = courses;
     }
 }

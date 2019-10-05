@@ -28,6 +28,14 @@ public class Course {
     )
     private Set<Student> students;
 
+    @ManyToMany
+    @JoinTable(
+            name = "course_teacher",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "teacher_id")
+    )
+    private Set<Teacher> teachers;
+
     public Course() {}
 
     public Course(String title, int ects) {
@@ -73,6 +81,14 @@ public class Course {
 
     public void setStudents(Set<Student> students) {
         this.students = students;
+    }
+
+    public Set<Teacher> getTeachers() {
+        return teachers;
+    }
+
+    public void setTeachers(Set<Teacher> teachers) {
+        this.teachers = teachers;
     }
 
     @Override

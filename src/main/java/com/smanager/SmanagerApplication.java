@@ -28,7 +28,7 @@ public class SmanagerApplication extends SpringBootServletInitializer {
 	@Bean
 	CommandLineRunner init(StorageService storageService) {
 		return (args) -> {
-			storageService.deleteAll();
+			//storageService.deleteAll();
 			storageService.init();
 		};
 	}

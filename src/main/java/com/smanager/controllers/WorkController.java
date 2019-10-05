@@ -26,6 +26,7 @@ public class WorkController {
     private AssignmentRepository assignmentRepository;
     private SolutionRepository solutionRepository;
     private StudentRepository studentRepository;
+    private TeacherRepository teacherRepository;
     private UserRepository userRepository;
     private CommentRepository commentRepository;
     private UserService userService;
@@ -35,7 +36,7 @@ public class WorkController {
     public WorkController(CourseRepository courseRepository, AssignmentRepository assignmentRepository,
                           SolutionRepository solutionRepository, StudentRepository studentRepository,
                           CommentRepository commentRepository, UserRepository userRepository,
-                          StorageService storageService) {
+                          StorageService storageService, TeacherRepository teacherRepository) {
         this.courseRepository = courseRepository;
         this.assignmentRepository = assignmentRepository;
         this.solutionRepository = solutionRepository;
@@ -43,6 +44,7 @@ public class WorkController {
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
         this.storageService = storageService;
+        this.teacherRepository = teacherRepository;
     }
 
     @GetMapping("/Index")
@@ -62,8 +64,7 @@ public class WorkController {
         List<Course> courses = courseRepository.findCoursesByStudentId(studentId);
         Map<Course, List<Assignment>> courseAssignmentsMap = new HashMap<>();
         Map<Assignment, List<Solution>> assignmentSolutionsMap = new HashMap<>();
-        Map<Solution, List<Comment>> solutionCommentsMap = new HashMap<>();
-        
+
         for (Course course : courses) {
             if (!courseAssignmentsMap.containsKey(course)) {
                 List<Assignment> courseAssignments = assignmentRepository.findAllByCourseId(course.getId());
@@ -83,8 +84,28 @@ public class WorkController {
         model.addAttribute("courses", courses);
         model.addAttribute("courseAssignments", courseAssignmentsMap);
         model.addAttribute("assignmentsSolutions", assignmentSolutionsMap);
-        
+        model.addAttribute("user", user);
+
         return "work_index";
+    }
+
+    @GetMapping("/TeacherWork")
+    @PreAuthorize("hasRole('TEACHER')")
+    public String teacherWork(Model model) {
+        userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
+        User user = userService.getLoggedUser();
+        Teacher teacher = null;
+        if (user != null) {
+            if (user.getTeacherUser() != null) {
+                teacher = teacherRepository.getOne(user.getTeacherUser().getId());
+            } else {
+                return "redirect:/Index";
+            }
+        }
+        Long teacherId = teacher.getId();
+        List<Course> courses = courseRepository.findCoursesByTeacherId(teacherId);
+
+        return "teacher_work";
     }
 
 }
