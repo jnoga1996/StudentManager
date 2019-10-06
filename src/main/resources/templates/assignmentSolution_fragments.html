@@ -11,7 +11,7 @@
         <div class="list-group">
             <div class="list-group-item list-group-item-primary" th:utext="${as}"></div>
             <th:block th:each="sol : ${solutionsForAssignment.get(as)}">
-                <div th:replace="solution_fragment :: div_view(solution=${sol})"></div>
+                <div th:replace="solution_fragment :: div_view(solution=${sol}, user=${user})"></div>
             </th:block>
         </div>
     </th:block>
@@ -24,7 +24,7 @@
             <div class="list-group-item list-group-item-primary"
                  th:utext="${as}"></div>
             <th:block th:each="sol : ${solutionsForAssignment.get(as)}">
-                <div th:replace="solution_fragment :: div_view(solution=${sol})"></div>
+                <div th:replace="solution_fragment :: div_view(solution=${sol}, user=${user})"></div>
             </th:block>
         </div>
     </th:block>

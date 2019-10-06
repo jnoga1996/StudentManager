@@ -107,4 +107,9 @@ public class User {
     public boolean isStudent() {
         return (getStudentUser() != null && getTeacherUser() == null);
     }
+
+    @Override
+    public String toString() {
+        return isStudent() ? getStudentUser().toString() : getTeacherUser().toString();
+    }
 }

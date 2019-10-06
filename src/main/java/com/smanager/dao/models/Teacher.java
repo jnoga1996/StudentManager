@@ -94,4 +94,5 @@ public class Teacher implements IUser {
     public void setCourses(Set<Course> courses) {
         this.courses = courses;
     }
+
 }

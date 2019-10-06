@@ -49,6 +49,7 @@ public class CommentController {
     public String getCommentsForSolution(Model model, Long solutionId) {
         List<Comment> comments = commentRepository.findAllBySolutionIdOrderByCreationDateDesc(solutionId);
         model.addAttribute("comments", comments);
+        model.addAttribute("user", userService.getLoggedUser());
 
         return "comment_index";
     }
@@ -69,7 +70,7 @@ public class CommentController {
     }
 
     @PostMapping("/Create")
-    public String createComment(@Valid Comment comment, @RequestParam("solutionId") Long solutionId, BindingResult result) {
+    public String createComment(@Valid Comment comment, @RequestParam("solutionId") Long solutionId, BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "comment_form";
         }
@@ -88,6 +89,7 @@ public class CommentController {
         }
         comment.setSolution(solution);
         commentRepository.save(comment);
+        model.addAttribute("user", userService.getLoggedUser());
 
         return INDEX_RETURN_STRING;
     }

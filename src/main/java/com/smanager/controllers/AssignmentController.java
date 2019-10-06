@@ -1,18 +1,14 @@
 package com.smanager.controllers;
 
 
-import com.smanager.dao.models.Assignment;
-import com.smanager.dao.models.Course;
-import com.smanager.dao.models.FileHistory;
-import com.smanager.dao.models.FileType;
-import com.smanager.dao.repositories.AssignmentRepository;
-import com.smanager.dao.repositories.CourseRepository;
-import com.smanager.dao.repositories.FileHistoryRepository;
-import com.smanager.dao.repositories.TeacherRepository;
+import com.smanager.dao.models.*;
+import com.smanager.dao.repositories.*;
 import com.smanager.services.FileUploadHelper;
+import com.smanager.services.UserService;
 import com.smanager.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -39,17 +35,21 @@ public class AssignmentController {
     private TeacherRepository teacherRepository;
     private CourseRepository courseRepository;
     private FileUploadHelper fileUploadHelper;
+    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     public AssignmentController(AssignmentRepository assignmentRepository, FileHistoryRepository fileHistoryRepository,
                                 StorageService storageService, TeacherRepository teacherRepository,
-                                CourseRepository courseRepository) {
+                                CourseRepository courseRepository, UserRepository userRepository) {
         this.assignmentRepository = assignmentRepository;
         this.fileHistoryRepository = fileHistoryRepository;
         this.storageService = storageService;
         this.teacherRepository = teacherRepository;
         this.courseRepository = courseRepository;
+        this.userRepository = userRepository;
         fileUploadHelper = new FileUploadHelper(fileHistoryRepository, storageService);
+        userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
     }
 
     @GetMapping("Index")
@@ -59,6 +59,7 @@ public class AssignmentController {
                 path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
                         "serveFile", path.getFileName().toString()).build().toString())
                 .collect(Collectors.toList()));
+        model.addAttribute("user", userService.getLoggedUser());
 
         return "assignment_index";
     }
@@ -66,6 +67,8 @@ public class AssignmentController {
     @GetMapping("Create")
     public String showForm(Model model) {
         fillModel(model, new Assignment(), true);
+        model.addAttribute("user", userService.getLoggedUser());
+
         return "assignment_form";
     }
 
@@ -77,6 +80,7 @@ public class AssignmentController {
         }
 
         fileUploadHelper.saveFileToRepository(assignmentRepository, file, assignment);
+        model.addAttribute("user", userService.getLoggedUser());
 
         return INDEX_REDIRECT_STRING;
     }
@@ -89,6 +93,8 @@ public class AssignmentController {
         }
         fillModel(model, assignment, false);
         model.addAttribute("id", id);
+        model.addAttribute("user", userService.getLoggedUser());
+
         return "assignment_form";
     }
 
@@ -110,17 +116,19 @@ public class AssignmentController {
 
             assignmentRepository.save(assignmentFromDb);
         }
+        model.addAttribute("user", userService.getLoggedUser());
 
         return INDEX_REDIRECT_STRING;
     }
 
     @GetMapping("/Delete")
     @PreAuthorize("hasAnyRole('TEACHER', 'ADMIN')")
-    public String delete(Long id) {
+    public String delete(Long id, Model model) {
         Assignment assignment = assignmentRepository.getOne(id);
         if (assignment != null) {
             assignmentRepository.delete(assignment);
         }
+        model.addAttribute("user", userService.getLoggedUser());
 
         return INDEX_REDIRECT_STRING;
     }
@@ -141,6 +149,7 @@ public class AssignmentController {
         List<Assignment> assignments = assignmentRepository.findAllByCourseId(courseId);
         model.addAttribute("course", course);
         model.addAttribute("assignments", assignments);
+        model.addAttribute("user", userService.getLoggedUser());
 
         return "courseAssignments_index";
     }

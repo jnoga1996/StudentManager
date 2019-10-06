@@ -72,12 +72,15 @@ public class SolutionController {
                         "serveFile", path.getFileName().toString()).build().toString())
                 .collect(Collectors.toList()));
 
+        model.addAttribute("user", user);
+
         return "solution_index";
     }
 
     @GetMapping("/Create")
     public String showForm(Model model) {
         fillModel(model, new Solution(), true);
+        model.addAttribute("user", userService.getLoggedUser());
         return "solution_form";
     }
 
@@ -88,6 +91,7 @@ public class SolutionController {
         }
 
         fileUploadHelper.saveFileToRepository(solutionRepository, file, solution);
+        model.addAttribute("user", userService.getLoggedUser());
 
         return INDEX_REDIRECT_STRING;
     }
@@ -100,6 +104,7 @@ public class SolutionController {
         }
         fillModel(model, solution, false);
         model.addAttribute("id", id);
+        model.addAttribute("user", userService.getLoggedUser());
 
         return "solution_form";
     }
@@ -107,6 +112,7 @@ public class SolutionController {
     @PostMapping("/Edit")
     public String edit(@Valid Solution solution, @RequestPart MultipartFile file, Model model, BindingResult binding) {
         if (binding.hasErrors()) {
+            model.addAttribute("user", userService.getLoggedUser());
             return INDEX_REDIRECT_STRING;
         }
 
@@ -124,6 +130,8 @@ public class SolutionController {
             solutionRepository.save(solutionFromDb);
         }
 
+        model.addAttribute("user", userService.getLoggedUser());
+
         return INDEX_REDIRECT_STRING;
     }
 
@@ -133,6 +141,7 @@ public class SolutionController {
         if (solution != null) {
             solutionRepository.delete(solution);
         }
+        model.addAttribute("user", userService.getLoggedUser());
 
         return INDEX_REDIRECT_STRING;
     }

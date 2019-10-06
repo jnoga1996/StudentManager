@@ -11,10 +11,13 @@ public class UserService {
     private Authentication authentication;
     private UserRepository userRepository;
 
-    @Autowired
     public UserService(Authentication authentication, UserRepository userRepository) {
-        this.authentication = authentication;
+        this(authentication);
         this.userRepository = userRepository;
+    }
+
+    public UserService(Authentication authentication) {
+        this.authentication = authentication;
     }
 
     public User getLoggedUser() {

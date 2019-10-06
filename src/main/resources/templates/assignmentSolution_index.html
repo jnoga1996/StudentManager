@@ -6,7 +6,7 @@
     <div th:replace="head_fragment :: scripts"></div>
 </head>
 <body>
-<div th:insert="header :: header"></div>
+<div th:insert="header_user :: header(user=${user})"></div>
 <a href="/AssignmentSolution/SolutionsToCheck">
     <button type="button" class="btn btn-primary btn-sm">Check solutions</button>
 </a>

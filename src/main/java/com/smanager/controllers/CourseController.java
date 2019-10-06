@@ -3,6 +3,7 @@ package com.smanager.controllers;
 import com.smanager.WebSecurityConfig;
 import com.smanager.dao.models.*;
 import com.smanager.dao.repositories.*;
+import com.smanager.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -22,7 +23,6 @@ import java.util.Set;
 
 @Controller
 @RequestMapping("/Course")
-@PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
 public class CourseController {
     private static final String INDEX_REDIRECT_STRING = "redirect:/Course/Index";
 
@@ -30,50 +30,60 @@ public class CourseController {
     private AssignmentRepository assignmentRepository;
     private SolutionRepository solutionRepository;
     private StudentRepository studentRepository;
-    private WebSecurityConfig webSecurityConfig;
+    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     public CourseController(CourseRepository courseRepository, AssignmentRepository assignmentRepository,
                             SolutionRepository solutionRepository, StudentRepository studentRepository,
-                            WebSecurityConfig webSecurityConfig) {
+                            UserRepository userRepository) {
         this.courseRepository = courseRepository;
         this.assignmentRepository = assignmentRepository;
         this.solutionRepository = solutionRepository;
         this.studentRepository = studentRepository;
-        this.webSecurityConfig = webSecurityConfig;
+        this.userRepository = userRepository;
+        userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
     }
 
     @GetMapping("Index")
     public String index(Model model) {
         model.addAttribute("courses", courseRepository.findAll());
+        model.addAttribute("user", userService.getLoggedUser());
+
         return "course_index";
     }
 
     @GetMapping("MyCourses")
     public String myCourses(Model model, Long studentId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
         model.addAttribute("courses", courseRepository.findCoursesByStudentId(studentId));
+        model.addAttribute("user", userService.getLoggedUser());
+
         return "course_index";
     }
 
     @GetMapping("/Create")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     public String showForm(Course course, Model model) {
         model.addAttribute("isCreate", true);
+        model.addAttribute("user", userService.getLoggedUser());
+
         return "course_form";
     }
 
     @PostMapping("/Create")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     public String create(@Valid Course course, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "course_form";
         }
         courseRepository.save(course);
+        model.addAttribute("user", userService.getLoggedUser());
 
         return INDEX_REDIRECT_STRING;
     }
 
     @GetMapping("/Edit")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     public String edit(Model model, Long id) {
         Course course = courseRepository.getOne(id);
         if (course == null) {
@@ -82,10 +92,13 @@ public class CourseController {
         model.addAttribute("course", course);
         model.addAttribute("isCreate", false);
         model.addAttribute("id", id);
+        model.addAttribute("user", userService.getLoggedUser());
+
         return "course_form";
     }
 
     @PostMapping("/Edit")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     public String edit(@Valid Course course, Model model, BindingResult binding) {
         if (binding.hasErrors()) {
             return INDEX_REDIRECT_STRING;
@@ -96,12 +109,14 @@ public class CourseController {
         courseFromDb.setEcts(course.getEcts());
         courseRepository.save(courseFromDb);
 
+        model.addAttribute("user", userService.getLoggedUser());
+
         return INDEX_REDIRECT_STRING;
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/Delete")
-    public String delete(Long id) {
+    public String delete(Model model, Long id) {
         Course course = courseRepository.getOne(id);
         if (course != null) {
             for (Assignment assignment : course.getAssignments()) {
@@ -114,6 +129,7 @@ public class CourseController {
             }
             courseRepository.delete(course);
         }
+        model.addAttribute("user", userService.getLoggedUser());
 
         return INDEX_REDIRECT_STRING;
     }
@@ -123,6 +139,8 @@ public class CourseController {
         model.addAttribute("courses", courseRepository.findAll());
         model.addAttribute("students", studentRepository.findAll());
         model.addAttribute("mapping", new CourseStudentMapping());
+        model.addAttribute("user", userService.getLoggedUser());
+
         return "courseStudentRegister_form";
     }
 
@@ -144,12 +162,14 @@ public class CourseController {
             course.setStudents(registeredStudents);
             courseRepository.save(course);
         }
+        model.addAttribute("user", userService.getLoggedUser());
 
         return INDEX_REDIRECT_STRING;
     }
 
     @GetMapping("/RemoveFromCourse")
-    public String removerStudentFromCourse(Long courseId, Long studentId) {
+    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
+    public String removerStudentFromCourse(Long courseId, Long studentId, Model model) {
         Course course = courseRepository.getOne(courseId);
         Student student = studentRepository.getOne(studentId);
 
@@ -157,6 +177,7 @@ public class CourseController {
             course.getStudents().remove(student);
             courseRepository.save(course);
         }
+        model.addAttribute("user", userService.getLoggedUser());
 
         return INDEX_REDIRECT_STRING;
     }

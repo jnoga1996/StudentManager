@@ -6,7 +6,7 @@
     <div th:replace="head_fragment :: scripts"></div>
 </head>
 <body>
-<div th:insert="header :: header"></div>
+<div th:insert="header_user :: header(user=${user})"></div>
 <a href="/Assignment/Create">Create new assignment</a>
 <table class="table table-striped">
     <thead class="thead-dark">

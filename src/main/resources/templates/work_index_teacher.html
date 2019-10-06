@@ -8,7 +8,7 @@
 <body>
 <div th:insert="header_user :: header(user=${user})"></div>
 <div class="h3">
-    <p th:utext="${student}"></p>
+    <p th:utext="${teacher}"></p>
 </div>
 <div class="list-group">
     <th:block th:each="course : ${courses}">
@@ -20,7 +20,7 @@
                 <div class="list-group-item">
                     <p th:utext="${assignment}"></p>
                     <button class="btn btn-primary" type="button" data-toggle="collapse" th:href="'#solutions-container-' + ${i.count}"
-                        role="button" aria-controls="'solutions-container-' + ${i.count}">Show solutions</button>
+                            role="button" aria-controls="'solutions-container-' + ${i.count}">Show solutions</button>
                     <div class="collapse" th:id="'solutions-container-' + ${i.count}">
                         <th:block th:each="solution : ${assignmentsSolutions.get(assignment)}">
                             <div class="list-group-item">

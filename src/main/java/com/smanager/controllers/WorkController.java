@@ -104,8 +104,31 @@ public class WorkController {
         }
         Long teacherId = teacher.getId();
         List<Course> courses = courseRepository.findCoursesByTeacherId(teacherId);
+        Map<Course, List<Assignment>> courseAssignmentsMap = new HashMap<>();
+        Map<Assignment, List<Solution>> assignmentSolutionsMap = new HashMap<>();
 
-        return "teacher_work";
+        for (Course course : courses) {
+            if (!courseAssignmentsMap.containsKey(course)) {
+                List<Assignment> courseAssignments = assignmentRepository.findAllByCourseId(course.getId());
+                courseAssignmentsMap.put(course, courseAssignments);
+
+                for (Assignment assignment : courseAssignments) {
+                    List<Solution> assignmentSolutions = assignment.getSolutions();
+                    assignmentSolutions.removeIf((s -> !s.isFinished()));
+                    if (!assignmentSolutionsMap.containsKey(assignment)) {
+                        assignmentSolutionsMap.put(assignment, assignmentSolutions);
+                    }
+                }
+            }
+        }
+
+        model.addAttribute("teacher", teacher);
+        model.addAttribute("courses", courses);
+        model.addAttribute("courseAssignments", courseAssignmentsMap);
+        model.addAttribute("assignmentsSolutions", assignmentSolutionsMap);
+        model.addAttribute("user", user);
+
+        return "work_index_teacher";
     }
 
 }
