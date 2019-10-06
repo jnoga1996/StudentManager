@@ -6,7 +6,8 @@ public enum Grades {
     C(4.0),
     D(3.5),
     E(3.0),
-    F(2.0);
+    F(2.0),
+    NO_GRADE(0.0);
 
     private Double grade;
 

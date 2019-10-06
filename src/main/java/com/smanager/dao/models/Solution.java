@@ -77,6 +77,7 @@ public class Solution implements ISaveable{
 
     public void setGrade(Double grade) {
         this.grade = grade;
+        setFinished(true);
     }
 
     public Assignment getAssignment() {

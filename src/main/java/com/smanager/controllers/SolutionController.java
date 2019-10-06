@@ -81,6 +81,8 @@ public class SolutionController {
     public String showForm(Model model) {
         fillModel(model, new Solution(), true);
         model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("grade", Grades.NO_GRADE);
+
         return "solution_form";
     }
 
@@ -105,6 +107,7 @@ public class SolutionController {
         fillModel(model, solution, false);
         model.addAttribute("id", id);
         model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("grade", Grades.NO_GRADE);
 
         return "solution_form";
     }
