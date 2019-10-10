@@ -1,6 +1,5 @@
 package com.smanager.controllers;
 
-import com.smanager.dao.models.FileHistory;
 import com.smanager.dao.models.Grades;
 import com.smanager.dao.models.Solution;
 import com.smanager.dao.models.User;
@@ -8,12 +7,7 @@ import com.smanager.dao.repositories.*;
 import com.smanager.services.FileUploadHelper;
 import com.smanager.services.UserService;
 import com.smanager.storage.StorageService;
-import com.sun.xml.internal.bind.v2.TODO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,12 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Controller
 @RequestMapping("/Solution")

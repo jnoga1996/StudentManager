@@ -9,10 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com</groupId>
-	<artifactId>smanager</artifactId>
-	<version>demo</version>
+	<artifactId>ROOT</artifactId>
 	<name>smanager</name>
-	<description>SManager</description>
+	<description>StudentManager application</description>
 	<packaging>war</packaging>
 
 	<properties>

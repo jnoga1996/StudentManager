@@ -6,7 +6,7 @@
     <div th:replace="head_fragment :: scripts"></div>
 </head>
 <body>
-<div th:insert="header_user :: header(user=${user})"></div>
+<div th:insert="header :: header"></div>
     <p th:utext="${user}">Logged as: </p>
 </body>
 </html>
