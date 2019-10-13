@@ -16,19 +16,23 @@
 <h2></h2>
 <form th:action="@{/login}" method="post" class="form-group">
     <div class="form-group row">
-        <label class="col-sm-2 col-form-label">User Name:</label>
+        <label class="col-sm-2 col-form-label">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("login", "username")}'></th:block>
+        </label>
         <div class="col-sm-4">
             <input type="text" name="username" class="form-control"/>
         </div>
     </div>
     <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Password:</label>
+        <label class="col-sm-2 col-form-label">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("login", "password")}'></th:block>
+        </label>
         <div class="col-sm-4">
             <input type="password" name="password" class="form-control"/>
         </div>
     </div>
     <div class="form-group">
-        <input type="submit" value="Sign In" class="btn btn-primary"/>
+        <input type="submit" th:value='${T(com.smanager.Bundles).getMessage("login", "signIn")}' class="btn btn-primary"/>
     </div>
 </form>
 </body>

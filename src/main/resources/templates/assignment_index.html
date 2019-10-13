@@ -7,17 +7,33 @@
 </head>
 <body>
 <div th:insert="header_user :: header(user=${user})"></div>
-<a href="/Assignment/Create">Create new assignment</a>
+<a href="/Assignment/Create">
+    <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "createNewAssignment")}'></th:block>
+</a>
 <table class="table table-striped">
     <thead class="thead-dark">
     <tr>
-        <th>Id</th>
-        <th>Title</th>
-        <th>Content</th>
-        <th>Teacher</th>
-        <th>Course</th>
-        <th>Edit</th>
-        <th>Delete</th>
+        <th>
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "id")}'></th:block>
+        </th>
+        <th>
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "title")}'></th:block>
+        </th>
+        <th>
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "content")}'></th:block>
+        </th>
+        <th>
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "teacher")}'></th:block>
+        </th>
+        <th>
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "course")}'></th:block>
+        </th>
+        <th>
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "edit")}'></th:block>
+        </th>
+        <th>
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "delete")}'></th:block>
+        </th>
     </tr>
     </thead>
     <th:block th:each="assignment : ${assignments}">
@@ -27,13 +43,21 @@
             <td th:utext="${assignment.getContent()}"></td>
             <td th:utext="${assignment.getTeacher()}"></td>
             <td th:utext="${assignment.getCourse()}"></td>
-            <td><a th:href="@{/Assignment/Edit(id=${assignment.getId()})}"/>Edit</td>
-            <td><a th:href="@{/Assignment/Delete(id=${assignment.getId()})}"/>Delete</td>
+            <td>
+                <a th:href="@{/Assignment/Edit(id=${assignment.getId()})}"/>
+                <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "edit")}'></th:block>
+            </td>
+            <td>
+                <a th:href="@{/Assignment/Delete(id=${assignment.getId()})}"/>
+                <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "delete")}'></th:block>
+            </td>
         </tr>
     </th:block>
 </table>
 <div>
-    <p class="h3">Uploaded files:</p>
+    <p class="h3">
+        <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "uploadedFiles")}'></th:block>:
+    </p>
     <ul class="list-group">
         <th:block th:each="file : ${files}">
             <li class="list-group-item">

@@ -8,7 +8,9 @@
 <body>
 <div th:insert="header_user :: header(user=${user})"></div>
 <a href="/AssignmentSolution/SolutionsToCheck">
-    <button type="button" class="btn btn-primary btn-sm">Check solutions</button>
+    <button type="button" class="btn btn-primary btn-sm">
+        <th:block th:text='${T(com.smanager.Bundles).getMessage("assignmentSolution", "checkSolutions")}'></th:block>
+    </button>
 </a>
 <div th:insert="assignmentSolution_fragments :: index"></div>
 </body>

@@ -15,34 +15,57 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/">
+                    <th:block th:text='${T(com.smanager.Bundles).getMessage("menu", "home")}'></th:block>
+                    <span class="sr-only">(current)</span>
+                </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/Work/Index">My work</a>
+                <a class="nav-link" href="/Work/Index">
+                    <th:block th:text='${T(com.smanager.Bundles).getMessage("menu", "myWork")}'></th:block>
+                </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/Course/Index">Course</a>
+                <a class="nav-link" href="/Course/Index">
+                    <th:block th:text='${T(com.smanager.Bundles).getMessage("menu", "course")}'></th:block>
+                </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/Assignment/Index">Assignment</a>
+                <a class="nav-link" href="/Assignment/Index">
+                    <th:block th:text='${T(com.smanager.Bundles).getMessage("menu", "assignment")}'></th:block>
+                </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/Solution/Index">Solution</a>
+                <a class="nav-link" href="/Solution/Index">
+                    <th:block th:text='${T(com.smanager.Bundles).getMessage("menu", "solution")}'></th:block>
+                </a>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Features
+                    <th:block th:text='${T(com.smanager.Bundles).getMessage("menu", "features")}'></th:block>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="/AssignmentSolution/Index">Assignment solution</a>
-                    <a class="dropdown-item" href="/Group/Index">Group</a>
-                    <a class="dropdown-item" href="/Student/Index">Student</a>
-                    <a class="dropdown-item" href="/Teacher/Index">Teacher</a>
-                    <a class="dropdown-item" href="/FileHistory/Index">File history</a>
+                    <a class="dropdown-item" href="/AssignmentSolution/Index">
+                        <th:block th:text='${T(com.smanager.Bundles).getMessage("menu", "assignmentSolution")}'></th:block>
+                    </a>
+                    <a class="dropdown-item" href="/Group/Index">
+                        <th:block th:text='${T(com.smanager.Bundles).getMessage("menu", "group")}'></th:block>
+                    </a>
+                    <a class="dropdown-item" href="/Student/Index">
+                        <th:block th:text='${T(com.smanager.Bundles).getMessage("menu", "student")}'></th:block>
+                    </a>
+                    <a class="dropdown-item" href="/Teacher/Index">
+                        <th:block th:text='${T(com.smanager.Bundles).getMessage("menu", "teacher")}'></th:block>
+                    </a>
+                    <a class="dropdown-item" href="/FileHistory/Index">
+                        <th:block th:text='${T(com.smanager.Bundles).getMessage("menu", "fileHistory")}'></th:block>
+                    </a>
                 </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/Authentication/Logout">Sign Out</a>
+                <a class="nav-link" href="/Authentication/Logout">
+                    <th:block th:text='${T(com.smanager.Bundles).getMessage("menu", "signOut")}'></th:block>
+                </a>
             </li>
         </ul>
     </div>

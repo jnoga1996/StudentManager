@@ -9,7 +9,9 @@
 <div th:insert="header_user :: header(user=${user})"></div>
 <div>
     <div th:if="${comments.isEmpty()}">
-        <h2>No comments available</h2>
+        <h2>
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("comment", "noComments")}'></th:block>
+        </h2>
     </div>
     <th:block th:each="comment : ${comments}">
         <div th:insert="comment_fragment :: div_view(comment=${comment})"></div>

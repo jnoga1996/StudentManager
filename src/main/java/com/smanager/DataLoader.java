@@ -23,12 +23,13 @@ public class DataLoader implements ApplicationRunner {
     private GroupRepository groupRepository;
     private UserRepository userRepository;
     private CommentRepository commentRepository;
+    private BundleRepository bundleRepository;
 
     @Autowired
     public DataLoader(StudentRepository studentRepository, TeacherRepository teacherRepository, AssignmentRepository assignmentRepository,
                       SolutionRepository solutionRepository, AssignmentSolutionRepository assignmentSolutionRepository,
                       CourseRepository courseRepository, GroupRepository groupRepository, UserRepository userRepository,
-                      CommentRepository commentRepository) {
+                      CommentRepository commentRepository, BundleRepository bundleRepository) {
         this.studentRepository = studentRepository;
         this.teacherRepository = teacherRepository;
         this.assignmentRepository = assignmentRepository;
@@ -38,6 +39,7 @@ public class DataLoader implements ApplicationRunner {
         this.groupRepository = groupRepository;
         this.userRepository = userRepository;
         this.commentRepository = commentRepository;
+        this.bundleRepository = bundleRepository;
     }
 
     @Override
@@ -70,6 +72,10 @@ public class DataLoader implements ApplicationRunner {
             initializeComments();
         }
 
+        BundlesInitializer bundlesInitializer = new BundlesInitializer(bundleRepository);
+        if (bundlesInitializer.isEmpty()) {
+            bundlesInitializer.initialize();
+        }
     }
 
     private void initializeStudents() {
@@ -283,5 +289,9 @@ public class DataLoader implements ApplicationRunner {
         );
 
         commentRepository.saveAll(comments);
+    }
+
+    private void initializeBundles() {
+
     }
 }

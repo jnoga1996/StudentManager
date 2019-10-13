@@ -12,7 +12,9 @@
     <input type="hidden" th:field="*{id}">
     <input type="hidden" name="solutionId" th:value="${solutionId}">
     <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Content:</label>
+        <label class="col-sm-2 col-form-label">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("comment", "content")}'></th:block>:
+        </label>
         <div class="col-sm-6">
             <input type="text" th:field="*{content}" class="form-control"/>
             <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="text-danger"></p>
@@ -20,7 +22,9 @@
     </div>
     <div class="form-group row">
         <div class="col-sm-6">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">
+                <th:block th:text='${T(com.smanager.Bundles).getMessage("comment", "submit")}'></th:block>
+            </button>
         </div>
     </div>
 </form>

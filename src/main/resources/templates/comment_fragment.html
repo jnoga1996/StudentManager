@@ -8,28 +8,40 @@
 <body>
 <div th:fragment="div_view(comment)" class="list-group-item list-group-item-light">
     <div class="form-group row">
-        <p class="col-sm-2">Id:</p>
+        <p class="col-sm-2">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("comment", "id")}'></th:block>:
+        </p>
         <p th:utext="${comment.getId()}" class="col-sm-6"></p>
     </div>
     <div class="form-group row">
-        <p class="col-sm-2">Content:</p>
+        <p class="col-sm-2">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("comment", "content")}'></th:block>:
+        </p>
         <p th:utext="${comment.getContent()}" class="col-sm-6"></p>
     </div>
     <div class="form-group row">
-        <p class="col-sm-2">Creation date:</p>
+        <p class="col-sm-2">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("comment", "creationDate")}'></th:block>:
+        </p>
         <p th:utext="${comment.getCreationDate()}" class="col-sm-6"></p>
     </div>
     <div class="form-group row">
-        <p class="col-sm-2">Solution:</p>
+        <p class="col-sm-2">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("comment", "solution")}'></th:block>:
+        </p>
         <p th:utext="${comment.getSolution()}" class="col-sm-6"></p>
     </div>
     <div class="form-group row">
         <div th:if="${comment.getStudent() != null}">
-            <p class="col-sm-2" >Student:</p>
+            <p class="col-sm-2">
+                <th:block th:text='${T(com.smanager.Bundles).getMessage("comment", "student")}'></th:block>:
+            </p>
             <p th:utext="${comment.getStudent()}" class="col-sm-6"></p>
         </div>
         <div th:unless="${comment.getStudent() != null}">
-            <p class="col-sm-2" >Teacher:</p>
+            <p class="col-sm-2">
+                <th:block th:text='${T(com.smanager.Bundles).getMessage("comment", "teacher")}'></th:block>:
+            </p>
             <p th:utext="${comment.getTeacher()}" class="col-sm-6"></p>
         </div>
     </div>

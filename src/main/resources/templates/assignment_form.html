@@ -11,19 +11,25 @@
 <form action="#" th:action="${isCreateAction} ? @{/Assignment/Create} : @{/Assignment/Edit}" th:object="${assignment}" enctype="multipart/form-data" method="post">
     <input type="hidden" th:field="*{id}">
     <div class="form-group row">
-        <label for="titleInput" class="col-sm-2 col-form-label">Title:</label>
+        <label for="titleInput" class="col-sm-2 col-form-label">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "title")}'></th:block>:
+        </label>
         <div class="col-sm-6">
             <input type="text" id="titleInput" th:field="*{title}" class="form-control"/>
         </div>
     </div>
     <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Content:</label>
+        <label class="col-sm-2 col-form-label">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "content")}'></th:block>:
+        </label>
         <div class="col-sm-6">
             <input type="text" th:field="*{content}" class="form-control"/>
         </div>
     </div>
     <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Course:</label>
+        <label class="col-sm-2 col-form-label">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "course")}'></th:block>:
+        </label>
         <div class="col-sm-6">
             <select th:field="*{course}" class="form-control">
                 <option th:each="cour : ${courses}" th:value="${cour.getId()}"
@@ -34,7 +40,9 @@
         </div>
     </div>
     <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Teacher:</label>
+        <label class="col-sm-2 col-form-label">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "teacher")}'></th:block>:
+        </label>
         <div class="col-sm-6">
             <select th:field="*{teacher}" class="form-control">
                 <option th:each="teach : ${teachers}" th:value="${teach.getId()}"
@@ -45,14 +53,18 @@
         </div>
     </div>
     <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Attachment:</label>
+        <label class="col-sm-2 col-form-label">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "attachment")}'></th:block>:
+        </label>
         <div class="col-sm-6">
             <input type="file" name="file" class="form-control-file"/>
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-6">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">
+                <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "submit")}'></th:block>
+            </button>
         </div>
     </div>
 </form>
