@@ -1,5 +1,6 @@
 package com.smanager.controllers;
 
+import com.smanager.Bundles;
 import com.smanager.dao.models.*;
 import com.smanager.dao.repositories.*;
 import com.smanager.services.UserService;
@@ -31,12 +32,14 @@ public class WorkController {
     private CommentRepository commentRepository;
     private UserService userService;
     private StorageService storageService;
+    private Bundles bundles;
 
     @Autowired
     public WorkController(CourseRepository courseRepository, AssignmentRepository assignmentRepository,
                           SolutionRepository solutionRepository, StudentRepository studentRepository,
                           CommentRepository commentRepository, UserRepository userRepository,
-                          StorageService storageService, TeacherRepository teacherRepository) {
+                          StorageService storageService, TeacherRepository teacherRepository,
+                          BundleRepository bundleRepository) {
         this.courseRepository = courseRepository;
         this.assignmentRepository = assignmentRepository;
         this.solutionRepository = solutionRepository;
@@ -45,6 +48,7 @@ public class WorkController {
         this.userRepository = userRepository;
         this.storageService = storageService;
         this.teacherRepository = teacherRepository;
+        bundles = new Bundles(bundleRepository);
     }
 
     @GetMapping("/Index")

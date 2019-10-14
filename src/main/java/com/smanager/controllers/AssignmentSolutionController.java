@@ -1,8 +1,10 @@
 package com.smanager.controllers;
 
+import com.smanager.Bundles;
 import com.smanager.dao.models.Assignment;
 import com.smanager.dao.models.Solution;
 import com.smanager.dao.repositories.AssignmentRepository;
+import com.smanager.dao.repositories.BundleRepository;
 import com.smanager.dao.repositories.SolutionRepository;
 import com.smanager.dao.repositories.UserRepository;
 import com.smanager.services.UserService;
@@ -27,14 +29,16 @@ public class AssignmentSolutionController {
     private SolutionRepository solutionRepository;
     private UserRepository userRepository;
     private UserService userService;
+    private Bundles bundles;
 
     @Autowired
     public AssignmentSolutionController(AssignmentRepository assignmentRepository, UserRepository userRepository,
-                                        SolutionRepository solutionRepository) {
+                                        SolutionRepository solutionRepository, BundleRepository bundleRepository) {
         this.assignmentRepository = assignmentRepository;
         this.solutionRepository = solutionRepository;
         this.userRepository = userRepository;
         this.userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
+        bundles = new Bundles(bundleRepository);
     }
 
     @GetMapping("Index")

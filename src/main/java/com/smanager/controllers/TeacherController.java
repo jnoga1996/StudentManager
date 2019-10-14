@@ -1,5 +1,7 @@
 package com.smanager.controllers;
 
+import com.smanager.Bundles;
+import com.smanager.dao.repositories.BundleRepository;
 import com.smanager.dao.repositories.TeacherRepository;
 import com.smanager.dao.repositories.UserRepository;
 import com.smanager.services.UserService;
@@ -19,12 +21,15 @@ public class TeacherController {
     private TeacherRepository teacherRepository;
     private UserService userService;
     private UserRepository userRepository;
+    private Bundles bundles;
 
     @Autowired
-    public TeacherController(TeacherRepository teacherRepository, UserRepository userRepository) {
+    public TeacherController(TeacherRepository teacherRepository, UserRepository userRepository,
+                             BundleRepository bundleRepository) {
         this.teacherRepository = teacherRepository;
         this.userRepository = userRepository;
         userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
+        bundles = new Bundles(bundleRepository);
     }
 
     @GetMapping("Index")

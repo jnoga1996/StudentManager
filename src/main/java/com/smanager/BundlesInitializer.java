@@ -52,7 +52,7 @@ public class BundlesInitializer {
                 new Bundle(language, "assignment", "teacher", "Nauczyciel"),
                 new Bundle(language, "assignment", "attachment", "Załącznik"),
                 new Bundle(language, "assignment", "submit", "Wyślij"),
-                new Bundle(language, "assignment", "createAssignment", "Utwórz nowe zadanie"),
+                new Bundle(language, "assignment", "createNewAssignment", "Utwórz nowe zadanie"),
                 new Bundle(language, "assignment", "id", "Id"),
                 new Bundle(language, "assignment", "edit", "Edytuj"),
                 new Bundle(language, "assignment", "delete", "Usuń"),
@@ -67,9 +67,61 @@ public class BundlesInitializer {
                 new Bundle(language, "comment", "student", "Student"),
                 new Bundle(language, "comment", "teacher", "Nauczyciel"),
                 new Bundle(language, "comment", "noComments", "Brak komentarzy"),
-                new Bundle(language, "comment", "submit", "Wyślij")
+                new Bundle(language, "comment", "submit", "Wyślij"),
 
-        );
+                new Bundle(language, "course", "id", "Id"),
+                new Bundle(language, "course", "title", "Tytuł"),
+                new Bundle(language, "course", "ects", "ECTS"),
+                new Bundle(language, "course", "solution", "Rozwiązanie"),
+                new Bundle(language, "course", "course", "Kurs"),
+                new Bundle(language, "course", "student", "Student"),
+                new Bundle(language, "course", "edit", "Edytuj"),
+                new Bundle(language, "course", "delete", "Usuń"),
+                new Bundle(language, "course", "create", "Utwórz kurs"),
+                new Bundle(language, "course", "removeFromCourse", "Usuń z kursu"),
+                new Bundle(language, "course", "registerToCourse", "Zapisz na kurs"),
+                new Bundle(language, "course", "submit", "Wyślij"),
+
+                new Bundle(language, "file", "id", "Id"),
+                new Bundle(language, "file", "filename", "Nazwa pliku"),
+                new Bundle(language, "file", "path", "Ścieżka"),
+                new Bundle(language, "file", "modificationDate", "Data modyfikacji"),
+                new Bundle(language, "file", "fileType", "Typ pliku"),
+                new Bundle(language, "file", "referencedId", "Id referencji"),
+                new Bundle(language, "file", "fileToUpload", "Plik do załadowania"),
+
+                new Bundle(language, "home", "loggedAs", "Zalogowany jako"),
+
+                new Bundle(language, "solution", "id", "Id"),
+                new Bundle(language, "solution", "content", "Zawartość"),
+                new Bundle(language, "solution", "finished", "Ukończone"),
+                new Bundle(language, "solution", "grade", "Ocena"),
+                new Bundle(language, "solution", "student", "Student"),
+                new Bundle(language, "solution", "assignment", "Zadanie"),
+                new Bundle(language, "solution", "attachment", "Załącznik"),
+                new Bundle(language, "solution", "creationDate", "Data utworzenia"),
+                new Bundle(language, "solution", "file", "Plik"),
+                new Bundle(language, "solution", "submit", "Wyślij"),
+                new Bundle(language, "solution", "delete", "Usuń"),
+                new Bundle(language, "solution", "edit", "Edytuj"),
+                new Bundle(language, "solution", "create", "Utwórz"),
+                new Bundle(language, "solution", "showComments", "Pokaż komentarze"),
+                new Bundle(language, "solution", "addComment", "Dodaj komentarz"),
+                new Bundle(language, "solution", "uploadedFiles", "Załączone pliki"),
+
+                new Bundle(language, "student", "id", "Id"),
+                new Bundle(language, "student", "firstName", "Imię"),
+                new Bundle(language, "student", "lastName", "Nazwisko"),
+                new Bundle(language, "student", "faculty", "Wydział"),
+                new Bundle(language, "student", "year", "Rok"),
+                new Bundle(language, "student", "courses", "Kursy"),
+
+                new Bundle(language, "teacher", "id", "Id"),
+                new Bundle(language, "teacher", "firstName", "Imię"),
+                new Bundle(language, "teacher", "lastName", "Nazwisko"),
+
+                new Bundle(language, "work", "showSolutions", "Pokaż rozwiązania")
+                );
 
         bundleRepository.saveAll(polishBundles);
     }
@@ -108,7 +160,7 @@ public class BundlesInitializer {
                 new Bundle(language, "assignment", "teacher", "Teacher"),
                 new Bundle(language, "assignment", "attachment", "Attachment"),
                 new Bundle(language, "assignment", "submit", "Submit"),
-                new Bundle(language, "assignment", "createAssignment", "Create new assignment"),
+                new Bundle(language, "assignment", "createNewAssignment", "Create new assignment"),
                 new Bundle(language, "assignment", "id", "Id"),
                 new Bundle(language, "assignment", "edit", "Edit"),
                 new Bundle(language, "assignment", "delete", "Delete"),
@@ -123,8 +175,60 @@ public class BundlesInitializer {
                 new Bundle(language, "comment", "student", "Student"),
                 new Bundle(language, "comment", "teacher", "Teacher"),
                 new Bundle(language, "comment", "noComments", "No comments available"),
-                new Bundle(language, "comment", "submit", "Submit")
+                new Bundle(language, "comment", "submit", "Submit"),
 
+                new Bundle(language, "course", "id", "Id"),
+                new Bundle(language, "course", "title", "Title"),
+                new Bundle(language, "course", "ects", "ECTS"),
+                new Bundle(language, "course", "solution", "Solution"),
+                new Bundle(language, "course", "course", "Course"),
+                new Bundle(language, "course", "student", "Student"),
+                new Bundle(language, "course", "edit", "Edit"),
+                new Bundle(language, "course", "delete", "Delete"),
+                new Bundle(language, "course", "create", "Create new course"),
+                new Bundle(language, "course", "removeFromCourse", "Remove from course"),
+                new Bundle(language, "course", "registerToCourse", "Register to course"),
+                new Bundle(language, "course", "submit", "Submit"),
+
+                new Bundle(language, "file", "id", "Id"),
+                new Bundle(language, "file", "filename", "File name"),
+                new Bundle(language, "file", "path", "Path"),
+                new Bundle(language, "file", "modificationDate", "Modification date"),
+                new Bundle(language, "file", "fileType", "File type"),
+                new Bundle(language, "file", "referencedId", "Referenced id"),
+                new Bundle(language, "file", "fileToUpload", "File to upload"),
+
+                new Bundle(language, "home", "loggedAs", "Logged as"),
+
+                new Bundle(language, "solution", "id", "Id"),
+                new Bundle(language, "solution", "content", "Content"),
+                new Bundle(language, "solution", "finished", "Finished"),
+                new Bundle(language, "solution", "grade", "Grade"),
+                new Bundle(language, "solution", "student", "Student"),
+                new Bundle(language, "solution", "assignment", "Assignment"),
+                new Bundle(language, "solution", "attachment", "Attachment"),
+                new Bundle(language, "solution", "creationDate", "Creation date"),
+                new Bundle(language, "solution", "file", "File"),
+                new Bundle(language, "solution", "submit", "Submit"),
+                new Bundle(language, "solution", "delete", "Delete"),
+                new Bundle(language, "solution", "edit", "Edit"),
+                new Bundle(language, "solution", "create", "Create"),
+                new Bundle(language, "solution", "showComments", "Show comments"),
+                new Bundle(language, "solution", "addComment", "Add comment"),
+                new Bundle(language, "solution", "uploadedFiles", "Uploaded files"),
+
+                new Bundle(language, "student", "id", "Id"),
+                new Bundle(language, "student", "firstName", "First name"),
+                new Bundle(language, "student", "lastName", "Last name"),
+                new Bundle(language, "student", "faculty", "Faculty"),
+                new Bundle(language, "student", "year", "Year"),
+                new Bundle(language, "student", "courses", "Courses"),
+
+                new Bundle(language, "teacher", "id", "Id"),
+                new Bundle(language, "teacher", "firstName", "First name"),
+                new Bundle(language, "teacher", "lastName", "Last name"),
+
+                new Bundle(language, "work", "showSolutions", "Show solutions")
         );
 
         bundleRepository.saveAll(englishBundles);

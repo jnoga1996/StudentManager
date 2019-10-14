@@ -7,6 +7,8 @@
 </head>
 <body>
 <div th:insert="header :: header"></div>
-    <p th:utext="${user}">Logged as: </p>
+    <p th:utext="${user}">
+        <th:block th:text='${T(com.smanager.Bundles).getMessage("home", "loggedAs")}'></th:block>:
+    </p>
 </body>
 </html>

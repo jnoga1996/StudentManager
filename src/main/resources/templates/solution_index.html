@@ -7,21 +7,44 @@
 </head>
 <body>
 <div th:insert="header_user :: header(user=${user})"></div>
-<a href="/Solution/Create">Create new Solution</a>
+<a href="/Solution/Create">
+    <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "create")}'></th:block>
+</a>
 <table class="table table-striped">
     <thead class="thead-dark">
     <tr>
-        <th scope="col">Id</th>
-        <th scope="col">Student</th>
-        <th scope="col">Content</th>
-        <th scope="col">Grade</th>
-        <th scope="col">Assignment</th>
-        <th scope="col">Finished</th>
-        <th scope="col">Creation date</th>
-        <th scope="col">Edit</th>
-        <th scope="col">Delete</th>
-        <th scope="col">Comments</th>
+        <th scope="col">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "id")}'></th:block>
+        </th>
+        <th scope="col">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "student")}'></th:block>
+        </th>
+        <th scope="col">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "content")}'></th:block>
+        </th>
+        <th scope="col">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "grade")}'></th:block>
+        </th>
+        <th scope="col">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "assignment")}'></th:block>
+        </th>
+        <th scope="col">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "finished")}'></th:block>
+        </th>
+        <th scope="col">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "creationDate")}'></th:block>
+        </th>
+        <th scope="col">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "edit")}'></th:block>
+        </th>
+        <th scope="col">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "delete")}'></th:block>
+        </th>
+        <th scope="col">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "showComments")}'></th:block>
+        </th>
     </tr>
+
     </thead>
     <tbody>
     <th:block th:each="solution : ${solutions}">
@@ -30,7 +53,9 @@
     </tbody>
 </table>
 <div>
-    <p class="h3">Uploaded files:</p>
+    <p class="h3">
+        <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "uploadedFiles")}'></th:block>:
+    </p>
     <ul class="list-group">
     <th:block th:each="file : ${files}">
         <li class="list-group-item">

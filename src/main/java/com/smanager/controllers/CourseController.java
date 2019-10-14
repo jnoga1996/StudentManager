@@ -1,5 +1,6 @@
 package com.smanager.controllers;
 
+import com.smanager.Bundles;
 import com.smanager.WebSecurityConfig;
 import com.smanager.dao.models.*;
 import com.smanager.dao.repositories.*;
@@ -32,17 +33,19 @@ public class CourseController {
     private StudentRepository studentRepository;
     private UserRepository userRepository;
     private UserService userService;
+    private Bundles bundles;
 
     @Autowired
     public CourseController(CourseRepository courseRepository, AssignmentRepository assignmentRepository,
                             SolutionRepository solutionRepository, StudentRepository studentRepository,
-                            UserRepository userRepository) {
+                            UserRepository userRepository, BundleRepository bundleRepository) {
         this.courseRepository = courseRepository;
         this.assignmentRepository = assignmentRepository;
         this.solutionRepository = solutionRepository;
         this.studentRepository = studentRepository;
         this.userRepository = userRepository;
         userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
+        bundles = new Bundles(bundleRepository);
     }
 
     @GetMapping("Index")

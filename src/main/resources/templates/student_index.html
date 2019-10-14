@@ -10,12 +10,24 @@
     <table class="table table-striped">
         <thead class="thead-dark">
             <tr>
-                <th scope="col">Id</th>
-                <th scope="col">First name</th>
-                <th scope="col">Last name</th>
-                <th scope="col">Faculty</th>
-                <th scope="col">Year</th>
-                <th scope="col">Courses</th>
+                <th scope="col">
+                    <th:block th:text='${T(com.smanager.Bundles).getMessage("student", "id")}'></th:block>
+                </th>
+                <th scope="col">
+                    <th:block th:text='${T(com.smanager.Bundles).getMessage("student", "firstName")}'></th:block>
+                </th>
+                <th scope="col">
+                    <th:block th:text='${T(com.smanager.Bundles).getMessage("student", "lastName")}'></th:block>
+                </th>
+                <th scope="col">
+                    <th:block th:text='${T(com.smanager.Bundles).getMessage("student", "faculty")}'></th:block>
+                </th>
+                <th scope="col">
+                    <th:block th:text='${T(com.smanager.Bundles).getMessage("student", "year")}'></th:block>
+                </th>
+                <th scope="col">
+                    <th:block th:text='${T(com.smanager.Bundles).getMessage("student", "courses")}'></th:block>
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -26,7 +38,10 @@
                     <td th:utext="${student.getLastName()}"></td>
                     <td th:utext="${student.getFaculty()}"></td>
                     <td th:utext="${student.getCurrentYear()}"></td>
-                    <td><a th:href="@{/Course/MyCourses(id=${student.getId()})}"/>Courses</td>
+                    <td>
+                        <a th:href="@{/Course/MyCourses(id=${student.getId()})}"/>
+                        <th:block th:text='${T(com.smanager.Bundles).getMessage("student", "courses")}'></th:block>
+                    </td>
                 </tr>
             </th:block>
         </tbody>

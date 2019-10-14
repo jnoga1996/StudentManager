@@ -10,9 +10,15 @@
 <table class="table table-striped">
     <thead class="thead-dark">
     <tr>
-        <th scope="col">Id</th>
-        <th scope="col">First name</th>
-        <th scope="col">Last name</th>
+        <th scope="col">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("teacher", "id")}'></th:block>
+        </th>
+        <th scope="col">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("teacher", "firstName")}'></th:block>
+        </th>
+        <th scope="col">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("teacher", "lastName")}'></th:block>
+        </th>
     </tr>
     </thead>
     <tbody>

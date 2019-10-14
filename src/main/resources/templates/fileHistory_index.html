@@ -10,12 +10,24 @@
 <table class="table table-striped">
     <thead class="thead-dark">
         <tr>
-            <th>Id</th>
-            <th>File name</th>
-            <th>Path</th>
-            <th>Modification date</th>
-            <th>File type</th>
-            <th>Referenced id</th>
+            <th>
+                <th:block th:text='${T(com.smanager.Bundles).getMessage("file", "id")}'></th:block>
+            </th>
+            <th>
+                <th:block th:text='${T(com.smanager.Bundles).getMessage("file", "filename")}'></th:block>
+            </th>
+            <th>
+                <th:block th:text='${T(com.smanager.Bundles).getMessage("file", "path")}'></th:block>
+            </th>
+            <th>
+                <th:block th:text='${T(com.smanager.Bundles).getMessage("file", "modificationDate")}'></th:block>
+            </th>
+            <th>
+                <th:block th:text='${T(com.smanager.Bundles).getMessage("file", "fileType")}'></th:block>
+            </th>
+            <th>
+                <th:block th:text='${T(com.smanager.Bundles).getMessage("file", "referencedId")}'></th:block>
+            </th>
         </tr>
     </thead>
     <th:block th:each="fh : ${fileHistory}">

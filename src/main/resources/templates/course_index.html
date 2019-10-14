@@ -9,20 +9,34 @@
 <div th:insert="header_user :: header(user=${user})"></div>
 <div class="btn-group">
     <a href="/Course/Create">
-        <button type="button" class="btn btn-primary btn-sm">Create course</button>
+        <button type="button" class="btn btn-primary btn-sm">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "create")}'></th:block>
+        </button>
     </a>
     <a href="/Course/Register">
-        <button type="button" class="btn btn-primary btn-sm">Register to course</button>
+        <button type="button" class="btn btn-primary btn-sm">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "registerToCourse")}'></th:block>
+        </button>
     </a>
 </div>
 <table class="table table-striped">
     <thead class="thead-dark">
     <tr>
-        <th>Id</th>
-        <th>Title</th>
-        <th>Ects</th>
-        <th>Edit</th>
-        <th>Delete</th>
+        <th>
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "id")}'></th:block>
+        </th>
+        <th>
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "title")}'></th:block>
+        </th>
+        <th>
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "ects")}'></th:block>
+        </th>
+        <th>
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "edit")}'></th:block>
+        </th>
+        <th>
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "delete")}'></th:block>
+        </th>
     </tr>
     </thead>
     <th:block th:each="course : ${courses}">
@@ -30,8 +44,12 @@
             <td th:utext="${course.getId()}"></td>
             <td th:utext="${course.getTitle()}"></td>
             <td th:utext="${course.getEcts()}"></td>
-            <td><a th:href="@{/Course/Edit(id=${course.getId()})}"/>Edit</td>
-            <td><a th:href="@{/Course/Delete(id=${course.getId()})}"/>Delete</td>
+            <td><a th:href="@{/Course/Edit(id=${course.getId()})}"/>
+                <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "edit")}'></th:block>
+            </td>
+            <td><a th:href="@{/Course/Delete(id=${course.getId()})}"/>
+                <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "delete")}'></th:block>
+            </td>
         </tr>
         <th:block th:each="student : ${course.getStudents()}">
             <tr>
@@ -42,7 +60,9 @@
                 <td><a th:href="@{/Course/RemoveFromCourse(
                     courseId=${course.getId()},
                     studentId=${student.getId()}
-                    )}"/>Remove from course</td>
+                    )}"/>
+                    <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "removeFromCourse")}'></th:block>
+                </td>
             </tr>
         </th:block>
     </th:block>

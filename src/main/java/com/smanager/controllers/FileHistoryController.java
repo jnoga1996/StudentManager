@@ -1,5 +1,7 @@
 package com.smanager.controllers;
 
+import com.smanager.Bundles;
+import com.smanager.dao.repositories.BundleRepository;
 import com.smanager.dao.repositories.FileHistoryRepository;
 import com.smanager.dao.repositories.UserRepository;
 import com.smanager.services.UserService;
@@ -17,12 +19,15 @@ public class FileHistoryController {
     private FileHistoryRepository fileHistoryRepository;
     private UserRepository userRepository;
     private UserService userService;
+    private Bundles bundles;
 
     @Autowired
-    public FileHistoryController(FileHistoryRepository fileHistoryRepository, UserRepository userRepository) {
+    public FileHistoryController(FileHistoryRepository fileHistoryRepository, UserRepository userRepository,
+                                 BundleRepository bundleRepository) {
         this.fileHistoryRepository = fileHistoryRepository;
         this.userRepository = userRepository;
         userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
+        bundles = new Bundles(bundleRepository);
     }
 
     @GetMapping("Index")

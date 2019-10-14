@@ -1,5 +1,7 @@
 package com.smanager.controllers;
 
+import com.smanager.Bundles;
+import com.smanager.dao.repositories.BundleRepository;
 import com.smanager.storage.StorageFileNotFoundException;
 import com.smanager.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +23,12 @@ import java.util.stream.Collectors;
 public class FileUploadController {
 
     private final StorageService storageService;
+    private Bundles bundles;
 
     @Autowired
-    public FileUploadController(StorageService storageService) {
+    public FileUploadController(StorageService storageService, BundleRepository bundleRepository) {
         this.storageService = storageService;
+        bundles = new Bundles(bundleRepository);
     }
 
     @GetMapping("/")

@@ -1,6 +1,7 @@
 package com.smanager.controllers;
 
 
+import com.smanager.Bundles;
 import com.smanager.dao.models.*;
 import com.smanager.dao.repositories.*;
 import com.smanager.services.FileUploadHelper;
@@ -37,11 +38,13 @@ public class AssignmentController {
     private FileUploadHelper fileUploadHelper;
     private UserRepository userRepository;
     private UserService userService;
+    private Bundles bundles;
 
     @Autowired
     public AssignmentController(AssignmentRepository assignmentRepository, FileHistoryRepository fileHistoryRepository,
                                 StorageService storageService, TeacherRepository teacherRepository,
-                                CourseRepository courseRepository, UserRepository userRepository) {
+                                CourseRepository courseRepository, UserRepository userRepository,
+                                BundleRepository bundleRepository) {
         this.assignmentRepository = assignmentRepository;
         this.fileHistoryRepository = fileHistoryRepository;
         this.storageService = storageService;
@@ -50,6 +53,7 @@ public class AssignmentController {
         this.userRepository = userRepository;
         fileUploadHelper = new FileUploadHelper(fileHistoryRepository, storageService);
         userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
+        bundles = new Bundles(bundleRepository);
     }
 
     @GetMapping("Index")
