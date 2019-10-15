@@ -153,13 +153,6 @@ public class BundlesInitializer {
                 new Bundle(language, "assignment", "teacher", "Teacher"),
                 new Bundle(language, "assignment", "attachment", "Attachment"),
                 new Bundle(language, "assignment", "submit", "Submit"),
-
-                new Bundle(language, "assignment", "title", "Title"),
-                new Bundle(language, "assignment", "content", "Content"),
-                new Bundle(language, "assignment", "course", "Course"),
-                new Bundle(language, "assignment", "teacher", "Teacher"),
-                new Bundle(language, "assignment", "attachment", "Attachment"),
-                new Bundle(language, "assignment", "submit", "Submit"),
                 new Bundle(language, "assignment", "createNewAssignment", "Create new assignment"),
                 new Bundle(language, "assignment", "id", "Id"),
                 new Bundle(language, "assignment", "edit", "Edit"),

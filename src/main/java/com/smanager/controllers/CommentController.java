@@ -33,19 +33,17 @@ public class CommentController {
     private StudentRepository studentRepository;
     private TeacherRepository teacherRepository;
     private UserService userService;
-    private Bundles bundles;
 
     @Autowired
     public CommentController(CommentRepository commentRepository, SolutionRepository solutionRepository,
                              UserRepository userRepository, StudentRepository studentRepository,
-                             TeacherRepository teacherRepository, BundleRepository bundleRepository) {
+                             TeacherRepository teacherRepository) {
         this.commentRepository = commentRepository;
         this.solutionRepository = solutionRepository;
         this.userRepository = userRepository;
         this.userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
         this.studentRepository = studentRepository;
         this.teacherRepository = teacherRepository;
-        bundles = new Bundles(bundleRepository);
     }
 
     @GetMapping("/Index")

@@ -38,13 +38,11 @@ public class AssignmentController {
     private FileUploadHelper fileUploadHelper;
     private UserRepository userRepository;
     private UserService userService;
-    private Bundles bundles;
 
     @Autowired
     public AssignmentController(AssignmentRepository assignmentRepository, FileHistoryRepository fileHistoryRepository,
                                 StorageService storageService, TeacherRepository teacherRepository,
-                                CourseRepository courseRepository, UserRepository userRepository,
-                                BundleRepository bundleRepository) {
+                                CourseRepository courseRepository, UserRepository userRepository) {
         this.assignmentRepository = assignmentRepository;
         this.fileHistoryRepository = fileHistoryRepository;
         this.storageService = storageService;
@@ -53,7 +51,6 @@ public class AssignmentController {
         this.userRepository = userRepository;
         fileUploadHelper = new FileUploadHelper(fileHistoryRepository, storageService);
         userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
-        bundles = new Bundles(bundleRepository);
     }
 
     @GetMapping("Index")

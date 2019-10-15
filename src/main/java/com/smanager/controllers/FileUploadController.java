@@ -23,12 +23,10 @@ import java.util.stream.Collectors;
 public class FileUploadController {
 
     private final StorageService storageService;
-    private Bundles bundles;
 
     @Autowired
-    public FileUploadController(StorageService storageService, BundleRepository bundleRepository) {
+    public FileUploadController(StorageService storageService) {
         this.storageService = storageService;
-        bundles = new Bundles(bundleRepository);
     }
 
     @GetMapping("/")

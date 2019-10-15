@@ -21,15 +21,12 @@ public class TeacherController {
     private TeacherRepository teacherRepository;
     private UserService userService;
     private UserRepository userRepository;
-    private Bundles bundles;
 
     @Autowired
-    public TeacherController(TeacherRepository teacherRepository, UserRepository userRepository,
-                             BundleRepository bundleRepository) {
+    public TeacherController(TeacherRepository teacherRepository, UserRepository userRepository) {
         this.teacherRepository = teacherRepository;
         this.userRepository = userRepository;
         userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
-        bundles = new Bundles(bundleRepository);
     }
 
     @GetMapping("Index")

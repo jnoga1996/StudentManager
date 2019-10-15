@@ -19,15 +19,12 @@ public class FileHistoryController {
     private FileHistoryRepository fileHistoryRepository;
     private UserRepository userRepository;
     private UserService userService;
-    private Bundles bundles;
 
     @Autowired
-    public FileHistoryController(FileHistoryRepository fileHistoryRepository, UserRepository userRepository,
-                                 BundleRepository bundleRepository) {
+    public FileHistoryController(FileHistoryRepository fileHistoryRepository, UserRepository userRepository) {
         this.fileHistoryRepository = fileHistoryRepository;
         this.userRepository = userRepository;
         userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
-        bundles = new Bundles(bundleRepository);
     }
 
     @GetMapping("Index")

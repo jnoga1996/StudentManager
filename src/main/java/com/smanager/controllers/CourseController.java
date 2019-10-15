@@ -33,19 +33,17 @@ public class CourseController {
     private StudentRepository studentRepository;
     private UserRepository userRepository;
     private UserService userService;
-    private Bundles bundles;
 
     @Autowired
     public CourseController(CourseRepository courseRepository, AssignmentRepository assignmentRepository,
                             SolutionRepository solutionRepository, StudentRepository studentRepository,
-                            UserRepository userRepository, BundleRepository bundleRepository) {
+                            UserRepository userRepository) {
         this.courseRepository = courseRepository;
         this.assignmentRepository = assignmentRepository;
         this.solutionRepository = solutionRepository;
         this.studentRepository = studentRepository;
         this.userRepository = userRepository;
         userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
-        bundles = new Bundles(bundleRepository);
     }
 
     @GetMapping("Index")

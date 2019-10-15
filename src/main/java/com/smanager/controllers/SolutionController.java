@@ -38,13 +38,12 @@ public class SolutionController {
     private StorageService storageService;
     private FileUploadHelper fileUploadHelper;
     private UserService userService;
-    private Bundles bundles;
 
     @Autowired
     public SolutionController(SolutionRepository solutionRepository, TeacherRepository teacherRepository,
                               StudentRepository studentRepository, FileHistoryRepository fileHistoryRepository,
                               StorageService storageService, AssignmentRepository assignmentRepository,
-                              UserRepository userRepository, BundleRepository bundleRepository) {
+                              UserRepository userRepository) {
         this.solutionRepository = solutionRepository;
         this.teacherRepository = teacherRepository;
         this.studentRepository = studentRepository;
@@ -54,7 +53,6 @@ public class SolutionController {
         this.assignmentRepository = assignmentRepository;
         fileUploadHelper = new FileUploadHelper(fileHistoryRepository, storageService);
         userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
-        bundles = new Bundles(bundleRepository);
     }
 
     @GetMapping("Index")

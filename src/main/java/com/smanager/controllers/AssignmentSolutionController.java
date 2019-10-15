@@ -29,16 +29,14 @@ public class AssignmentSolutionController {
     private SolutionRepository solutionRepository;
     private UserRepository userRepository;
     private UserService userService;
-    private Bundles bundles;
 
     @Autowired
     public AssignmentSolutionController(AssignmentRepository assignmentRepository, UserRepository userRepository,
-                                        SolutionRepository solutionRepository, BundleRepository bundleRepository) {
+                                        SolutionRepository solutionRepository) {
         this.assignmentRepository = assignmentRepository;
         this.solutionRepository = solutionRepository;
         this.userRepository = userRepository;
         this.userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
-        bundles = new Bundles(bundleRepository);
     }
 
     @GetMapping("Index")
