@@ -29,6 +29,9 @@
             <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "course")}'></th:block>
         </th>
         <th>
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "details")}'></th:block>
+        </th>
+        <th>
             <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "edit")}'></th:block>
         </th>
         <th>
@@ -43,6 +46,10 @@
             <td th:utext="${assignment.getContent()}"></td>
             <td th:utext="${assignment.getTeacher()}"></td>
             <td th:utext="${assignment.getCourse()}"></td>
+            <td>
+                <a th:href="@{/Assignment/Details(id=${assignment.getId()})}"/>
+                <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "details")}'></th:block>
+            </td>
             <td>
                 <a th:href="@{/Assignment/Edit(id=${assignment.getId()})}"/>
                 <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "edit")}'></th:block>

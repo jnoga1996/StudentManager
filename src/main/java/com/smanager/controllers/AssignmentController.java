@@ -7,6 +7,7 @@ import com.smanager.dao.repositories.*;
 import com.smanager.services.FileUploadHelper;
 import com.smanager.services.UserService;
 import com.smanager.storage.StorageService;
+import com.smanager.utils.MultilineTextParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -86,6 +87,19 @@ public class AssignmentController {
         return INDEX_REDIRECT_STRING;
     }
 
+    @GetMapping("/Details")
+    public String details(Model model, Long id) {
+        Assignment assignment = assignmentRepository.getOne(id);
+        if (assignment == null) {
+            return INDEX_REDIRECT_STRING;
+        }
+        fillModel(model, assignment);
+        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("parsedContent", MultilineTextParser.getMultilineTextFromString(assignment.getContent()));
+
+        return "assignment_details";
+    }
+
     @GetMapping("/Edit")
     public String edit(Model model, Long id) {
         Assignment assignment = assignmentRepository.getOne(id);
@@ -135,8 +149,12 @@ public class AssignmentController {
     }
 
     private void fillModel(Model model, Assignment assignment, boolean isCreateAction) {
-        model.addAttribute("assignment", assignment);
+        fillModel(model, assignment);
         model.addAttribute("isCreateAction", isCreateAction);
+    }
+
+    private void fillModel(Model model, Assignment assignment) {
+        model.addAttribute("assignment", assignment);
         model.addAttribute("teachers", teacherRepository.findAll());
         model.addAttribute("courses", courseRepository.findAll());
     }

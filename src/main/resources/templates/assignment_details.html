@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Details</title>
+    <div th:replace="head_fragment :: scripts"></div>
+</head>
+<body>
+<div th:insert="header_user :: header(user=${user})"></div>
+<h2>
+    <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "details")}'></th:block>
+</h2>
+<div class="list-group-item">
+    <div class="form-group row">
+        <p class="col-sm-2">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "id")}'></th:block>:
+        </p>
+        <p th:utext="${assignment.getId()}" class="col-sm-6"></p>
+    </div>
+    <div class="form-group row">
+        <p class="col-sm-2">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "title")}'></th:block>:
+        </p>
+        <p th:utext="${assignment.getTitle()}" class="col-sm-6"></p>
+    </div>
+    <div class="form-group row">
+        <p class="col-sm-2">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "content")}'></th:block>:
+        </p>
+        <p th:utext="${parsedContent}" class="col-sm-6"></p>
+    </div>
+    <div class="form-group row">
+        <p class="col-sm-2">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "teacher")}'></th:block>:
+        </p>
+        <p th:utext="${assignment.getTeacher()}" class="col-sm-6"></p>
+    </div>
+    <div class="form-group row">
+        <p class="col-sm-2">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "course")}'></th:block>:
+        </p>
+        <p th:utext="${assignment.getCourse()}" class="col-sm-6"></p>
+    </div>
+</div>
+</body>
+</html>

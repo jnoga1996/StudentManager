@@ -57,6 +57,7 @@ public class BundlesInitializer {
                 new Bundle(language, "assignment", "edit", "Edytuj"),
                 new Bundle(language, "assignment", "delete", "Usuń"),
                 new Bundle(language, "assignment", "uploadedFiles", "Pliki"),
+                new Bundle(language, "assignment", "details", "Szczegóły"),
 
                 new Bundle(language, "assignmentSolution", "checkSolutions", "Sprawdź rozwiązania"),
 
@@ -158,6 +159,7 @@ public class BundlesInitializer {
                 new Bundle(language, "assignment", "edit", "Edit"),
                 new Bundle(language, "assignment", "delete", "Delete"),
                 new Bundle(language, "assignment", "uploadedFiles", "Files"),
+                new Bundle(language, "assignment", "details", "Details"),
 
                 new Bundle(language, "assignmentSolution", "checkSolutions", "Check solutions"),
 

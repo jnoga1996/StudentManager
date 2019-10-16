@@ -5,6 +5,7 @@ import com.smanager.dao.models.*;
 import com.smanager.dao.repositories.*;
 import com.smanager.services.UserService;
 import com.smanager.storage.StorageService;
+import com.smanager.wrappers.CourseAssignmentSolutionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.thymeleaf.expression.Sets;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Controller
@@ -104,6 +106,44 @@ public class WorkController {
             }
         }
         Long teacherId = teacher.getId();
+        CourseAssignmentSolutionWrapper wrapper = populateCoursesAssignmentsAndSolutions(teacherId, s -> s.isFinished());
+
+        model.addAttribute("teacher", teacher);
+        model.addAttribute("courses", wrapper.getCourses());
+        model.addAttribute("courseAssignments", wrapper.getCourseAssignmentsMap());
+        model.addAttribute("assignmentsSolutions", wrapper.getAssignmentSolutionsMap());
+        model.addAttribute("user", user);
+
+        return "work_index_teacher";
+    }
+
+    @GetMapping("/NoGradeReport")
+    @PreAuthorize("hasRole('TEACHER')")
+    public String generateReporForTeacherWithSolutionsWithoutGrade(Model model) {
+        userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
+        User user = userService.getLoggedUser();
+        Teacher teacher = null;
+        if (user != null) {
+            if (user.getTeacherUser() != null) {
+                teacher = teacherRepository.getOne(user.getTeacherUser().getId());
+            } else {
+                return "redirect:/Index";
+            }
+        }
+        Long teacherId = teacher.getId();
+
+        CourseAssignmentSolutionWrapper wrapper = populateCoursesAssignmentsAndSolutions(teacherId, s -> s.getGrade() == null);
+
+        model.addAttribute("teacher", teacher);
+        model.addAttribute("courses", wrapper.getCourses());
+        model.addAttribute("courseAssignments", wrapper.getCourseAssignmentsMap());
+        model.addAttribute("assignmentsSolutions", wrapper.getAssignmentSolutionsMap());
+        model.addAttribute("user", user);
+
+        return "work_index_teacher";
+    }
+
+    private CourseAssignmentSolutionWrapper populateCoursesAssignmentsAndSolutions(Long teacherId, Predicate<Solution> predicate) {
         List<Course> courses = courseRepository.findCoursesByTeacherId(teacherId);
         Map<Course, List<Assignment>> courseAssignmentsMap = new HashMap<>();
         Map<Assignment, List<Solution>> assignmentSolutionsMap = new HashMap<>();
@@ -115,7 +155,9 @@ public class WorkController {
 
                 for (Assignment assignment : courseAssignments) {
                     List<Solution> assignmentSolutions = assignment.getSolutions();
-                    assignmentSolutions.removeIf((s -> !s.isFinished()));
+
+                    assignmentSolutions = filterSolutions(assignmentSolutions, predicate);
+
                     if (!assignmentSolutionsMap.containsKey(assignment)) {
                         assignmentSolutionsMap.put(assignment, assignmentSolutions);
                     }
@@ -123,13 +165,11 @@ public class WorkController {
             }
         }
 
-        model.addAttribute("teacher", teacher);
-        model.addAttribute("courses", courses);
-        model.addAttribute("courseAssignments", courseAssignmentsMap);
-        model.addAttribute("assignmentsSolutions", assignmentSolutionsMap);
-        model.addAttribute("user", user);
+        return new CourseAssignmentSolutionWrapper(courses, courseAssignmentsMap, assignmentSolutionsMap);
+    }
 
-        return "work_index_teacher";
+    private static List<Solution> filterSolutions(List<Solution> solutions, Predicate<Solution> predicate) {
+        return solutions.stream().filter(predicate).collect(Collectors.toList());
     }
 
 }
