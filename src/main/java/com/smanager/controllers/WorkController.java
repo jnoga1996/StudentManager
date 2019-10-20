@@ -64,29 +64,12 @@ public class WorkController {
             }
         }
         Long studentId = student.getId();
-        List<Course> courses = courseRepository.findCoursesByStudentId(studentId);
-        Map<Course, List<Assignment>> courseAssignmentsMap = new HashMap<>();
-        Map<Assignment, List<Solution>> assignmentSolutionsMap = new HashMap<>();
-
-        for (Course course : courses) {
-            if (!courseAssignmentsMap.containsKey(course)) {
-                List<Assignment> courseAssignments = assignmentRepository.findAllByCourseId(course.getId());
-                courseAssignmentsMap.put(course, courseAssignments);
-
-                for (Assignment assignment : courseAssignments) {
-                    List<Solution> assignmentSolutions = assignment.getSolutions();
-                    assignmentSolutions.removeIf(s -> !s.getStudent().getId().equals(studentId));
-                    if (!assignmentSolutionsMap.containsKey(assignment)) {
-                        assignmentSolutionsMap.put(assignment, assignmentSolutions);
-                    }
-                }
-            }
-        }
+        CourseAssignmentSolutionWrapper wrapper = populateCoursesAssignmentsAndSolutions(studentId, s -> s.getStudent().getId().equals(studentId));
 
         model.addAttribute("student", student);
-        model.addAttribute("courses", courses);
-        model.addAttribute("courseAssignments", courseAssignmentsMap);
-        model.addAttribute("assignmentsSolutions", assignmentSolutionsMap);
+        model.addAttribute("courses", wrapper.getCourses());
+        model.addAttribute("courseAssignments", wrapper.getCourseAssignmentsMap());
+        model.addAttribute("assignmentsSolutions", wrapper.getAssignmentSolutionsMap());
         model.addAttribute("user", user);
 
         return "work_index";
@@ -143,8 +126,8 @@ public class WorkController {
         return "work_index_teacher";
     }
 
-    private CourseAssignmentSolutionWrapper populateCoursesAssignmentsAndSolutions(Long teacherId, Predicate<Solution> predicate) {
-        List<Course> courses = courseRepository.findCoursesByTeacherId(teacherId);
+    private CourseAssignmentSolutionWrapper populateCoursesAssignmentsAndSolutions(Long id, Predicate<Solution> predicate) {
+        List<Course> courses = courseRepository.findCoursesByTeacherId(id);
         Map<Course, List<Assignment>> courseAssignmentsMap = new HashMap<>();
         Map<Assignment, List<Solution>> assignmentSolutionsMap = new HashMap<>();
 
