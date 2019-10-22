@@ -120,6 +120,14 @@ public class Solution implements ISaveable{
         this.creationDate = creationDate;
     }
 
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

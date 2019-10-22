@@ -121,7 +121,11 @@ public class BundlesInitializer {
                 new Bundle(language, "teacher", "firstName", "Imię"),
                 new Bundle(language, "teacher", "lastName", "Nazwisko"),
 
-                new Bundle(language, "work", "showSolutions", "Pokaż rozwiązania")
+                new Bundle(language, "work", "showSolutions", "Pokaż rozwiązania"),
+
+                new Bundle(language, "report", "/TeacherWork", "Rozwiązania bez ocen"),
+                new Bundle(language, "report", "/NoGradeReport", "Ukończone rozwiązania"),
+                new Bundle(language, "report", "/NoCommentReport", "Rozwiązania bez komentarzy")
                 );
 
         bundleRepository.saveAll(polishBundles);
@@ -223,7 +227,11 @@ public class BundlesInitializer {
                 new Bundle(language, "teacher", "firstName", "First name"),
                 new Bundle(language, "teacher", "lastName", "Last name"),
 
-                new Bundle(language, "work", "showSolutions", "Show solutions")
+                new Bundle(language, "work", "showSolutions", "Show solutions"),
+
+                new Bundle(language, "report", "/TeacherWork", "Solutions without grades"),
+                new Bundle(language, "report", "/NoGradeReport", "Finished solutions"),
+                new Bundle(language, "report", "/NoCommentReport", "Solutions without comments")
         );
 
         bundleRepository.saveAll(englishBundles);
