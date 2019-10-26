@@ -6,8 +6,25 @@
     <div th:replace="head_fragment :: scripts"></div>
 </head>
 <body>
-<div th:fragment="edit">
-
+<div th:fragment="div_view(course, user)" class="list-group-item list-group-item-light">
+    <div class="form-group row">
+        <p class="col-sm-2">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "id")}'></th:block>:
+        </p>
+        <p th:utext="${course.getId()}" class="col-sm-6"></p>
+    </div>
+    <div class="form-group row">
+        <p class="col-sm-2">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "title")}'></th:block>:
+        </p>
+        <p th:utext="${course.getTitle()}" class="col-sm-6"></p>
+    </div>
+    <div class="form-group row">
+        <p class="col-sm-2">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "ects")}'></th:block>:
+        </p>
+        <p th:utext="${course.getEcts()}" class="col-sm-6"></p>
+    </div>
 </div>
 </body>
 </html>

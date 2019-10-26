@@ -7,6 +7,7 @@ import com.smanager.dao.repositories.UserRepository;
 import com.smanager.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,12 +26,19 @@ public class HomeController {
     @Autowired
     public HomeController(UserRepository userRepository, BundleRepository bundleRepository) {
         this.userRepository = userRepository;
-        userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        userService = new UserService(authentication, userRepository);
         bundles = new Bundles(bundleRepository);
     }
 
     @RequestMapping("/")
     public String index(Model model) {
+        boolean isLogged = false;
+        if (userService.getLoggedUser() != null) {
+            isLogged = true;
+        }
+
+        model.addAttribute("isLogged", isLogged);
         model.addAttribute("user", userService.getLoggedUser());
 
         return "home_index";

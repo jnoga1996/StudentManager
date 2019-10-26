@@ -1,5 +1,7 @@
 package com.smanager.dao.models;
 
+import com.smanager.controllers.CourseController;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Set;
@@ -94,5 +96,9 @@ public class Course {
     @Override
     public String toString() {
         return String.format("%s, ECTS: %s", getTitle(), getEcts());
+    }
+
+    public String getDetailsUrl() {
+        return CourseController.DETAILS_URL + "?id=" + getId();
     }
 }

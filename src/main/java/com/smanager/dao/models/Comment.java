@@ -91,4 +91,13 @@ public class Comment {
     public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
     }
+
+    public boolean isStudent() {
+        return (getStudent() != null && getTeacher() == null);
+    }
+
+    @Override
+    public String toString() {
+        return "ID: " + getId() + ", solution:" + getSolution() + ", content: " + getContent() + ", isStudent: " + isStudent();
+    }
 }

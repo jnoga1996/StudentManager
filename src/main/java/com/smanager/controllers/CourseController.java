@@ -25,6 +25,8 @@ import java.util.Set;
 @Controller
 @RequestMapping("/Course")
 public class CourseController {
+
+    public static final String DETAILS_URL = "/Course/Details";
     private static final String INDEX_REDIRECT_STRING = "redirect:/Course/Index";
 
     private CourseRepository courseRepository;
@@ -113,6 +115,18 @@ public class CourseController {
         model.addAttribute("user", userService.getLoggedUser());
 
         return INDEX_REDIRECT_STRING;
+    }
+
+    @GetMapping("/Details")
+    public String getDetails(Model model, Long id) {
+        Course course = courseRepository.getOne(id);
+        if (course == null) {
+            return INDEX_REDIRECT_STRING;
+        }
+        model.addAttribute("course", course);
+        model.addAttribute("user", userService.getLoggedUser());
+
+        return "course_details";
     }
 
     @PreAuthorize("hasRole('ADMIN')")

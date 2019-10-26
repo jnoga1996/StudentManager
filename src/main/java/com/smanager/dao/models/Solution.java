@@ -1,5 +1,6 @@
 package com.smanager.dao.models;
 
+import com.smanager.controllers.SolutionController;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
@@ -126,6 +127,10 @@ public class Solution implements ISaveable{
 
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
+    }
+
+    public String getDetailsUrl() {
+        return SolutionController.DETAILS_URL + "?id=" + getId();
     }
 
     @Override

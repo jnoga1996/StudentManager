@@ -1,5 +1,6 @@
 package com.smanager.dao.models;
 
+import com.smanager.controllers.AssignmentController;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -107,5 +108,9 @@ public class Assignment implements ISaveable {
     @Override
     public String toString() {
         return "Id: " + getId() + ", title: " + getTitle() + ", content: " + getContent();
+    }
+
+    public String getDetailsUrl() {
+        return AssignmentController.DETAILS_URL + "?id=" + getId();
     }
 }

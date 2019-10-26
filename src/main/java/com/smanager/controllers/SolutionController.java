@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/Solution")
 public class SolutionController {
 
+    public final static String DETAILS_URL = "/Solution/Details";
     private final static String INDEX_REDIRECT_STRING = "redirect:/Solution/Index";
 
     private SolutionRepository solutionRepository;
@@ -128,6 +129,18 @@ public class SolutionController {
         model.addAttribute("user", userService.getLoggedUser());
 
         return INDEX_REDIRECT_STRING;
+    }
+
+    @GetMapping("/Details")
+    public String details(Model model, Long id) {
+        Solution solution = solutionRepository.getOne(id);
+        if (solution == null) {
+            return INDEX_REDIRECT_STRING;
+        }
+        fillModel(model, solution, false);
+        model.addAttribute("user", userService.getLoggedUser());
+
+        return "solution_details";
     }
 
     @GetMapping("/Delete")

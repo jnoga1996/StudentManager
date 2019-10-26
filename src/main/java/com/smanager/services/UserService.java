@@ -22,10 +22,14 @@ public class UserService {
 
     public User getLoggedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        User user = userRepository.getUserByUsername(currentUsername);
+        if (authentication.isAuthenticated()) {
+            String currentUsername = authentication.getName();
+            User user = userRepository.getUserByUsername(currentUsername);
 
-        return user;
+            return user;
+        }
+
+        return null;
     }
 
     public Long getStudentOrTeacherId(User user) {

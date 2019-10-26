@@ -10,7 +10,7 @@
         <ul class="navbar-nav mr-auto">
             <th:block th:each="report : ${reports}">
                 <li class="nav-item">
-                    <a class="nav-link" th:href="${report}">
+                    <a class="nav-link" th:href="'/Work' + ${report}">
                         <th:block th:text='${T(com.smanager.Bundles).getMessage("report", report)}'></th:block>
                     </a>
                 </li>

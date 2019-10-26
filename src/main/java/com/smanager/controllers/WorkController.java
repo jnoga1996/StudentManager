@@ -72,6 +72,24 @@ public class WorkController {
         return "work_index";
     }
 
+    @GetMapping("/Menu")
+    public String sideMenu(Model model) {
+        User user = userService.getLoggedUser();
+        Long studentOrTeacherId = userService.getStudentOrTeacherId(user);
+        CourseAssignmentSolutionWrapper wrapper = populateCoursesAssignmentsAndSolutions(studentOrTeacherId, s -> s.getId() > 0);
+        Teacher teacher = null;
+        if (user != null) {
+            if (user.getTeacherUser() != null) {
+                teacher = teacherRepository.getOne(user.getTeacherUser().getId());
+            } else {
+                return "redirect:/Index";
+            }
+        }
+        fillModelForTeacherReports(model, teacher, wrapper, user);
+
+        return "side_menu";
+    }
+
     @GetMapping("/TeacherWork")
     @PreAuthorize("hasRole('TEACHER')")
     public String teacherWork(Model model) {

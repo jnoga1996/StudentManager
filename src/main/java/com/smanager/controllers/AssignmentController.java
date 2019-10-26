@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/Assignment")
 public class AssignmentController {
 
+    public final static String DETAILS_URL = "/Assignment/Details";
     private final static String INDEX_REDIRECT_STRING = "redirect:/Assignment/Index";
 
     private AssignmentRepository assignmentRepository;
