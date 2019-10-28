@@ -5,6 +5,7 @@ import com.smanager.dao.models.*;
 import com.smanager.dao.repositories.*;
 import com.smanager.services.UserService;
 import com.smanager.storage.StorageService;
+import com.smanager.utils.CourseHelper;
 import com.smanager.wrappers.CourseAssignmentSolutionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,28 +23,21 @@ import java.util.stream.Collectors;
 @RequestMapping("/Work")
 public class WorkController {
 
-    private CourseRepository courseRepository;
-    private AssignmentRepository assignmentRepository;
-    private SolutionRepository solutionRepository;
     private StudentRepository studentRepository;
     private TeacherRepository teacherRepository;
     private UserRepository userRepository;
-    private CommentRepository commentRepository;
     private UserService userService;
     private List<String> reportList;
+    private CourseHelper courseHelper;
 
     @Autowired
     public WorkController(CourseRepository courseRepository, AssignmentRepository assignmentRepository,
-                          SolutionRepository solutionRepository, StudentRepository studentRepository,
-                          CommentRepository commentRepository, UserRepository userRepository,
+                          StudentRepository studentRepository, UserRepository userRepository,
                           TeacherRepository teacherRepository) {
-        this.courseRepository = courseRepository;
-        this.assignmentRepository = assignmentRepository;
-        this.solutionRepository = solutionRepository;
         this.studentRepository = studentRepository;
-        this.commentRepository = commentRepository;
         this.userRepository = userRepository;
         this.teacherRepository = teacherRepository;
+        this.courseHelper = new CourseHelper(courseRepository, assignmentRepository);
 
         reportList = Arrays.asList(
                 "/TeacherWork",
@@ -66,7 +60,7 @@ public class WorkController {
             }
         }
         Long studentId = student.getId();
-        CourseAssignmentSolutionWrapper wrapper = populateCoursesAssignmentsAndSolutions(studentId, s -> s.getStudent().getId().equals(studentId));
+        CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(studentId, s -> s.getStudent().getId().equals(studentId));
         fillModelForStudentReports(model, student, wrapper, user);
 
         return "work_index";
@@ -76,7 +70,7 @@ public class WorkController {
     public String sideMenu(Model model) {
         User user = userService.getLoggedUser();
         Long studentOrTeacherId = userService.getStudentOrTeacherId(user);
-        CourseAssignmentSolutionWrapper wrapper = populateCoursesAssignmentsAndSolutions(studentOrTeacherId, s -> s.getId() > 0);
+        CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(studentOrTeacherId, s -> s.getId() > 0);
         Teacher teacher = null;
         if (user != null) {
             if (user.getTeacherUser() != null) {
@@ -104,7 +98,7 @@ public class WorkController {
             }
         }
         Long teacherId = teacher.getId();
-        CourseAssignmentSolutionWrapper wrapper = populateCoursesAssignmentsAndSolutions(teacherId, s -> s.isFinished());
+        CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(teacherId, s -> s.isFinished());
         fillModelForTeacherReports(model, teacher, wrapper, user);
 
         return "work_index_teacher";
@@ -125,7 +119,7 @@ public class WorkController {
         }
         Long teacherId = teacher.getId();
 
-        CourseAssignmentSolutionWrapper wrapper = populateCoursesAssignmentsAndSolutions(teacherId, s -> s.getGrade() == null);
+        CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(teacherId, s -> s.getGrade() == null);
         fillModelForTeacherReports(model, teacher, wrapper, user);
 
         return "work_index_teacher";
@@ -145,39 +139,10 @@ public class WorkController {
             }
         }
         Long teacherId = teacher.getId();
-        CourseAssignmentSolutionWrapper wrapper = populateCoursesAssignmentsAndSolutions(teacherId, s -> s.getComments().isEmpty());
+        CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(teacherId, s -> s.getComments().isEmpty());
         fillModelForTeacherReports(model, teacher, wrapper, user);
 
         return "work_index_teacher";
-    }
-
-    private CourseAssignmentSolutionWrapper populateCoursesAssignmentsAndSolutions(Long id, Predicate<Solution> predicate) {
-        List<Course> courses = courseRepository.findCoursesByTeacherId(id);
-        Map<Course, List<Assignment>> courseAssignmentsMap = new HashMap<>();
-        Map<Assignment, List<Solution>> assignmentSolutionsMap = new HashMap<>();
-
-        for (Course course : courses) {
-            if (!courseAssignmentsMap.containsKey(course)) {
-                List<Assignment> courseAssignments = assignmentRepository.findAllByCourseId(course.getId());
-                courseAssignmentsMap.put(course, courseAssignments);
-
-                for (Assignment assignment : courseAssignments) {
-                    List<Solution> assignmentSolutions = assignment.getSolutions();
-
-                    assignmentSolutions = filterSolutions(assignmentSolutions, predicate);
-
-                    if (!assignmentSolutionsMap.containsKey(assignment)) {
-                        assignmentSolutionsMap.put(assignment, assignmentSolutions);
-                    }
-                }
-            }
-        }
-
-        return new CourseAssignmentSolutionWrapper(courses, courseAssignmentsMap, assignmentSolutionsMap);
-    }
-
-    private static List<Solution> filterSolutions(List<Solution> solutions, Predicate<Solution> predicate) {
-        return solutions.stream().filter(predicate).collect(Collectors.toList());
     }
 
     private void fillModelForTeacherReports(Model model, Teacher teacher, CourseAssignmentSolutionWrapper wrapper,

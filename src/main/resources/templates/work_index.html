@@ -10,30 +10,35 @@
 <div class="h3">
     <p th:utext="${student}"></p>
 </div>
-<div class="list-group">
-    <th:block th:each="course : ${courses}">
-        <div class="list-group-item list-group-item-primary">
-            <p th:utext="${course}"></p>
-        </div>
-        <div class="list-group">
-            <th:block th:each="assignment, i : ${courseAssignments.get(course)}">
-                <div class="list-group-item">
-                    <p th:utext="${assignment}"></p>
-                    <button class="btn btn-primary" type="button" data-toggle="collapse" th:href="'#solutions-container-' + ${assignment.getId()} + '-' + ${i.count}"
-                        role="button" aria-controls="'solutions-container-' + ${assignment.getId()} + '-' + ${i.count}">
-                        <th:block th:text='${T(com.smanager.Bundles).getMessage("work", "showSolutions")}'></th:block>
-                    </button>
-                    <div class="collapse" th:id="'solutions-container-' + ${assignment.getId()} + '-' + ${i.count}">
-                        <th:block th:each="solution : ${assignmentsSolutions.get(assignment)}">
-                            <div class="list-group-item">
-                                <div th:insert="solution_fragment :: div_view(solution=${solution}, user=${user})"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div th:insert="side_menu :: menu(courses=${courses})" class="col-2"></div>
+        <div class="list-group col-10">
+            <th:block th:each="course : ${courses}">
+                <div class="list-group-item list-group-item-primary">
+                    <p th:utext="${course}"></p>
+                </div>
+                <div class="list-group">
+                    <th:block th:each="assignment, i : ${courseAssignments.get(course)}">
+                        <div class="list-group-item">
+                            <p th:utext="${assignment}"></p>
+                            <button class="btn btn-primary" type="button" data-toggle="collapse" th:href="'#solutions-container-' + ${assignment.getId()} + '-' + ${i.count}"
+                                role="button" aria-controls="'solutions-container-' + ${assignment.getId()} + '-' + ${i.count}">
+                                <th:block th:text='${T(com.smanager.Bundles).getMessage("work", "showSolutions")}'></th:block>
+                            </button>
+                            <div class="collapse" th:id="'solutions-container-' + ${assignment.getId()} + '-' + ${i.count}">
+                                <th:block th:each="solution : ${assignmentsSolutions.get(assignment)}">
+                                    <div class="list-group-item">
+                                        <div th:insert="solution_fragment :: div_view(solution=${solution}, user=${user})"></div>
+                                    </div>
+                                </th:block>
                             </div>
-                        </th:block>
-                    </div>
+                        </div>
+                    </th:block>
                 </div>
             </th:block>
         </div>
-    </th:block>
+    </div>
 </div>
 </body>
 </html>

@@ -6,8 +6,8 @@
     <div th:replace="head_fragment :: scripts"></div>
 </head>
 <body>
-<div>
-    <ul>
+<div th:fragment="menu(courses)">
+    <ul style="list-style: none">
         <th:block th:each="course, c_i : ${courses}">
             <li th:if="${course != null}">
                 <button data-toggle="collapse"
@@ -17,7 +17,7 @@
                 <a th:href="${course.getDetailsUrl()}">
                     <th:block th:utext="${course}"></th:block>
                 </a>
-                <ul class="collapse" th:id="'course-' + ${c_i.count}">
+                <ul class="collapse" th:id="'course-' + ${c_i.count}" style="list-style: none">
                     <th:block th:each="assignment, a_i : ${course.getAssignments()}">
                         <li th:if="${assignment != null}">
                             <button data-toggle="collapse"
@@ -27,7 +27,7 @@
                             <a th:href="${assignment.getDetailsUrl()}">
                                 <th:block th:utext="${assignment}"></th:block>
                             </a>
-                            <ul class="collapse" th:id="'course-' + ${c_i.count} + '-assignment-' + ${a_i.count}">
+                            <ul class="collapse" th:id="'course-' + ${c_i.count} + '-assignment-' + ${a_i.count}" style="list-style: none">
                                 <th:block th:each="solution, s_i : ${assignment.getSolutions()}">
                                     <li th:if="${solution != null}">
                                         <button data-toggle="collapse"
@@ -38,7 +38,7 @@
                                         <a th:href="${solution.getDetailsUrl()}">
                                             <th:block th:utext="${solution}"></th:block>
                                         </a>
-                                        <ul class="collapse" th:id="'course-' + ${c_i.count} + '-assignment-' + ${a_i.count} + '-course-' + ${s_i.count}">
+                                        <ul class="collapse" th:id="'course-' + ${c_i.count} + '-assignment-' + ${a_i.count} + '-course-' + ${s_i.count}" style="list-style: none">
                                             <th:block th:each="comment : ${solution.getComments()}">
                                                 <li th:if="${comment != null}">
                                                     <th:block th:utext="${comment}"></th:block>

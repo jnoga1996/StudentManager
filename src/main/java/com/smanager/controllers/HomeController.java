@@ -2,9 +2,12 @@ package com.smanager.controllers;
 
 import com.smanager.Bundles;
 import com.smanager.dao.models.Bundle;
+import com.smanager.dao.repositories.AssignmentRepository;
 import com.smanager.dao.repositories.BundleRepository;
+import com.smanager.dao.repositories.CourseRepository;
 import com.smanager.dao.repositories.UserRepository;
 import com.smanager.services.UserService;
+import com.smanager.utils.CourseHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.core.Authentication;
@@ -22,13 +25,18 @@ public class HomeController {
     private UserService userService;
     private UserRepository userRepository;
     private Bundles bundles;
+    private CourseHelper courseHelper;
+    private CourseRepository courseRepository;
 
     @Autowired
-    public HomeController(UserRepository userRepository, BundleRepository bundleRepository) {
+    public HomeController(UserRepository userRepository, BundleRepository bundleRepository,
+                          CourseRepository courseRepository, AssignmentRepository assignmentRepository) {
         this.userRepository = userRepository;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         userService = new UserService(authentication, userRepository);
         bundles = new Bundles(bundleRepository);
+        this.courseRepository = courseRepository;
+        courseHelper = new CourseHelper(courseRepository, assignmentRepository);
     }
 
     @RequestMapping("/")
@@ -40,6 +48,7 @@ public class HomeController {
 
         model.addAttribute("isLogged", isLogged);
         model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("courses", courseRepository.findAll());
 
         return "home_index";
     }
