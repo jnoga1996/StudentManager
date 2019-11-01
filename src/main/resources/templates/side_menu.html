@@ -7,7 +7,7 @@
 </head>
 <body>
 <div th:fragment="menu(courses)">
-    <ul style="list-style: none">
+    <ul style="list-style: none;padding-left: 0%">
         <th:block th:each="course, c_i : ${courses}">
             <li th:if="${course != null}">
                 <button data-toggle="collapse"
@@ -17,7 +17,7 @@
                 <a th:href="${course.getDetailsUrl()}">
                     <th:block th:utext="${course}"></th:block>
                 </a>
-                <ul class="collapse" th:id="'course-' + ${c_i.count}" style="list-style: none">
+                <ul class="collapse" th:id="'course-' + ${c_i.count}" style="list-style: none;padding-left: 5%">
                     <th:block th:each="assignment, a_i : ${course.getAssignments()}">
                         <li th:if="${assignment != null}">
                             <button data-toggle="collapse"
@@ -27,24 +27,12 @@
                             <a th:href="${assignment.getDetailsUrl()}">
                                 <th:block th:utext="${assignment}"></th:block>
                             </a>
-                            <ul class="collapse" th:id="'course-' + ${c_i.count} + '-assignment-' + ${a_i.count}" style="list-style: none">
+                            <ul class="collapse" th:id="'course-' + ${c_i.count} + '-assignment-' + ${a_i.count}" style="list-style: none;padding-left: 7%">
                                 <th:block th:each="solution, s_i : ${assignment.getSolutions()}">
                                     <li th:if="${solution != null}">
-                                        <button data-toggle="collapse"
-                                            th:href="'#course-' + ${c_i.count} + '-assignment-' + ${a_i.count} + '-course-' + ${s_i.count}" role="button"
-                                            aria-controls="'course-' + ${c_i.count} + '-assignment-' + ${a_i.count} + '-course-' + ${s_i.count}">
-                                            +
-                                        </button>
                                         <a th:href="${solution.getDetailsUrl()}">
                                             <th:block th:utext="${solution}"></th:block>
                                         </a>
-                                        <ul class="collapse" th:id="'course-' + ${c_i.count} + '-assignment-' + ${a_i.count} + '-course-' + ${s_i.count}" style="list-style: none">
-                                            <th:block th:each="comment : ${solution.getComments()}">
-                                                <li th:if="${comment != null}">
-                                                    <th:block th:utext="${comment}"></th:block>
-                                                </li>
-                                            </th:block>
-                                        </ul>
                                     </li>
                                 </th:block>
                             </ul>
@@ -55,6 +43,5 @@
         </th:block>
     </ul>
 </div>
-
 </body>
 </html>

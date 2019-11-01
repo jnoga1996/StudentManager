@@ -7,6 +7,9 @@
 </head>
 <body>
 <div th:insert="header_user :: header(user=${user})"></div>
+<h3>
+    <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "course")}'></th:block>
+</h3>
 <div class="btn-group">
     <div th:if="${!user.isStudent()}">
         <a href="/Course/Create">
@@ -15,11 +18,20 @@
             </button>
         </a>
     </div>
-    <a href="/Course/Register">
-        <button type="button" class="btn btn-primary btn-sm">
-            <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "registerToCourse")}'></th:block>
-        </button>
-    </a>
+    <div>
+        <a href="/Course/Register">
+            <button type="button" class="btn btn-primary btn-sm">
+                <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "registerToCourse")}'></th:block>
+            </button>
+        </a>
+    </div>
+    <div>
+        <a href="/Course/TeacherIndex">
+            <button type="button" class="btn btn-primary btn-sm">
+                <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "teacherCourses")}'></th:block>
+            </button>
+        </a>
+    </div>
 </div>
 <table class="table table-striped">
     <thead class="thead-dark">
@@ -54,7 +66,7 @@
             </td>
         </tr>
         <th:block th:each="student : ${course.getStudents()}">
-            <tr>
+            <tr class="table-light">
                 <td th:utext="${student}"></td>
                 <td></td>
                 <td></td>

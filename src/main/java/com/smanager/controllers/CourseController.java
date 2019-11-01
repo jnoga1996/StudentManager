@@ -56,6 +56,18 @@ public class CourseController {
         return "course_index";
     }
 
+    @GetMapping("TeacherIndex")
+    public String teacherIndex(Model model) {
+        User user = userService.getLoggedUser();
+        Long teacherId = userService.getStudentOrTeacherId(user);
+        List<Course> courses = courseRepository.findCoursesByTeacherId(teacherId);
+
+        model.addAttribute("courses", courses);
+        model.addAttribute("user", user);
+
+        return "course_index";
+    }
+
     @GetMapping("MyCourses")
     public String myCourses(Model model, Long studentId) {
         model.addAttribute("courses", courseRepository.findCoursesByStudentId(studentId));
