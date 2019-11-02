@@ -8,7 +8,6 @@ import com.smanager.dao.repositories.CourseRepository;
 import com.smanager.wrappers.CourseAssignmentSolutionWrapper;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -22,6 +21,10 @@ public class CourseHelper {
     public CourseHelper(CourseRepository courseRepository, AssignmentRepository assignmentRepository) {
         this.courseRepository = courseRepository;
         this.assignmentRepository = assignmentRepository;
+    }
+
+    public CourseRepository getCourseRepository() {
+        return this.courseRepository;
     }
 
     public CourseAssignmentSolutionWrapper populateCoursesAssignmentsAndSolutions(Long id, Predicate<Solution> predicate) {
@@ -57,5 +60,47 @@ public class CourseHelper {
 
     public static List<Solution> filterSolutions(List<Solution> solutions, Predicate<Solution> predicate) {
         return solutions.stream().filter(predicate).collect(Collectors.toList());
+    }
+
+    public static int getGradeForAssignment(Assignment assignment, Long studentId) {
+        double sum = 0;
+        List<Solution> solutions = assignment.getSolutions()
+                .stream()
+                .filter(s -> s.getStudent().getId() == studentId && s.isFinished())
+                .collect(Collectors.toList());
+
+        for (Solution solution : assignment.getSolutions()) {
+            sum += solution.getGrade();
+        }
+
+        int grade = 0;
+        try {
+            grade = (int)(sum / solutions.size());
+        } catch (ArithmeticException ex) {
+            grade = -1;
+        }
+
+        return grade;
+    }
+
+    public static int getGradeForCourse(Course course, Long studentId) {
+        double sum = 0;
+        List<Assignment> assignments = course.getAssignments()
+                .stream()
+                .filter(s -> s.getCourse().getId() == course.getId())
+                .collect(Collectors.toList());
+
+        for (Assignment assignment : assignments) {
+            sum += getGradeForAssignment(assignment, studentId);
+        }
+
+        int grade = 0;
+        try {
+            grade = (int)(sum / assignments.size());
+        } catch (ArithmeticException ex) {
+            grade = 0;
+        }
+
+        return grade;
     }
 }

@@ -8,7 +8,7 @@
 <body>
 <div th:insert="header_user :: header(user=${user})"></div>
 <h3>
-    <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "course")}'></th:block>
+    <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "courses")}'></th:block>
 </h3>
 <div class="btn-group">
     <div th:if="${!user.isStudent()}">

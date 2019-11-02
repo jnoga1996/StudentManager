@@ -7,6 +7,9 @@
 </head>
 <body>
 <div th:insert="header_user :: header(user=${user})"></div>
+<h3>
+    <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "assignments")}'></th:block>
+</h3>
 <a href="/Assignment/Create">
     <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "createNewAssignment")}'></th:block>
 </a>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Grade report</title>
+    <div th:replace="head_fragment :: scripts"></div>
+</head>
+<body>
+<div th:insert="header_user :: header(user=${user})"></div>
+<table class="table table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Course</th>
+            <th>Grade</th>
+        </tr>
+    </thead>
+    <th:block th:each="course : ${courseGrades.keySet()}">
+        <tr>
+            <td th:utext="${course}"></td>
+            <td th:utext="${courseGrades.get(course)}"></td>
+        </tr>
+    </th:block>
+</table>
+</body>
+</html>

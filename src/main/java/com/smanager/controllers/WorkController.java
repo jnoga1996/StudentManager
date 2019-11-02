@@ -87,7 +87,6 @@ public class WorkController {
     @GetMapping("/TeacherWork")
     @PreAuthorize("hasRole('TEACHER')")
     public String teacherWork(Model model) {
-        userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
         User user = userService.getLoggedUser();
         Teacher teacher = null;
         if (user != null) {
@@ -107,7 +106,6 @@ public class WorkController {
     @GetMapping("/NoGradeReport")
     @PreAuthorize("hasRole('TEACHER')")
     public String generateReporForTeacherWithSolutionsWithoutGrade(Model model) {
-        userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
         User user = userService.getLoggedUser();
         Teacher teacher = null;
         if (user != null) {
@@ -128,7 +126,6 @@ public class WorkController {
     @GetMapping("/NoCommentReport")
     @PreAuthorize("hasRole('TEACHER')")
     public String generateReporForTeacherWithSolutionsWithoutComment(Model model) {
-        userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
         User user = userService.getLoggedUser();
         Teacher teacher = null;
         if (user != null) {
@@ -143,6 +140,26 @@ public class WorkController {
         fillModelForTeacherReports(model, teacher, wrapper, user);
 
         return "work_index_teacher";
+    }
+
+    @GetMapping("/GradesReport")
+    @PreAuthorize("hasRole('STUDENT')")
+    public String generateGradesReportForStudent(Model model) {
+        User user = userService.getLoggedUser();
+        Long id = userService.getStudentOrTeacherId(user);
+
+        List<Course> courses = courseHelper.getCourseRepository().findCoursesByStudentId(id);
+        Map<Course, Integer> courseGradeMap = new HashMap<>();
+
+        for (Course course : courses) {
+            int grade = CourseHelper.getGradeForCourse(course, id);
+            courseGradeMap.put(course, grade);
+        }
+
+        model.addAttribute("courseGrades", courseGradeMap);
+        model.addAttribute("user", user);
+
+        return "grade_report";
     }
 
     private void fillModelForTeacherReports(Model model, Teacher teacher, CourseAssignmentSolutionWrapper wrapper,

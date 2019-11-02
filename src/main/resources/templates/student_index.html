@@ -7,6 +7,9 @@
 </head>
 <body>
 <div th:insert="header_user :: header(user=${user})"></div>
+<h3>
+    <th:block th:text='${T(com.smanager.Bundles).getMessage("student", "students")}'></th:block>
+</h3>
     <table class="table table-striped">
         <thead class="thead-dark">
             <tr>
