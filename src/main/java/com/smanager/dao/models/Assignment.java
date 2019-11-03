@@ -20,6 +20,7 @@ public class Assignment implements ISaveable {
     private String title;
 
     @NotBlank
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     private String path;
@@ -112,5 +113,25 @@ public class Assignment implements ISaveable {
 
     public String getDetailsUrl() {
         return AssignmentController.DETAILS_URL + "?id=" + getId();
+    }
+
+    public String getContentMultiline() {
+        String content = getContent();
+        StringBuilder stringBuilder = new StringBuilder();
+        final int MAX_SIZE = 64;
+        String[] words = content.split("\\s+");
+        StringBuilder currentLine = new StringBuilder();
+
+        for (String word : words) {
+            if (currentLine.length() + word.length() > MAX_SIZE) {
+                currentLine.append("\n");
+            }
+            currentLine.append(word);
+            currentLine.append(" ");
+            stringBuilder.append(currentLine.toString());
+            currentLine = new StringBuilder();
+        }
+
+        return stringBuilder.toString();
     }
 }
