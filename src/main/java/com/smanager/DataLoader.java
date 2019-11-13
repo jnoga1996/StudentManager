@@ -21,14 +21,13 @@ public class DataLoader implements ApplicationRunner {
     private AssignmentSolutionRepository assignmentSolutionRepository;
     private CourseRepository courseRepository;
     private GroupRepository groupRepository;
-    private UserRepository userRepository;
     private CommentRepository commentRepository;
     private BundleRepository bundleRepository;
 
     @Autowired
     public DataLoader(StudentRepository studentRepository, TeacherRepository teacherRepository, AssignmentRepository assignmentRepository,
                       SolutionRepository solutionRepository, AssignmentSolutionRepository assignmentSolutionRepository,
-                      CourseRepository courseRepository, GroupRepository groupRepository, UserRepository userRepository,
+                      CourseRepository courseRepository, GroupRepository groupRepository,
                       CommentRepository commentRepository, BundleRepository bundleRepository) {
         this.studentRepository = studentRepository;
         this.teacherRepository = teacherRepository;
@@ -37,7 +36,6 @@ public class DataLoader implements ApplicationRunner {
         this.assignmentSolutionRepository = assignmentSolutionRepository;
         this.courseRepository = courseRepository;
         this.groupRepository = groupRepository;
-        this.userRepository = userRepository;
         this.commentRepository = commentRepository;
         this.bundleRepository = bundleRepository;
     }
@@ -45,10 +43,6 @@ public class DataLoader implements ApplicationRunner {
     @Override
     @Transactional
     public void run(ApplicationArguments args) {
-        if (studentRepository.findAll().isEmpty())
-            initializeStudents();
-        if (teacherRepository.findAll().isEmpty())
-            initializeTeachers();
         if (assignmentRepository.findAll().isEmpty())
             initializeAssignments();
         if (solutionRepository.findAll().isEmpty())
@@ -62,11 +56,6 @@ public class DataLoader implements ApplicationRunner {
         }
         if (groupRepository.findAll().isEmpty())
             initializeGroups();
-        if (!userRepository.findAll().isEmpty()) {
-            userRepository.deleteAll();
-        }
-
-        initializeUsers();
 
         if (commentRepository.findAll().isEmpty()) {
             initializeComments();
@@ -76,32 +65,6 @@ public class DataLoader implements ApplicationRunner {
         if (bundlesInitializer.isEmpty()) {
             bundlesInitializer.initialize();
         }
-    }
-
-    private void initializeStudents() {
-        List<Student> students = Arrays.asList(
-                new Student("Jan", "Kowalski", "Fizyka", 1),
-                new Student("Ewa", "Kowalska", "Astronomia", 2),
-                new Student("Krystian", "Brodaty", "Informatyka", 1),
-                new Student("Agata", "Herbata", "Fizyka", 1),
-                new Student("Tomasz", "Plecak", "Fizyka", 2),
-                new Student("Ewelina", "Lina", "Informatyka", 1),
-                new Student("Eustachy", "Rzeka", "Fizyka", 2));
-
-        studentRepository.saveAll(students);
-    }
-
-    private void initializeTeachers() {
-        List<Teacher> teachers = Arrays.asList(
-                new Teacher("Marian", "Jezioro"),
-                new Teacher("Joanna", "Talerz"),
-                new Teacher("Edmund", "Gruszka"),
-                new Teacher("Teacher", "Teacher"),
-                new Teacher("Teacher2", "Teacher2"),
-                new Teacher("Teacher3", "Teacher3")
-        );
-
-        teacherRepository.saveAll(teachers);
     }
 
     private void initializeAssignments() {
@@ -184,43 +147,6 @@ public class DataLoader implements ApplicationRunner {
         return new Group(course, teacher);
     }
 
-    private void initializeUsers() {
-        List<User> users = Arrays.asList(
-                new User("student", "student", UserType.STUDENT.toString(), true),
-                new User("teacher", "teacher", UserType.TEACHER.toString(), true),
-                new User("admin", "admin", UserType.ADMIN.toString(), true)
-        );
-
-        userRepository.saveAll(users);
-        userRepository.saveAll(getStudentUsers());
-        userRepository.saveAll(getTeacherUsers());
-
-    }
-
-    private List<User> getStudentUsers() {
-        List<User> students = new LinkedList<>();
-        for (Student student : studentRepository.findAll()) {
-            String username = student.getUsername();
-            String password = "123456";
-            User user = new User(username, password, UserType.STUDENT.toString(), true, student);
-            students.add(user);
-        }
-
-        return students;
-    }
-
-    private List<User> getTeacherUsers() {
-        List<User> teachers = new LinkedList<>();
-        for (Teacher teacher : teacherRepository.findAll()) {
-            String username = teacher.getUsername();
-            String password = "123456";
-            User user = new User(username, password, UserType.TEACHER.toString(), true, teacher);
-            teachers.add(user);
-        }
-
-        return teachers;
-    }
-
     private void registerStudentToCourse(Long studentId, Long courseId) {
         Course course = courseRepository.getOne(courseId);
         Student student = studentRepository.getOne(studentId);
@@ -291,7 +217,4 @@ public class DataLoader implements ApplicationRunner {
         commentRepository.saveAll(comments);
     }
 
-    private void initializeBundles() {
-
-    }
 }

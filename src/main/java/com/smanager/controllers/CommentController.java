@@ -1,7 +1,5 @@
 package com.smanager.controllers;
 
-import com.smanager.Bundles;
-import com.smanager.WebSecurityConfig;
 import com.smanager.dao.models.Comment;
 import com.smanager.dao.models.Solution;
 import com.smanager.dao.models.User;
@@ -29,21 +27,14 @@ public class CommentController {
 
     private CommentRepository commentRepository;
     private SolutionRepository solutionRepository;
-    private UserRepository userRepository;
-    private StudentRepository studentRepository;
-    private TeacherRepository teacherRepository;
     private UserService userService;
 
     @Autowired
     public CommentController(CommentRepository commentRepository, SolutionRepository solutionRepository,
-                             UserRepository userRepository, StudentRepository studentRepository,
-                             TeacherRepository teacherRepository) {
+                             UserRepository userRepository) {
         this.commentRepository = commentRepository;
         this.solutionRepository = solutionRepository;
-        this.userRepository = userRepository;
         this.userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
-        this.studentRepository = studentRepository;
-        this.teacherRepository = teacherRepository;
     }
 
     @GetMapping("/Index")
