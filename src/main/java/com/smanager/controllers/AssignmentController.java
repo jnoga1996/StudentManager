@@ -38,21 +38,19 @@ public class AssignmentController {
     private TeacherRepository teacherRepository;
     private CourseRepository courseRepository;
     private FileUploadHelper fileUploadHelper;
-    private UserRepository userRepository;
-    private UserService userService;
+    private User user;
 
     @Autowired
     public AssignmentController(AssignmentRepository assignmentRepository, FileHistoryRepository fileHistoryRepository,
                                 StorageService storageService, TeacherRepository teacherRepository,
-                                CourseRepository courseRepository, UserRepository userRepository) {
+                                CourseRepository courseRepository, UserService userService) {
         this.assignmentRepository = assignmentRepository;
         this.fileHistoryRepository = fileHistoryRepository;
         this.storageService = storageService;
         this.teacherRepository = teacherRepository;
         this.courseRepository = courseRepository;
-        this.userRepository = userRepository;
         fileUploadHelper = new FileUploadHelper(fileHistoryRepository, storageService);
-        userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
+        user = userService.getLoggedUser();
     }
 
     @GetMapping("Index")
@@ -62,7 +60,7 @@ public class AssignmentController {
                 path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
                         "serveFile", path.getFileName().toString()).build().toString())
                 .collect(Collectors.toList()));
-        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("user", user);
 
         return "assignment_index";
     }
@@ -70,7 +68,7 @@ public class AssignmentController {
     @GetMapping("Create")
     public String showForm(Model model) {
         fillModel(model, new Assignment(), true);
-        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("user", user);
 
         return "assignment_form";
     }
@@ -83,7 +81,7 @@ public class AssignmentController {
         }
 
         fileUploadHelper.saveFileToRepository(assignmentRepository, file, assignment);
-        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("user", user);
 
         return INDEX_REDIRECT_STRING;
     }
@@ -95,7 +93,7 @@ public class AssignmentController {
             return INDEX_REDIRECT_STRING;
         }
         fillModel(model, assignment);
-        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("user", user);
         model.addAttribute("parsedContent", MultilineTextParser.getMultilineTextFromString(assignment.getContent()));
 
         return "assignment_details";
@@ -109,7 +107,7 @@ public class AssignmentController {
         }
         fillModel(model, assignment, false);
         model.addAttribute("id", id);
-        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("user", user);
 
         return "assignment_form";
     }
@@ -132,7 +130,7 @@ public class AssignmentController {
 
             assignmentRepository.save(assignmentFromDb);
         }
-        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("user", user);
 
         return INDEX_REDIRECT_STRING;
     }
@@ -144,7 +142,7 @@ public class AssignmentController {
         if (assignment != null) {
             assignmentRepository.delete(assignment);
         }
-        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("user", user);
 
         return INDEX_REDIRECT_STRING;
     }
@@ -169,7 +167,7 @@ public class AssignmentController {
         List<Assignment> assignments = assignmentRepository.findAllByCourseId(courseId);
         model.addAttribute("course", course);
         model.addAttribute("assignments", assignments);
-        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("user", user);
 
         return "courseAssignments_index";
     }

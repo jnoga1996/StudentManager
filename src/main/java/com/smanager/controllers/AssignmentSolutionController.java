@@ -3,6 +3,7 @@ package com.smanager.controllers;
 import com.smanager.Bundles;
 import com.smanager.dao.models.Assignment;
 import com.smanager.dao.models.Solution;
+import com.smanager.dao.models.User;
 import com.smanager.dao.repositories.AssignmentRepository;
 import com.smanager.dao.repositories.BundleRepository;
 import com.smanager.dao.repositories.SolutionRepository;
@@ -27,16 +28,14 @@ public class AssignmentSolutionController {
 
     private AssignmentRepository assignmentRepository;
     private SolutionRepository solutionRepository;
-    private UserRepository userRepository;
-    private UserService userService;
+    private User user;
 
     @Autowired
-    public AssignmentSolutionController(AssignmentRepository assignmentRepository, UserRepository userRepository,
-                                        SolutionRepository solutionRepository) {
+    public AssignmentSolutionController(AssignmentRepository assignmentRepository,
+                                        SolutionRepository solutionRepository, UserService userService) {
         this.assignmentRepository = assignmentRepository;
         this.solutionRepository = solutionRepository;
-        this.userRepository = userRepository;
-        this.userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
+        user = userService.getLoggedUser();
     }
 
     @GetMapping("Index")
@@ -78,6 +77,6 @@ public class AssignmentSolutionController {
                            HashMap<Assignment, List<Solution>> assignmentSolutionsMap) {
         model.addAttribute("assignmentSolutions", assignments);
         model.addAttribute("solutionsForAssignment", assignmentSolutionsMap);
-        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("user", user);
     }
 }

@@ -1,6 +1,7 @@
 package com.smanager.controllers;
 
 import com.smanager.Bundles;
+import com.smanager.dao.models.User;
 import com.smanager.dao.repositories.*;
 import com.smanager.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,18 +18,19 @@ public class StudentController {
     private StudentRepository studentRepository;
     private UserService userService;
     private UserRepository userRepository;
+    private User user;
 
     @Autowired
-    public StudentController(StudentRepository studentRepository, UserRepository userRepository) {
+    public StudentController(StudentRepository studentRepository, UserRepository userRepository, UserService userService) {
         this.studentRepository = studentRepository;
         this.userRepository = userRepository;
-        userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
+        user = userService.getLoggedUser();
     }
 
     @GetMapping("Index")
     public String index(Model model) {
         model.addAttribute("students", studentRepository.findAll());
-        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("user", user);
         return "student_index";
     }
 }

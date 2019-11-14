@@ -27,21 +27,21 @@ public class CommentController {
 
     private CommentRepository commentRepository;
     private SolutionRepository solutionRepository;
-    private UserService userService;
+    private User user;
 
     @Autowired
     public CommentController(CommentRepository commentRepository, SolutionRepository solutionRepository,
-                             UserRepository userRepository) {
+                             UserService userService) {
         this.commentRepository = commentRepository;
         this.solutionRepository = solutionRepository;
-        this.userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
+        user = userService.getLoggedUser();
     }
 
     @GetMapping("/Index")
     public String getCommentsForSolution(Model model, Long solutionId) {
         List<Comment> comments = commentRepository.findAllBySolutionIdOrderByCreationDateDesc(solutionId);
         model.addAttribute("comments", comments);
-        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("user", user);
 
         return "comment_index";
     }
@@ -49,7 +49,6 @@ public class CommentController {
     @GetMapping("/Create")
     public String createComment(Model model, Long solutionId) {
         Solution solution = solutionRepository.getOne(solutionId);
-        User user = userService.getLoggedUser();
         if (solution == null || user == null) {
             return INDEX_RETURN_STRING;
         }
@@ -67,7 +66,6 @@ public class CommentController {
             return "comment_form";
         }
 
-        User user = userService.getLoggedUser();
         if (user.isStudent()) {
             comment.setStudent(user.getStudentUser());
         } else {
@@ -81,7 +79,7 @@ public class CommentController {
         }
         comment.setSolution(solution);
         commentRepository.save(comment);
-        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("user", user);
 
         return INDEX_RETURN_STRING;
     }

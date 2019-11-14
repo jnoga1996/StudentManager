@@ -21,10 +21,9 @@ public class FileHistoryController {
     private UserService userService;
 
     @Autowired
-    public FileHistoryController(FileHistoryRepository fileHistoryRepository, UserRepository userRepository) {
+    public FileHistoryController(FileHistoryRepository fileHistoryRepository, UserRepository userRepository, UserService userService) {
         this.fileHistoryRepository = fileHistoryRepository;
         this.userRepository = userRepository;
-        userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
     }
 
     @GetMapping("Index")

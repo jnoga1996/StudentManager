@@ -33,32 +33,31 @@ public class CourseController {
     private AssignmentRepository assignmentRepository;
     private SolutionRepository solutionRepository;
     private StudentRepository studentRepository;
-    private UserRepository userRepository;
     private UserService userService;
+    private User user;
 
     @Autowired
     public CourseController(CourseRepository courseRepository, AssignmentRepository assignmentRepository,
                             SolutionRepository solutionRepository, StudentRepository studentRepository,
-                            UserRepository userRepository) {
+                            UserService userService) {
         this.courseRepository = courseRepository;
         this.assignmentRepository = assignmentRepository;
         this.solutionRepository = solutionRepository;
         this.studentRepository = studentRepository;
-        this.userRepository = userRepository;
-        userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
+        this.userService = userService;
+        user = userService.getLoggedUser();
     }
 
     @GetMapping("Index")
     public String index(Model model) {
         model.addAttribute("courses", courseRepository.findAll());
-        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("user", user);
 
         return "course_index";
     }
 
     @GetMapping("TeacherIndex")
     public String teacherIndex(Model model) {
-        User user = userService.getLoggedUser();
         Long teacherId = userService.getStudentOrTeacherId(user);
         List<Course> courses = courseRepository.findCoursesByTeacherId(teacherId);
 
@@ -71,7 +70,7 @@ public class CourseController {
     @GetMapping("MyCourses")
     public String myCourses(Model model, Long studentId) {
         model.addAttribute("courses", courseRepository.findCoursesByStudentId(studentId));
-        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("user", user);
 
         return "course_index";
     }
@@ -80,7 +79,7 @@ public class CourseController {
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     public String showForm(Course course, Model model) {
         model.addAttribute("isCreate", true);
-        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("user", user);
 
         return "course_form";
     }
@@ -92,7 +91,7 @@ public class CourseController {
             return "course_form";
         }
         courseRepository.save(course);
-        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("user", user);
 
         return INDEX_REDIRECT_STRING;
     }
@@ -107,7 +106,7 @@ public class CourseController {
         model.addAttribute("course", course);
         model.addAttribute("isCreate", false);
         model.addAttribute("id", id);
-        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("user", user);
 
         return "course_form";
     }
@@ -124,7 +123,7 @@ public class CourseController {
         courseFromDb.setEcts(course.getEcts());
         courseRepository.save(courseFromDb);
 
-        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("user", user);
 
         return INDEX_REDIRECT_STRING;
     }
@@ -136,7 +135,7 @@ public class CourseController {
             return INDEX_REDIRECT_STRING;
         }
         model.addAttribute("course", course);
-        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("user", user);
 
         return "course_details";
     }
@@ -156,7 +155,7 @@ public class CourseController {
             }
             courseRepository.delete(course);
         }
-        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("user", user);
 
         return INDEX_REDIRECT_STRING;
     }
@@ -166,7 +165,7 @@ public class CourseController {
         model.addAttribute("courses", courseRepository.findAll());
         model.addAttribute("students", studentRepository.findAll());
         model.addAttribute("mapping", new CourseStudentMapping());
-        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("user", user);
 
         return "courseStudentRegister_form";
     }
@@ -189,7 +188,7 @@ public class CourseController {
             course.setStudents(registeredStudents);
             courseRepository.save(course);
         }
-        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("user", user);
 
         return INDEX_REDIRECT_STRING;
     }
@@ -204,7 +203,7 @@ public class CourseController {
             course.getStudents().remove(student);
             courseRepository.save(course);
         }
-        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("user", user);
 
         return INDEX_REDIRECT_STRING;
     }

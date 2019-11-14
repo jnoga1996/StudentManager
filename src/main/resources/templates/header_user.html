@@ -20,10 +20,10 @@
                     <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a th:if="${user.getStudentUser() != null}" class="nav-link" href="/Work/Index">
+                <a th:if="${user != null && user.getStudentUser() != null}" class="nav-link" href="/Work/Index">
                     <th:block th:text='${T(com.smanager.Bundles).getMessage("menu", "myWork")}'></th:block>
                 </a>
-                <a th:unless="${user.getStudentUser() != null}" class="nav-link" href="/Work/TeacherWork">
+                <a th:unless="${user != null && user.getStudentUser() != null}" class="nav-link" href="/Work/TeacherWork">
                     <th:block th:text='${T(com.smanager.Bundles).getMessage("menu", "myWork")}'></th:block>
                 </a>
             </li>

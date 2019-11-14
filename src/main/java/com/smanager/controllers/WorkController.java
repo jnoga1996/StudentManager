@@ -29,15 +29,18 @@ public class WorkController {
     private UserService userService;
     private List<String> reportList;
     private CourseHelper courseHelper;
+    private User user;
 
     @Autowired
     public WorkController(CourseRepository courseRepository, AssignmentRepository assignmentRepository,
                           StudentRepository studentRepository, UserRepository userRepository,
-                          TeacherRepository teacherRepository) {
+                          TeacherRepository teacherRepository, UserService userService) {
         this.studentRepository = studentRepository;
         this.userRepository = userRepository;
         this.teacherRepository = teacherRepository;
         this.courseHelper = new CourseHelper(courseRepository, assignmentRepository);
+        this.userService = userService;
+        user = userService.getLoggedUser();
 
         reportList = Arrays.asList(
                 "/TeacherWork",
@@ -49,8 +52,6 @@ public class WorkController {
     @GetMapping("/Index")
     @PreAuthorize("hasRole('STUDENT')")
     public String index(Model model) {
-        userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
-        User user = userService.getLoggedUser();
         Student student = null;
         if (user != null) {
             if (user.getStudentUser() != null) {
@@ -68,7 +69,6 @@ public class WorkController {
 
     @GetMapping("/Menu")
     public String sideMenu(Model model) {
-        User user = userService.getLoggedUser();
         Long studentOrTeacherId = userService.getStudentOrTeacherId(user);
         CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(studentOrTeacherId, s -> s.getId() > 0);
         Teacher teacher = null;
@@ -87,7 +87,6 @@ public class WorkController {
     @GetMapping("/TeacherWork")
     @PreAuthorize("hasRole('TEACHER')")
     public String teacherWork(Model model) {
-        User user = userService.getLoggedUser();
         Teacher teacher = null;
         if (user != null) {
             if (user.getTeacherUser() != null) {
@@ -106,7 +105,6 @@ public class WorkController {
     @GetMapping("/NoGradeReport")
     @PreAuthorize("hasRole('TEACHER')")
     public String generateReporForTeacherWithSolutionsWithoutGrade(Model model) {
-        User user = userService.getLoggedUser();
         Teacher teacher = null;
         if (user != null) {
             if (user.getTeacherUser() != null) {
@@ -126,7 +124,6 @@ public class WorkController {
     @GetMapping("/NoCommentReport")
     @PreAuthorize("hasRole('TEACHER')")
     public String generateReporForTeacherWithSolutionsWithoutComment(Model model) {
-        User user = userService.getLoggedUser();
         Teacher teacher = null;
         if (user != null) {
             if (user.getTeacherUser() != null) {
@@ -145,7 +142,6 @@ public class WorkController {
     @GetMapping("/GradesReport")
     @PreAuthorize("hasRole('STUDENT')")
     public String generateGradesReportForStudent(Model model) {
-        User user = userService.getLoggedUser();
         Long id = userService.getStudentOrTeacherId(user);
 
         List<Course> courses = courseHelper.getCourseRepository().findCoursesByStudentId(id);

@@ -23,10 +23,9 @@ public class TeacherController {
     private UserRepository userRepository;
 
     @Autowired
-    public TeacherController(TeacherRepository teacherRepository, UserRepository userRepository) {
+    public TeacherController(TeacherRepository teacherRepository, UserRepository userRepository, UserService userService) {
         this.teacherRepository = teacherRepository;
         this.userRepository = userRepository;
-        userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
     }
 
     @GetMapping("Index")

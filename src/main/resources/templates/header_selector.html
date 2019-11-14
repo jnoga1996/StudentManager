@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Header</title>
+    <div th:replace="head_fragment :: scripts"></div>
+</head>
+<body>
+<div th:fragment="selector(user)">
+    <div th:if="${user == null}" th:insert="header :: header"></div>
+    <div th:if="${user != null}" th:insert="header_user :: header(user=${user})"></div>
+</div>
+</body>
+</html>

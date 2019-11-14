@@ -32,33 +32,28 @@ public class SolutionController {
     private SolutionRepository solutionRepository;
     private TeacherRepository teacherRepository;
     private StudentRepository studentRepository;
-    private FileHistoryRepository fileHistoryRepository;
     private AssignmentRepository assignmentRepository;
-    private UserRepository userRepository;
 
     private StorageService storageService;
     private FileUploadHelper fileUploadHelper;
-    private UserService userService;
+    private User user;
 
     @Autowired
     public SolutionController(SolutionRepository solutionRepository, TeacherRepository teacherRepository,
                               StudentRepository studentRepository, FileHistoryRepository fileHistoryRepository,
                               StorageService storageService, AssignmentRepository assignmentRepository,
-                              UserRepository userRepository) {
+                              UserService userService) {
         this.solutionRepository = solutionRepository;
         this.teacherRepository = teacherRepository;
         this.studentRepository = studentRepository;
-        this.fileHistoryRepository = fileHistoryRepository;
-        this.userRepository = userRepository;
         this.storageService = storageService;
         this.assignmentRepository = assignmentRepository;
         fileUploadHelper = new FileUploadHelper(fileHistoryRepository, storageService);
-        userService = new UserService(SecurityContextHolder.getContext().getAuthentication(), userRepository);
+        user = userService.getLoggedUser();
     }
 
     @GetMapping("Index")
     public String index(Model model) {
-        User user = userService.getLoggedUser();
         model.addAttribute("solutions", solutionRepository.findAll());
         model.addAttribute("files", storageService.loadAllByType(Solution.class).map(
                 path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
@@ -73,7 +68,7 @@ public class SolutionController {
     @GetMapping("/Create")
     public String showForm(Model model) {
         fillModel(model, new Solution(), true);
-        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("user", user);
         model.addAttribute("grade", Grades.NO_GRADE);
 
         return "solution_form";
@@ -86,7 +81,7 @@ public class SolutionController {
         }
 
         fileUploadHelper.saveFileToRepository(solutionRepository, file, solution);
-        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("user", user);
 
         return INDEX_REDIRECT_STRING;
     }
@@ -99,7 +94,7 @@ public class SolutionController {
         }
         fillModel(model, solution, false);
         model.addAttribute("id", id);
-        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("user", user);
         model.addAttribute("grade", Grades.NO_GRADE);
 
         return "solution_form";
@@ -108,7 +103,7 @@ public class SolutionController {
     @PostMapping("/Edit")
     public String edit(@Valid Solution solution, @RequestPart MultipartFile file, Model model, BindingResult binding) {
         if (binding.hasErrors()) {
-            model.addAttribute("user", userService.getLoggedUser());
+            model.addAttribute("user", user);
             return INDEX_REDIRECT_STRING;
         }
 
@@ -126,7 +121,7 @@ public class SolutionController {
             solutionRepository.save(solutionFromDb);
         }
 
-        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("user", user);
 
         return INDEX_REDIRECT_STRING;
     }
@@ -138,7 +133,7 @@ public class SolutionController {
             return INDEX_REDIRECT_STRING;
         }
         fillModel(model, solution, false);
-        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("user", user);
 
         return "solution_details";
     }
@@ -149,7 +144,7 @@ public class SolutionController {
         if (solution != null) {
             solutionRepository.delete(solution);
         }
-        model.addAttribute("user", userService.getLoggedUser());
+        model.addAttribute("user", user);
 
         return INDEX_REDIRECT_STRING;
     }
