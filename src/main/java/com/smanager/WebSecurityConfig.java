@@ -26,16 +26,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/").permitAll()
                     .anyRequest().authenticated()
                     .and()
-                    .exceptionHandling().accessDeniedPage("/Home/403")
-                    .and()
                 .formLogin()
                     .loginPage("/login")
                     .permitAll()
-                .successForwardUrl("/Home/")
+                .successForwardUrl("/home_index")
                     .and()
                 .logout()
                     .logoutUrl("/logout")
-                    .permitAll();
+                    .permitAll()
+                .and()
+                    .exceptionHandling().accessDeniedPage("/error");
 
     }
 

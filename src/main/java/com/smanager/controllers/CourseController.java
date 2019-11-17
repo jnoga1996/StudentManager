@@ -34,7 +34,6 @@ public class CourseController {
     private SolutionRepository solutionRepository;
     private StudentRepository studentRepository;
     private UserService userService;
-    private User user;
 
     @Autowired
     public CourseController(CourseRepository courseRepository, AssignmentRepository assignmentRepository,
@@ -45,11 +44,11 @@ public class CourseController {
         this.solutionRepository = solutionRepository;
         this.studentRepository = studentRepository;
         this.userService = userService;
-        user = userService.getLoggedUser();
     }
 
     @GetMapping("Index")
     public String index(Model model) {
+        User user = userService.getLoggedUser();
         model.addAttribute("courses", courseRepository.findAll());
         model.addAttribute("user", user);
 
@@ -58,6 +57,7 @@ public class CourseController {
 
     @GetMapping("TeacherIndex")
     public String teacherIndex(Model model) {
+        User user = userService.getLoggedUser();
         Long teacherId = userService.getStudentOrTeacherId(user);
         List<Course> courses = courseRepository.findCoursesByTeacherId(teacherId);
 
@@ -69,6 +69,7 @@ public class CourseController {
 
     @GetMapping("MyCourses")
     public String myCourses(Model model, Long studentId) {
+        User user = userService.getLoggedUser();
         model.addAttribute("courses", courseRepository.findCoursesByStudentId(studentId));
         model.addAttribute("user", user);
 
@@ -78,6 +79,7 @@ public class CourseController {
     @GetMapping("/Create")
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     public String showForm(Course course, Model model) {
+        User user = userService.getLoggedUser();
         model.addAttribute("isCreate", true);
         model.addAttribute("user", user);
 
@@ -87,6 +89,7 @@ public class CourseController {
     @PostMapping("/Create")
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     public String create(@Valid Course course, BindingResult bindingResult, Model model) {
+        User user = userService.getLoggedUser();
         if (bindingResult.hasErrors()) {
             return "course_form";
         }
@@ -99,6 +102,7 @@ public class CourseController {
     @GetMapping("/Edit")
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     public String edit(Model model, Long id) {
+        User user = userService.getLoggedUser();
         Course course = courseRepository.getOne(id);
         if (course == null) {
             return INDEX_REDIRECT_STRING;
@@ -114,6 +118,7 @@ public class CourseController {
     @PostMapping("/Edit")
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     public String edit(@Valid Course course, Model model, BindingResult binding) {
+        User user = userService.getLoggedUser();
         if (binding.hasErrors()) {
             return INDEX_REDIRECT_STRING;
         }
@@ -130,6 +135,7 @@ public class CourseController {
 
     @GetMapping("/Details")
     public String getDetails(Model model, Long id) {
+        User user = userService.getLoggedUser();
         Course course = courseRepository.getOne(id);
         if (course == null) {
             return INDEX_REDIRECT_STRING;
@@ -143,6 +149,7 @@ public class CourseController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/Delete")
     public String delete(Model model, Long id) {
+        User user = userService.getLoggedUser();
         Course course = courseRepository.getOne(id);
         if (course != null) {
             for (Assignment assignment : course.getAssignments()) {
@@ -162,6 +169,7 @@ public class CourseController {
 
     @GetMapping("/Register")
     public String registerStudentToCourse(Model model) {
+        User user = userService.getLoggedUser();
         model.addAttribute("courses", courseRepository.findAll());
         model.addAttribute("students", studentRepository.findAll());
         model.addAttribute("mapping", new CourseStudentMapping());
@@ -172,6 +180,7 @@ public class CourseController {
 
     @PostMapping("/Register")
     public String registerStudentToCourse(@Valid CourseStudentMapping mapping, Model model) {
+        User user = userService.getLoggedUser();
         Course course = courseRepository.getOne(mapping.getCourse().getId());
         Student student = studentRepository.getOne(mapping.getStudent().getId());
         Set<Student> registeredStudents = course.getStudents();
@@ -196,6 +205,7 @@ public class CourseController {
     @GetMapping("/RemoveFromCourse")
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     public String removerStudentFromCourse(Long courseId, Long studentId, Model model) {
+        User user = userService.getLoggedUser();
         Course course = courseRepository.getOne(courseId);
         Student student = studentRepository.getOne(studentId);
 

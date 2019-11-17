@@ -28,14 +28,14 @@ public class AssignmentSolutionController {
 
     private AssignmentRepository assignmentRepository;
     private SolutionRepository solutionRepository;
-    private User user;
+    private UserService userService;
 
     @Autowired
     public AssignmentSolutionController(AssignmentRepository assignmentRepository,
                                         SolutionRepository solutionRepository, UserService userService) {
         this.assignmentRepository = assignmentRepository;
         this.solutionRepository = solutionRepository;
-        user = userService.getLoggedUser();
+        this.userService = userService;
     }
 
     @GetMapping("Index")
@@ -75,6 +75,7 @@ public class AssignmentSolutionController {
 
     private void fillModel(Model model, List<Assignment> assignments,
                            HashMap<Assignment, List<Solution>> assignmentSolutionsMap) {
+        User user = userService.getLoggedUser();
         model.addAttribute("assignmentSolutions", assignments);
         model.addAttribute("solutionsForAssignment", assignmentSolutionsMap);
         model.addAttribute("user", user);

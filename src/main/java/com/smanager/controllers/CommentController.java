@@ -27,18 +27,19 @@ public class CommentController {
 
     private CommentRepository commentRepository;
     private SolutionRepository solutionRepository;
-    private User user;
+    private UserService userService;
 
     @Autowired
     public CommentController(CommentRepository commentRepository, SolutionRepository solutionRepository,
                              UserService userService) {
         this.commentRepository = commentRepository;
         this.solutionRepository = solutionRepository;
-        user = userService.getLoggedUser();
+        this.userService = userService;
     }
 
     @GetMapping("/Index")
     public String getCommentsForSolution(Model model, Long solutionId) {
+        User user = userService.getLoggedUser();
         List<Comment> comments = commentRepository.findAllBySolutionIdOrderByCreationDateDesc(solutionId);
         model.addAttribute("comments", comments);
         model.addAttribute("user", user);
@@ -48,6 +49,7 @@ public class CommentController {
 
     @GetMapping("/Create")
     public String createComment(Model model, Long solutionId) {
+        User user = userService.getLoggedUser();
         Solution solution = solutionRepository.getOne(solutionId);
         if (solution == null || user == null) {
             return INDEX_RETURN_STRING;
@@ -62,6 +64,7 @@ public class CommentController {
 
     @PostMapping("/Create")
     public String createComment(@Valid Comment comment, @RequestParam("solutionId") Long solutionId, BindingResult result, Model model) {
+        User user = userService.getLoggedUser();
         if (result.hasErrors()) {
             return "comment_form";
         }

@@ -36,7 +36,7 @@ public class SolutionController {
 
     private StorageService storageService;
     private FileUploadHelper fileUploadHelper;
-    private User user;
+    private UserService userService;
 
     @Autowired
     public SolutionController(SolutionRepository solutionRepository, TeacherRepository teacherRepository,
@@ -49,11 +49,12 @@ public class SolutionController {
         this.storageService = storageService;
         this.assignmentRepository = assignmentRepository;
         fileUploadHelper = new FileUploadHelper(fileHistoryRepository, storageService);
-        user = userService.getLoggedUser();
+        this.userService = userService;
     }
 
     @GetMapping("Index")
     public String index(Model model) {
+        User user = userService.getLoggedUser();
         model.addAttribute("solutions", solutionRepository.findAll());
         model.addAttribute("files", storageService.loadAllByType(Solution.class).map(
                 path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
@@ -67,6 +68,7 @@ public class SolutionController {
 
     @GetMapping("/Create")
     public String showForm(Model model) {
+        User user = userService.getLoggedUser();
         fillModel(model, new Solution(), true);
         model.addAttribute("user", user);
         model.addAttribute("grade", Grades.NO_GRADE);
@@ -76,6 +78,7 @@ public class SolutionController {
 
     @PostMapping("/Create")
     public String create(@Valid Solution solution, @RequestParam MultipartFile file, Model model, BindingResult binding) {
+        User user = userService.getLoggedUser();
         if (binding.hasErrors()) {
             return "solution_index";
         }
@@ -88,6 +91,7 @@ public class SolutionController {
 
     @GetMapping("/Edit")
     public String edit(Model model, Long id) {
+        User user = userService.getLoggedUser();
         Solution solution = solutionRepository.getOne(id);
         if (solution == null) {
             return INDEX_REDIRECT_STRING;
@@ -102,6 +106,7 @@ public class SolutionController {
 
     @PostMapping("/Edit")
     public String edit(@Valid Solution solution, @RequestPart MultipartFile file, Model model, BindingResult binding) {
+        User user = userService.getLoggedUser();
         if (binding.hasErrors()) {
             model.addAttribute("user", user);
             return INDEX_REDIRECT_STRING;
@@ -128,6 +133,7 @@ public class SolutionController {
 
     @GetMapping("/Details")
     public String details(Model model, Long id) {
+        User user = userService.getLoggedUser();
         Solution solution = solutionRepository.getOne(id);
         if (solution == null) {
             return INDEX_REDIRECT_STRING;
@@ -140,6 +146,7 @@ public class SolutionController {
 
     @GetMapping("/Delete")
     public String delete(Model model, Long id) {
+        User user = userService.getLoggedUser();
         Solution solution = solutionRepository.getOne(id);
         if (solution != null) {
             solutionRepository.delete(solution);

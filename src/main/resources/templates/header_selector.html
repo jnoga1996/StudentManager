@@ -7,8 +7,8 @@
 </head>
 <body>
 <div th:fragment="selector(user)">
-    <div th:if="${user == null}" th:insert="header :: header"></div>
-    <div th:if="${user != null}" th:insert="header_user :: header(user=${user})"></div>
+    <div th:if="${user == null}" th:insert="header :: header"><script>console.log("header")</script></div>
+    <div th:if="${user != null}" th:insert="header_user :: header(user=${user})"><script>console.log("header user")</script></div>
 </div>
 </body>
 </html>

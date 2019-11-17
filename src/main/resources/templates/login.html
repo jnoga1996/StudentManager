@@ -6,7 +6,7 @@
     <div th:replace="head_fragment :: scripts"></div>
 </head>
 <body>
-<div th:insert="header :: header"></div>
+<div th:insert="header_selector :: selector(user=${user})"></div>
 <div th:if="${param.error}">
     Invalid username and password.
 </div>

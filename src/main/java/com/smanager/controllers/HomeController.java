@@ -27,7 +27,7 @@ public class HomeController {
     private Bundles bundles;
     private CourseHelper courseHelper;
     private CourseRepository courseRepository;
-    private User user;
+    private UserService userService;
 
     @Autowired
     public HomeController(BundleRepository bundleRepository, CourseRepository courseRepository,
@@ -35,12 +35,13 @@ public class HomeController {
         bundles = new Bundles(bundleRepository);
         this.courseRepository = courseRepository;
         courseHelper = new CourseHelper(courseRepository, assignmentRepository);
-        user = userService.getLoggedUser();
+        this.userService = userService;
     }
 
     @RequestMapping("/")
     public String index(Model model) {
         boolean isLogged = false;
+        User user = userService.getLoggedUser();
         if (user != null) {
             isLogged = true;
         }
@@ -52,8 +53,4 @@ public class HomeController {
         return "home_index";
     }
 
-    @GetMapping("/403")
-    public String error() {
-        return "accessDenied";
-    }
 }

@@ -23,7 +23,7 @@
                 <a th:if="${user != null && user.getStudentUser() != null}" class="nav-link" href="/Work/Index">
                     <th:block th:text='${T(com.smanager.Bundles).getMessage("menu", "myWork")}'></th:block>
                 </a>
-                <a th:unless="${user != null && user.getStudentUser() != null}" class="nav-link" href="/Work/TeacherWork">
+                <a th:if="${user != null && user.getTeacherUser() != null}" class="nav-link" href="/Work/TeacherWork">
                     <th:block th:text='${T(com.smanager.Bundles).getMessage("menu", "myWork")}'></th:block>
                 </a>
             </li>

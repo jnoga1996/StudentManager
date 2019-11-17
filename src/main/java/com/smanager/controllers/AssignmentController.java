@@ -38,7 +38,7 @@ public class AssignmentController {
     private TeacherRepository teacherRepository;
     private CourseRepository courseRepository;
     private FileUploadHelper fileUploadHelper;
-    private User user;
+    private UserService userService;
 
     @Autowired
     public AssignmentController(AssignmentRepository assignmentRepository, FileHistoryRepository fileHistoryRepository,
@@ -50,11 +50,12 @@ public class AssignmentController {
         this.teacherRepository = teacherRepository;
         this.courseRepository = courseRepository;
         fileUploadHelper = new FileUploadHelper(fileHistoryRepository, storageService);
-        user = userService.getLoggedUser();
+        this.userService = userService;
     }
 
     @GetMapping("Index")
     public String index(Model model) {
+        User user = userService.getLoggedUser();
         model.addAttribute("assignments", assignmentRepository.findAll());
         model.addAttribute("files", storageService.loadAllByType(Assignment.class).map(
                 path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
@@ -67,6 +68,7 @@ public class AssignmentController {
 
     @GetMapping("Create")
     public String showForm(Model model) {
+        User user = userService.getLoggedUser();
         fillModel(model, new Assignment(), true);
         model.addAttribute("user", user);
 
@@ -76,6 +78,7 @@ public class AssignmentController {
     @PostMapping("Create")
     @PreAuthorize("hasAnyRole('TEACHER', 'ADMIN')")
     public String create(@Valid Assignment assignment, @RequestParam MultipartFile file, BindingResult bindingResult, Model model) {
+        User user = userService.getLoggedUser();
         if (bindingResult.hasErrors()) {
             return "assignment_form";
         }
@@ -88,6 +91,7 @@ public class AssignmentController {
 
     @GetMapping("/Details")
     public String details(Model model, Long id) {
+        User user = userService.getLoggedUser();
         Assignment assignment = assignmentRepository.getOne(id);
         if (assignment == null) {
             return INDEX_REDIRECT_STRING;
@@ -101,6 +105,7 @@ public class AssignmentController {
 
     @GetMapping("/Edit")
     public String edit(Model model, Long id) {
+        User user = userService.getLoggedUser();
         Assignment assignment = assignmentRepository.getOne(id);
         if (assignment == null) {
             return "redirect:/Assignment/Edit?id=" + id;
@@ -115,6 +120,7 @@ public class AssignmentController {
     @PostMapping("/Edit")
     @PreAuthorize("hasAnyRole('TEACHER', 'ADMIN')")
     public String edit(@Valid Assignment assignment, @RequestParam MultipartFile file, BindingResult binding, Model model) {
+        User user = userService.getLoggedUser();
         if (binding.hasErrors()) {
             return INDEX_REDIRECT_STRING;
         }
@@ -138,6 +144,7 @@ public class AssignmentController {
     @GetMapping("/Delete")
     @PreAuthorize("hasAnyRole('TEACHER', 'ADMIN')")
     public String delete(Long id, Model model) {
+        User user = userService.getLoggedUser();
         Assignment assignment = assignmentRepository.getOne(id);
         if (assignment != null) {
             assignmentRepository.delete(assignment);
@@ -160,6 +167,7 @@ public class AssignmentController {
 
     @GetMapping("/CourseAssignments")
     public String getAssignmentsForCourse(Model model, Long courseId) {
+        User user = userService.getLoggedUser();
         Course course = courseRepository.getOne(courseId);
         if (course == null) {
             return INDEX_REDIRECT_STRING;
