@@ -11,13 +11,15 @@
     <thead class="table-dark">
         <tr>
             <th>Course</th>
+            <th>Grades</th>
             <th>Grade</th>
         </tr>
     </thead>
     <th:block th:each="course : ${courseGrades.keySet()}">
         <tr>
             <td th:utext="${course}"></td>
-            <td th:utext="${courseGrades.get(course)}"></td>
+            <td th:utext="${courseGrades.get(course).getGrades()}"></td>
+            <td th:utext="${courseGrades.get(course).getGrade()}"></td>
         </tr>
     </th:block>
 </table>

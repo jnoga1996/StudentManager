@@ -91,6 +91,11 @@
             <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "grade")}'></th:block>
         </button>
     </a>
+    <a th:href="@{/Comment/Create(solutionId=${solution.getId()})}">
+        <button class="btn btn-primary">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "addComment")}'></th:block>
+        </button>
+    </a>
 
 </div>
 

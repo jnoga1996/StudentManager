@@ -7,6 +7,7 @@ import com.smanager.dao.repositories.AssignmentRepository;
 import com.smanager.dao.repositories.CourseRepository;
 import com.smanager.wrappers.CourseAssignmentSolutionWrapper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,6 +82,35 @@ public class CourseHelper {
         }
 
         return grade;
+    }
+
+    public static List<Integer> getGradesForAssignment(Assignment assignment, Long studentId) {
+        List<Integer> grades = new ArrayList<>();
+        List<Solution> solutions = assignment.getSolutions()
+                .stream()
+                .filter(s -> s.getStudent().getId() == studentId && s.isFinished())
+                .collect(Collectors.toList());
+
+        for (Solution solution : solutions) {
+            grades.add(solution.getGrade().intValue());
+        }
+
+        return grades;
+    }
+
+    public static List<Integer> getGradesForCourse(Course course, Long studentId) {
+        List<Integer> grades = new ArrayList<>();
+        List<Assignment> assignments = course.getAssignments()
+                .stream()
+                .filter(c -> c.getCourse().getId() == course.getId())
+                .collect(Collectors.toList());
+
+        for (Assignment assignment : assignments) {
+            List<Integer> gradesForAssignment = CourseHelper.getGradesForAssignment(assignment, studentId);
+            grades.addAll(gradesForAssignment);
+        }
+
+        return grades;
     }
 
     public static int getGradeForCourse(Course course, Long studentId) {

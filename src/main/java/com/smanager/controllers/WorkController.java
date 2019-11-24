@@ -1,23 +1,18 @@
 package com.smanager.controllers;
 
-import com.smanager.Bundles;
 import com.smanager.dao.models.*;
 import com.smanager.dao.repositories.*;
 import com.smanager.services.UserService;
-import com.smanager.storage.StorageService;
 import com.smanager.utils.CourseHelper;
 import com.smanager.wrappers.CourseAssignmentSolutionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/Work")
@@ -45,6 +40,8 @@ public class WorkController {
                 "/NoGradeReport",
                 "/NoCommentReport"
         );
+
+
     }
 
     @GetMapping("/Index")
@@ -87,59 +84,35 @@ public class WorkController {
     @GetMapping("/TeacherWork")
     @PreAuthorize("hasRole('TEACHER')")
     public String teacherWork(Model model) {
-        User user = userService.getLoggedUser();
-        Teacher teacher = null;
-        if (user != null) {
-            if (user.getTeacherUser() != null) {
-                teacher = teacherRepository.getOne(user.getTeacherUser().getId());
-            } else {
-                return "redirect:/Index";
-            }
-        }
-        Long teacherId = teacher.getId();
+        ReportWrapper methodReportWrapper = getData();
+        Long teacherId = methodReportWrapper.getTeacher().getId();
         CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(teacherId, s -> s.isFinished());
-        fillModelForTeacherReports(model, teacher, wrapper, user);
+        fillModelForTeacherReports(model, methodReportWrapper.getTeacher(), wrapper, methodReportWrapper.getUser());
 
-        return "work_index_teacher";
+        return methodReportWrapper.isErrorOccurred() ? "redirect:/Index" : "work_index_teacher";
     }
 
     @GetMapping("/NoGradeReport")
     @PreAuthorize("hasRole('TEACHER')")
-    public String generateReporForTeacherWithSolutionsWithoutGrade(Model model) {
-        User user = userService.getLoggedUser();
-        Teacher teacher = null;
-        if (user != null) {
-            if (user.getTeacherUser() != null) {
-                teacher = teacherRepository.getOne(user.getTeacherUser().getId());
-            } else {
-                return "redirect:/Index";
-            }
-        }
-        Long teacherId = teacher.getId();
+    public String generateReportForTeacherWithSolutionsWithoutGrade(Model model) {
+        ReportWrapper methodReportWrapper = getData();
+        Long teacherId = methodReportWrapper.getTeacher().getId();
 
         CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(teacherId, s -> s.getGrade() == null);
-        fillModelForTeacherReports(model, teacher, wrapper, user);
+        fillModelForTeacherReports(model, methodReportWrapper.getTeacher(), wrapper, methodReportWrapper.getUser());
 
-        return "work_index_teacher";
+        return methodReportWrapper.isErrorOccurred() ? "redirect:/Index" : "work_index_teacher";
     }
 
     @GetMapping("/NoCommentReport")
     @PreAuthorize("hasRole('TEACHER')")
-    public String generateReporForTeacherWithSolutionsWithoutComment(Model model) {
-        User user = userService.getLoggedUser();
-        Teacher teacher = null;
-        if (user != null) {
-            if (user.getTeacherUser() != null) {
-                teacher = teacherRepository.getOne(user.getTeacherUser().getId());
-            } else {
-                return "redirect:/Index";
-            }
-        }
-        Long teacherId = teacher.getId();
+    public String generateReportForTeacherWithSolutionsWithoutComment(Model model) {
+        ReportWrapper methodReportWrapper = getData();
+        Long teacherId = methodReportWrapper.getTeacher().getId();
         CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(teacherId, s -> s.getComments().isEmpty());
-        fillModelForTeacherReports(model, teacher, wrapper, user);
+        fillModelForTeacherReports(model, methodReportWrapper.getTeacher(), wrapper, methodReportWrapper.getUser());
 
-        return "work_index_teacher";
+        return methodReportWrapper.isErrorOccurred() ? "redirect:/Index" : "work_index_teacher";
     }
 
     @GetMapping("/GradesReport")
@@ -149,17 +122,44 @@ public class WorkController {
         Long id = userService.getStudentOrTeacherId(user);
 
         List<Course> courses = courseHelper.getCourseRepository().findCoursesByStudentId(id);
-        Map<Course, Integer> courseGradeMap = new HashMap<>();
+        Map<Course, GradeWrapper> courseGradeMap = new HashMap<>();
 
         for (Course course : courses) {
             int grade = CourseHelper.getGradeForCourse(course, id);
-            courseGradeMap.put(course, grade);
+            List<Integer> courseGrades = CourseHelper.getGradesForCourse(course, id);
+            courseGradeMap.put(course, new GradeWrapper(grade, courseGrades));
         }
 
         model.addAttribute("courseGrades", courseGradeMap);
         model.addAttribute("user", user);
 
         return "grade_report";
+    }
+
+    private class GradeWrapper {
+        private Integer grade;
+        private List<Integer> grades;
+
+        public GradeWrapper(Integer grade, List<Integer> grades) {
+            this.grade = grade;
+            this.grades = grades;
+        }
+
+        public Integer getGrade() {
+            return grade;
+        }
+
+        public void setGrade(Integer grade) {
+            this.grade = grade;
+        }
+
+        public List<Integer> getGrades() {
+            return grades;
+        }
+
+        public void setGrades(List<Integer> grades) {
+            this.grades = grades;
+        }
     }
 
     private void fillModelForTeacherReports(Model model, Teacher teacher, CourseAssignmentSolutionWrapper wrapper,
@@ -182,4 +182,54 @@ public class WorkController {
         model.addAttribute("reports", reportList);
     }
 
+    private class ReportWrapper {
+        private boolean errorOccurred;
+        private User user;
+        private Teacher teacher;
+
+        public boolean isErrorOccurred() {
+            return errorOccurred;
+        }
+
+        public void setErrorOccurred(boolean errorOccurred) {
+            this.errorOccurred = errorOccurred;
+        }
+
+        public User getUser() {
+            return user;
+        }
+
+        public void setUser(User user) {
+            this.user = user;
+        }
+
+        public Teacher getTeacher() {
+            return teacher;
+        }
+
+        public void setTeacher(Teacher teacher) {
+            this.teacher = teacher;
+        }
+
+        public ReportWrapper(boolean result, User user, Teacher teacher) {
+            this.errorOccurred = result;
+            this.user = user;
+            this.teacher = teacher;
+        }
+    }
+
+    public ReportWrapper getData() {
+        boolean errorOccurred = false;
+        User user = userService.getLoggedUser();
+        Teacher teacher = null;
+        if (user != null) {
+            if (user.getTeacherUser() != null) {
+                teacher = teacherRepository.getOne(user.getTeacherUser().getId());
+            } else {
+                errorOccurred = true;
+            }
+        }
+
+        return new ReportWrapper(errorOccurred, user, teacher);
+    }
 }

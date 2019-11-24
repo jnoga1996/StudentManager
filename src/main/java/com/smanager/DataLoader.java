@@ -69,7 +69,7 @@ public class DataLoader implements ApplicationRunner {
 
     private void initializeAssignments() {
         List<Assignment> assignments = Arrays.asList(
-                new Assignment("Wstęp do sortowania", "Zaimplementuj 3 dowolne metody sortowania"),
+                new Assignment("Wstep do sortowania", "Zaimplementuj 3 dowolne metody sortowania"),
                 new Assignment("Title", "Content"));
 
         assignments.get(0).setCourse(courseRepository.getOne(1L));
