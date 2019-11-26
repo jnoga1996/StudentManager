@@ -35,15 +35,11 @@
 <div th:fragment="div_view(solution, user)" class="list-group-item list-group-item-light">
     <div class="form-group row">
         <p class="col-sm-2">
-            <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "id")}'></th:block>:
-        </p>
-        <p th:utext="${solution.getId()}" class="col-sm-6"></p>
-    </div>
-    <div class="form-group row">
-        <p class="col-sm-2">
             <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "student")}'></th:block>:
         </p>
-        <p th:utext="${solution.getStudent().toString()}" class="col-sm-6"></p>
+        <span>
+            <p th:text="${solution.getStudent().getInfo()}"></p>
+        </span>
     </div>
     <div class="form-group row">
         <p class="col-sm-2">
@@ -59,18 +55,6 @@
     </div>
     <div class="form-group row">
         <p class="col-sm-2">
-            <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "assignment")}'></th:block>:
-        </p>
-        <p th:utext="${solution.getAssignment()}" class="col-sm-6"></p>
-    </div>
-    <div class="form-group row">
-        <p class="col-sm-2">
-            <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "finished")}'></th:block>:
-        </p>
-        <p th:utext="${solution.isFinished()}" class="col-sm-6"></p>
-    </div>
-    <div class="form-group row">
-        <p class="col-sm-2">
             <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "creationDate")}'></th:block>:
         </p>
         <p th:utext="${solution.getCreationDate()}" class="col-sm-6"></p>
@@ -79,11 +63,11 @@
         <p class="col-sm-2">
             <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "file")}'></th:block>:
         </p>
-        <p th:utext="${solution.getPath()}" class="col-sm-6"></p>
+        <a th:href="${solution.getPath(paths)}" th:text="download" class="col-sm-6"></a>
     </div>
     <a th:href="@{/Comment/Index(solutionId=${solution.getId()})}">
         <button class="btn btn-primary">
-            <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "showComments")}'></th:block>
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "showAllComments")}'></th:block>
         </button>
     </a>
     <a th:if="${!user.isStudent()}" th:href="@{/Solution/Edit(id=${solution.getId()})}">

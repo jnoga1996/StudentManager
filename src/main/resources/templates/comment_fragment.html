@@ -46,5 +46,16 @@
         </div>
     </div>
 </div>
+
+<div th:fragment="index(solution)">
+    <div th:if="${solution.getComments().isEmpty()}">
+        <h2>
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("comment", "noComments")}'></th:block>
+        </h2>
+    </div>
+    <th:block th:each="comment : ${solution.getComments()}">
+        <div th:insert="comment_fragment :: div_view(comment=${comment})"></div>
+    </th:block>
+</div>
 </body>
 </html>

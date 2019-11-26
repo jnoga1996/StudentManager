@@ -16,12 +16,13 @@
         <div class="list-group col-10">
             <th:block th:each="course : ${courses}">
                 <div class="list-group-item list-group-item-primary">
-                    <p th:utext="${course}"></p>
+                    <p th:utext="${course.getTitle()}"></p>
                 </div>
                 <div class="list-group">
                     <th:block th:each="assignment, i : ${courseAssignments.get(course)}">
                         <div class="list-group-item">
-                            <p th:utext="${assignment}"></p>
+                            <p th:utext="${assignment.getTitle()}"></p>
+                            <p th:utext="${assignment.getContent()}"></p>
                             <button class="btn btn-primary" type="button" data-toggle="collapse" th:href="'#solutions-container-' + ${assignment.getId()} + '-' + ${i.count}"
                                     role="button" aria-controls="'solutions-container-' + ${assignment.getId()} + '-' + ${i.count}">
                                 <th:block th:text='${T(com.smanager.Bundles).getMessage("work", "showSolutions")}'></th:block>
@@ -30,6 +31,13 @@
                                 <th:block th:each="solution : ${assignmentsSolutions.get(assignment)}">
                                     <div class="list-group-item">
                                         <div th:insert="solution_fragment :: div_view(solution=${solution}, user=${user})"></div>
+                                        <button class="btn btn-primary" type="button" data-toggle="collapse" th:href="'#comments-' + ${solution.getId()}"
+                                                role="button" aria-controls="'comments-' + ${solution.getId()}">
+                                            <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "showComments")}'></th:block>
+                                        </button>
+                                        <div class="collapse" th:id="'comments-' + ${solution.getId()}"
+                                             th:insert="comment_fragment :: index(solution=${solution})">
+                                        </div>
                                     </div>
                                 </th:block>
                             </div>

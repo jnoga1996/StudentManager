@@ -3,6 +3,7 @@ package com.smanager.controllers;
 import com.smanager.dao.models.*;
 import com.smanager.dao.repositories.*;
 import com.smanager.services.UserService;
+import com.smanager.storage.StorageService;
 import com.smanager.utils.CourseHelper;
 import com.smanager.wrappers.CourseAssignmentSolutionWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/Work")
@@ -24,23 +27,24 @@ public class WorkController {
     private UserService userService;
     private List<String> reportList;
     private CourseHelper courseHelper;
+    private StorageService storageService;
 
     @Autowired
     public WorkController(CourseRepository courseRepository, AssignmentRepository assignmentRepository,
                           StudentRepository studentRepository, UserRepository userRepository,
-                          TeacherRepository teacherRepository, UserService userService) {
+                          TeacherRepository teacherRepository, UserService userService, StorageService storageService) {
         this.studentRepository = studentRepository;
         this.userRepository = userRepository;
         this.teacherRepository = teacherRepository;
         this.courseHelper = new CourseHelper(courseRepository, assignmentRepository);
         this.userService = userService;
+        this.storageService = storageService;
 
         reportList = Arrays.asList(
                 "/TeacherWork",
                 "/NoGradeReport",
                 "/NoCommentReport"
         );
-
 
     }
 
@@ -58,7 +62,9 @@ public class WorkController {
         }
         Long studentId = student.getId();
         CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(studentId, s -> s.getStudent().getId().equals(studentId));
-        fillModelForStudentReports(model, student, wrapper, user);
+        List<String> paths = getPaths();
+        fillModelForStudentReports(model, student, wrapper, user, paths);
+
 
         return "work_index";
     }
@@ -76,7 +82,8 @@ public class WorkController {
                 return "redirect:/Index";
             }
         }
-        fillModelForTeacherReports(model, teacher, wrapper, user);
+        List<String> paths = getPaths();
+        fillModelForTeacherReports(model, teacher, wrapper, user, paths);
 
         return "side_menu";
     }
@@ -87,7 +94,8 @@ public class WorkController {
         ReportWrapper methodReportWrapper = getData();
         Long teacherId = methodReportWrapper.getTeacher().getId();
         CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(teacherId, s -> s.isFinished());
-        fillModelForTeacherReports(model, methodReportWrapper.getTeacher(), wrapper, methodReportWrapper.getUser());
+        List<String> paths = getPaths();
+        fillModelForTeacherReports(model, methodReportWrapper.getTeacher(), wrapper, methodReportWrapper.getUser(), paths);
 
         return methodReportWrapper.isErrorOccurred() ? "redirect:/Index" : "work_index_teacher";
     }
@@ -99,7 +107,8 @@ public class WorkController {
         Long teacherId = methodReportWrapper.getTeacher().getId();
 
         CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(teacherId, s -> s.getGrade() == null);
-        fillModelForTeacherReports(model, methodReportWrapper.getTeacher(), wrapper, methodReportWrapper.getUser());
+        List<String> paths = getPaths();
+        fillModelForTeacherReports(model, methodReportWrapper.getTeacher(), wrapper, methodReportWrapper.getUser(), paths);
 
         return methodReportWrapper.isErrorOccurred() ? "redirect:/Index" : "work_index_teacher";
     }
@@ -110,7 +119,8 @@ public class WorkController {
         ReportWrapper methodReportWrapper = getData();
         Long teacherId = methodReportWrapper.getTeacher().getId();
         CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(teacherId, s -> s.getComments().isEmpty());
-        fillModelForTeacherReports(model, methodReportWrapper.getTeacher(), wrapper, methodReportWrapper.getUser());
+        List<String> paths = getPaths();
+        fillModelForTeacherReports(model, methodReportWrapper.getTeacher(), wrapper, methodReportWrapper.getUser(), paths);
 
         return methodReportWrapper.isErrorOccurred() ? "redirect:/Index" : "work_index_teacher";
     }
@@ -163,23 +173,24 @@ public class WorkController {
     }
 
     private void fillModelForTeacherReports(Model model, Teacher teacher, CourseAssignmentSolutionWrapper wrapper,
-                                     User user) {
-        fillModelForReports(model, wrapper, user);
+                                     User user, List<String> paths) {
+        fillModelForReports(model, wrapper, user, paths);
         model.addAttribute("teacher", teacher);
     }
 
     private void fillModelForStudentReports(Model model, Student student, CourseAssignmentSolutionWrapper wrapper,
-                                            User user) {
-        fillModelForReports(model, wrapper, user);
+                                            User user, List<String> paths) {
+        fillModelForReports(model, wrapper, user, paths);
         model.addAttribute("student", student);
     }
 
-    private void fillModelForReports(Model model, CourseAssignmentSolutionWrapper wrapper, User user) {
+    private void fillModelForReports(Model model, CourseAssignmentSolutionWrapper wrapper, User user, List<String> paths) {
         model.addAttribute("courses", wrapper.getCourses());
         model.addAttribute("courseAssignments", wrapper.getCourseAssignmentsMap());
         model.addAttribute("assignmentsSolutions", wrapper.getAssignmentSolutionsMap());
         model.addAttribute("user", user);
         model.addAttribute("reports", reportList);
+        model.addAttribute("paths", paths);
     }
 
     private class ReportWrapper {
@@ -232,4 +243,12 @@ public class WorkController {
 
         return new ReportWrapper(errorOccurred, user, teacher);
     }
+
+    private List<String> getPaths() {
+        return storageService.loadAllByType(Solution.class).map(
+                path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
+                        "serveFile", path.getFileName().toString()).build().toString())
+                .collect(Collectors.toList());
+    }
+
 }

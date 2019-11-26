@@ -122,6 +122,14 @@ public class Student implements IUser {
         this.comments = comments;
     }
 
+    public String getFullName() {
+        return getFirstName() + " " + getLastName();
+    }
+
+    public String getInfo() {
+        return getFullName() + ", " + getFaculty();
+    }
+
     @Override
     public String toString() {
         return "Name: " + getFirstName() + " " + getLastName()

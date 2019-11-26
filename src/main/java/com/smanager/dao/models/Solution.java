@@ -1,11 +1,11 @@
 package com.smanager.dao.models;
 
 import com.smanager.controllers.SolutionController;
-import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -143,4 +143,17 @@ public class Solution implements ISaveable{
 
         return sb.toString();
     }
+
+    public String getPath(List<String> paths) {
+        if (paths != null) {
+            for (String path : paths) {
+                if (path.contains(getPath())) {
+                    return path;
+                }
+            }
+        }
+
+        return null;
+    }
+
 }
