@@ -115,6 +115,7 @@ public class BundlesInitializer {
                 new Bundle(language, "solution", "addComment", "Dodaj komentarz"),
                 new Bundle(language, "solution", "uploadedFiles", "Zalaczone pliki"),
                 new Bundle(language, "solution", "solutions", "Rozwiazania"),
+                new Bundle(language, "solution", "download", "Pobierz"),
 
                 new Bundle(language, "student", "id", "Id"),
                 new Bundle(language, "student", "firstName", "Imie"),
@@ -228,6 +229,7 @@ public class BundlesInitializer {
                 new Bundle(language, "solution", "addComment", "Add comment"),
                 new Bundle(language, "solution", "uploadedFiles", "Uploaded files"),
                 new Bundle(language, "solution", "solutions", "Solutions"),
+                new Bundle(language, "solution", "download", "Download"),
 
                 new Bundle(language, "student", "id", "Id"),
                 new Bundle(language, "student", "firstName", "First name"),

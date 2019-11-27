@@ -3,6 +3,7 @@ package com.smanager.dao.models;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Set;
 
 @Entity
@@ -99,5 +100,10 @@ public class Comment {
     @Override
     public String toString() {
         return "ID: " + getId() + ", solution:" + getSolution() + ", content: " + getContent() + ", isStudent: " + isStudent();
+    }
+
+    public String getFormattedDate() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm");
+        return getCreationDate().format(formatter);
     }
 }

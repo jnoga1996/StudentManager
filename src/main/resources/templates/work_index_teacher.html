@@ -34,6 +34,19 @@
                                                 role="button" aria-controls="'comments-' + ${solution.getId()}">
                                             <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "showComments")}'></th:block>
                                         </button>
+
+                                        <a th:href="@{/Comment/Create(solutionId=${solution.getId()})}">
+                                            <button class="btn btn-primary">
+                                                <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "addComment")}'></th:block>
+                                            </button>
+                                        </a>
+
+                                        <a th:if="${!user.isStudent()}" th:href="@{/Solution/Edit(id=${solution.getId()})}">
+                                            <button class="btn btn-primary">
+                                                <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "grade")}'></th:block>
+                                            </button>
+                                        </a>
+
                                         <div class="collapse" th:id="'comments-' + ${solution.getId()}"
                                              th:insert="comment_fragment :: index(solution=${solution})">
                                         </div>

@@ -132,8 +132,7 @@ public class Student implements IUser {
 
     @Override
     public String toString() {
-        return "Name: " + getFirstName() + " " + getLastName()
-                + ", faculty: " + getFaculty() + ", year: " + getCurrentYear();
+        return getFirstName() + " " + getLastName();
     }
 
     public String getUsername() {

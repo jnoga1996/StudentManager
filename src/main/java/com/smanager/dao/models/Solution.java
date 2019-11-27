@@ -5,6 +5,7 @@ import com.smanager.controllers.SolutionController;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 
@@ -154,6 +155,12 @@ public class Solution implements ISaveable{
         }
 
         return null;
+    }
+
+    public String getFormattedDate() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm");
+        String formattedDate = getCreationDate().format(formatter);
+        return formattedDate;
     }
 
 }
