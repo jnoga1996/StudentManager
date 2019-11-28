@@ -1,0 +1,26 @@
+.right-aligned {
+    text-align: right;
+}
+
+.center-aligned {
+    text-align: center;
+}
+
+ul {
+    list-style: none;
+}
+
+ul.side-menu-first {
+    list-style: none;
+    padding-left: 0%;
+}
+
+ul.side-menu-second {
+    list-style: none;
+    padding-left: 5%;
+}
+
+ul.side-menu-third {
+    list-style: none;
+    padding-left: 7%;
+}

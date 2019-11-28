@@ -1,13 +1,10 @@
 package com.smanager.controllers;
 
-import com.smanager.Bundles;
-import com.smanager.dao.repositories.BundleRepository;
 import com.smanager.dao.repositories.TeacherRepository;
 import com.smanager.dao.repositories.UserRepository;
 import com.smanager.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <title>Side menu</title>
     <div th:replace="head_fragment :: scripts"></div>
+    <link rel="stylesheet" type="text/css" th:href="@{css/global.css}">
 </head>
 <body>
 <div th:fragment="menu(courses)">
-    <ul style="list-style: none;padding-left: 0%">
+    <ul class="side-menu-first">
         <th:block th:each="course, c_i : ${courses}">
             <li th:if="${course != null}">
                 <button data-toggle="collapse"
@@ -17,7 +18,7 @@
                 <a th:href="${course.getDetailsUrl()}">
                     <th:block th:utext="${course}"></th:block>
                 </a>
-                <ul class="collapse" th:id="'course-' + ${c_i.count}" style="list-style: none;padding-left: 5%">
+                <ul class="collapse side-menu-second" th:id="'course-' + ${c_i.count}">
                     <th:block th:each="assignment, a_i : ${course.getAssignments()}">
                         <li th:if="${assignment != null}">
                             <button data-toggle="collapse"
@@ -27,7 +28,7 @@
                             <a th:href="${assignment.getDetailsUrl()}">
                                 <th:block th:utext="${assignment}"></th:block>
                             </a>
-                            <ul class="collapse" th:id="'course-' + ${c_i.count} + '-assignment-' + ${a_i.count}" style="list-style: none;padding-left: 7%">
+                            <ul class="collapse side-menu-third" th:id="'course-' + ${c_i.count} + '-assignment-' + ${a_i.count}">
                                 <th:block th:each="solution, s_i : ${assignment.getSolutions()}">
                                     <li th:if="${solution != null}">
                                         <a th:href="${solution.getDetailsUrl()}">
