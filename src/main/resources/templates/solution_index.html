@@ -56,6 +56,15 @@
     </tbody>
 </table>
 <div>
+    <ul class="pagination">
+        <th:block th:each="page : ${pages}">
+            <li class="page-item">
+                <a class="page-link" th:href="'/Solution/Index/' + ${page}" th:text="${page}"></a>
+            </li>
+        </th:block>
+    </ul>
+</div>
+<div>
     <p class="h3">
         <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "uploadedFiles")}'></th:block>:
     </p>

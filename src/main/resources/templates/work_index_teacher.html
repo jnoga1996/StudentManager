@@ -21,7 +21,8 @@
                 <div class="list-group">
                     <th:block th:each="assignment, i : ${courseAssignments.get(course)}">
                         <div class="list-group-item">
-                            <p th:utext="${assignment}"></p>
+                            <p th:utext="${assignment.getTitle()}"></p>
+                            <p th:utext="${assignment.getContent()}"></p>
                             <button class="btn btn-primary" type="button" data-toggle="collapse" th:href="'#solutions-container-' + ${assignment.getId()} + '-' + ${i.count}"
                                     role="button" aria-controls="'solutions-container-' + ${assignment.getId()} + '-' + ${i.count}">
                                 <th:block th:text='${T(com.smanager.Bundles).getMessage("work", "showSolutions")}'></th:block>
