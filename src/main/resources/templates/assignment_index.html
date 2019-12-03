@@ -64,6 +64,8 @@
         </tr>
     </th:block>
 </table>
+<div th:insert="pagination_fragments :: pagination(pages=${pages}, url='/Assignment/Index/')">
+</div>
 <div>
     <p class="h3">
         <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "uploadedFiles")}'></th:block>:

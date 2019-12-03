@@ -25,7 +25,14 @@ public class WorkController {
     private TeacherRepository teacherRepository;
     private UserRepository userRepository;
     private UserService userService;
-    private List<String> reportList;
+    private List<String> teacherReportList = Arrays.asList(
+            "/TeacherWork",
+            "/NoGradeReport",
+            "/NoCommentReport"
+            );
+    private List<String> studentReportList = Arrays.asList(
+            "/GradesReport"
+    );
     private CourseHelper courseHelper;
     private StorageService storageService;
 
@@ -39,13 +46,6 @@ public class WorkController {
         this.courseHelper = new CourseHelper(courseRepository, assignmentRepository);
         this.userService = userService;
         this.storageService = storageService;
-
-        reportList = Arrays.asList(
-                "/TeacherWork",
-                "/NoGradeReport",
-                "/NoCommentReport"
-        );
-
     }
 
     @GetMapping("/Index")
@@ -176,12 +176,14 @@ public class WorkController {
                                      User user, List<String> paths) {
         fillModelForReports(model, wrapper, user, paths);
         model.addAttribute("teacher", teacher);
+        model.addAttribute("reports", teacherReportList);
     }
 
     private void fillModelForStudentReports(Model model, Student student, CourseAssignmentSolutionWrapper wrapper,
                                             User user, List<String> paths) {
         fillModelForReports(model, wrapper, user, paths);
         model.addAttribute("student", student);
+        model.addAttribute("reports", studentReportList);
     }
 
     private void fillModelForReports(Model model, CourseAssignmentSolutionWrapper wrapper, User user, List<String> paths) {
@@ -189,7 +191,6 @@ public class WorkController {
         model.addAttribute("courseAssignments", wrapper.getCourseAssignmentsMap());
         model.addAttribute("assignmentsSolutions", wrapper.getAssignmentSolutionsMap());
         model.addAttribute("user", user);
-        model.addAttribute("reports", reportList);
         model.addAttribute("paths", paths);
     }
 

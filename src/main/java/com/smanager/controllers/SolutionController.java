@@ -7,10 +7,9 @@ import com.smanager.dao.repositories.*;
 import com.smanager.services.FileUploadHelper;
 import com.smanager.services.UserService;
 import com.smanager.storage.StorageService;
+import com.smanager.utils.PaginationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,9 +19,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
@@ -31,7 +28,6 @@ public class SolutionController {
 
     public final static String DETAILS_URL = "/Solution/Details";
     private final static String INDEX_REDIRECT_STRING = "redirect:/Solution/Index";
-    private final static int PAGE_SIZE = 3;
 
     private SolutionRepository solutionRepository;
     private TeacherRepository teacherRepository;
@@ -41,6 +37,7 @@ public class SolutionController {
     private StorageService storageService;
     private FileUploadHelper fileUploadHelper;
     private UserService userService;
+    private PaginationHelper<Solution> paginationHelper;
 
     @Autowired
     public SolutionController(SolutionRepository solutionRepository, TeacherRepository teacherRepository,
@@ -54,6 +51,7 @@ public class SolutionController {
         this.assignmentRepository = assignmentRepository;
         fileUploadHelper = new FileUploadHelper(fileHistoryRepository, storageService);
         this.userService = userService;
+        paginationHelper = new PaginationHelper<>(solutionRepository);
     }
 
     @GetMapping("Index")
@@ -66,7 +64,7 @@ public class SolutionController {
                 .collect(Collectors.toList()));
 
         model.addAttribute("user", user);
-        model.addAttribute("pages", getPageList());
+        model.addAttribute("pages", paginationHelper.getPageList());
 
 
         return "solution_index";
@@ -75,7 +73,7 @@ public class SolutionController {
     @GetMapping("Index/{page}")
     public String index(Model model, @PathVariable("page") int page) {
         User user = userService.getLoggedUser();
-        Page<Solution> solutions = getPage(page);
+        Page<Solution> solutions = paginationHelper.getPage(page);
         model.addAttribute("solutions", solutions);
         model.addAttribute("files", storageService.loadAllByType(Solution.class).map(
                 path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
@@ -83,7 +81,7 @@ public class SolutionController {
                 .collect(Collectors.toList()));
 
         model.addAttribute("user", user);
-        model.addAttribute("pages", getPageList());
+        model.addAttribute("pages", paginationHelper.getPageList());
 
         return "solution_index";
     }
@@ -186,31 +184,6 @@ public class SolutionController {
         model.addAttribute("assignments", assignmentRepository.findAll());
         model.addAttribute("grades", Arrays.asList(Grades.values()));
         model.addAttribute("creationDate", LocalDateTime.now());
-    }
-
-    private Page<Solution> getPage(int index) {
-        Long count = solutionRepository.count();
-        Long availablePages = count / PAGE_SIZE;
-        Pageable page;
-        if (index > availablePages) {
-            page = PageRequest.of(1, PAGE_SIZE);
-        } else {
-            page = PageRequest.of(index, PAGE_SIZE);
-        }
-
-        return solutionRepository.findAll(page);
-    }
-
-    public List<Integer> getPageList() {
-        Long count = solutionRepository.count();
-        Long availablePages = count / PAGE_SIZE;
-        List<Integer> pages = new ArrayList<>();
-
-        for (int i = 0 ; i < availablePages + 1; i++) {
-            pages.add(i);
-        }
-
-        return pages;
     }
 
 }

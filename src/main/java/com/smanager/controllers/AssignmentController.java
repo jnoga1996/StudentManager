@@ -8,16 +8,15 @@ import com.smanager.services.FileUploadHelper;
 import com.smanager.services.UserService;
 import com.smanager.storage.StorageService;
 import com.smanager.utils.MultilineTextParser;
+import com.smanager.utils.PaginationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
@@ -39,6 +38,7 @@ public class AssignmentController {
     private CourseRepository courseRepository;
     private FileUploadHelper fileUploadHelper;
     private UserService userService;
+    private PaginationHelper<Assignment> paginationHelper;
 
     @Autowired
     public AssignmentController(AssignmentRepository assignmentRepository, FileHistoryRepository fileHistoryRepository,
@@ -51,6 +51,7 @@ public class AssignmentController {
         this.courseRepository = courseRepository;
         fileUploadHelper = new FileUploadHelper(fileHistoryRepository, storageService);
         this.userService = userService;
+        paginationHelper = new PaginationHelper<>(assignmentRepository);
     }
 
     @GetMapping("Index")
@@ -62,6 +63,22 @@ public class AssignmentController {
                         "serveFile", path.getFileName().toString()).build().toString())
                 .collect(Collectors.toList()));
         model.addAttribute("user", user);
+        model.addAttribute("pages", paginationHelper.getPageList());
+
+        return "assignment_index";
+    }
+
+    @GetMapping("Index/{page}")
+    public String index(Model model, @PathVariable("page") int page) {
+        User user = userService.getLoggedUser();
+        Page<Assignment> assignments = paginationHelper.getPage(page);
+        model.addAttribute("assignments", assignments);
+        model.addAttribute("files", storageService.loadAllByType(Assignment.class).map(
+                path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
+                        "serveFile", path.getFileName().toString()).build().toString())
+                .collect(Collectors.toList()));
+        model.addAttribute("user", user);
+        model.addAttribute("pages", paginationHelper.getPageList());
 
         return "assignment_index";
     }

@@ -133,7 +133,8 @@ public class BundlesInitializer {
 
                 new Bundle(language, "report", "/TeacherWork", "Rozwiazania bez ocen"),
                 new Bundle(language, "report", "/NoGradeReport", "Ukonczone rozwiazania"),
-                new Bundle(language, "report", "/NoCommentReport", "Rozwiazania bez komentarzy")
+                new Bundle(language, "report", "/NoCommentReport", "Rozwiazania bez komentarzy"),
+                new Bundle(language, "report", "/GradesReport", "Oceny")
                 );
 
         bundleRepository.saveAll(polishBundles);
@@ -247,7 +248,8 @@ public class BundlesInitializer {
 
                 new Bundle(language, "report", "/TeacherWork", "Solutions without grades"),
                 new Bundle(language, "report", "/NoGradeReport", "Finished solutions"),
-                new Bundle(language, "report", "/NoCommentReport", "Solutions without comments")
+                new Bundle(language, "report", "/NoCommentReport", "Solutions without comments"),
+                new Bundle(language, "report", "/GradesReport", "Grades")
         );
 
         bundleRepository.saveAll(englishBundles);

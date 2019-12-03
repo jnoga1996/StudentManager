@@ -13,7 +13,7 @@
     <td th:utext="${solution.getGrade()}"></td>
     <td th:utext="${solution.getAssignment()}"></td>
     <td th:utext="${solution.isFinished()}"></td>
-    <td th:utext="${solution.getCreationDate()}"></td>
+    <td th:utext="${solution.getFormattedDate()}"></td>
     <td>
         <a th:href="@{/Solution/Edit(id=${solution.getId()})}"/>
         <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "edit")}'></th:block>
