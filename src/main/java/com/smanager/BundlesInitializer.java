@@ -131,6 +131,7 @@ public class BundlesInitializer {
 
                 new Bundle(language, "work", "showSolutions", "Pokaz rozwiazania"),
 
+                new Bundle(language, "report", "header", "Raporty"),
                 new Bundle(language, "report", "/TeacherWork", "Rozwiazania bez ocen"),
                 new Bundle(language, "report", "/NoGradeReport", "Ukonczone rozwiazania"),
                 new Bundle(language, "report", "/NoCommentReport", "Rozwiazania bez komentarzy"),
@@ -246,6 +247,7 @@ public class BundlesInitializer {
 
                 new Bundle(language, "work", "showSolutions", "Show solutions"),
 
+                new Bundle(language, "report", "header", "Reports"),
                 new Bundle(language, "report", "/TeacherWork", "Solutions without grades"),
                 new Bundle(language, "report", "/NoGradeReport", "Finished solutions"),
                 new Bundle(language, "report", "/NoCommentReport", "Solutions without comments"),

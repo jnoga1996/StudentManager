@@ -5,9 +5,10 @@
     <title>Report menu</title>
     <div th:replace="head_fragment :: scripts"></div>
 </head>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark" th:fragment="menu">
+<nav class="navbar navbar-expand-lg navbar-dark bg-secondary" th:fragment="menu">
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
+            <li class="navbar-brand"><th:block th:text='${T(com.smanager.Bundles).getMessage("report", "header")}'></th:block></li>
             <th:block th:each="report : ${reports}">
                 <li class="nav-item">
                     <a class="nav-link" th:href="'/Work' + ${report}">

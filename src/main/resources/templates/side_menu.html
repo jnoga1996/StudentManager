@@ -10,9 +10,9 @@
     <ul class="side-menu-first">
         <th:block th:each="course, c_i : ${courses}">
             <li th:if="${course != null}">
-                <button data-toggle="collapse"
+                <button data-toggle="collapse" class="btn"
                     th:href="'#course-' + ${c_i.count}" role="button" aria-controls="'course-' + ${c_i.count}">
-                    +
+                    <i class="material-icons">double_arrow</i>
                 </button>
                 <a th:href="${course.getDetailsUrl()}">
                     <th:block th:utext="${course.getTitle()}"></th:block>
@@ -20,9 +20,9 @@
                 <ul class="collapse side-menu-second" th:id="'course-' + ${c_i.count}">
                     <th:block th:each="assignment, a_i : ${course.getAssignments()}">
                         <li th:if="${assignment != null}">
-                            <button data-toggle="collapse"
+                            <button data-toggle="collapse" class="btn"
                                 th:href="'#course-' + ${c_i.count} + '-assignment-' + ${a_i.count}" role="button" aria-controls="'course-' + ${c_i.count} + '-assignment-' + ${a_i.count}">
-                                +
+                                <i class="material-icons">double_arrow</i>
                             </button>
                             <a th:href="${assignment.getDetailsUrl()}">
                                 <th:block th:utext="${assignment.getTitle()}"></th:block>
