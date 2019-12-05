@@ -31,7 +31,7 @@
                                 <th:block th:each="solution, s_i : ${assignment.getSolutions()}">
                                     <li th:if="${solution != null}">
                                         <a th:href="${solution.getDetailsUrl()}">
-                                            <th:block th:utext="${solution}"></th:block>
+                                            <th:block th:utext="${solution.getContent()}"></th:block>
                                         </a>
                                     </li>
                                 </th:block>

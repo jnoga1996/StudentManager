@@ -42,7 +42,12 @@
     </div>
     <div class="form-group row">
         <p class="col-sm-10">
-            <a th:href="${solution.getPath(paths)}" th:text='${T(com.smanager.Bundles).getMessage("solution", "download")}'></a>
+            <a th:href="${solution.getPath(paths)}">
+                <button class="btn btn-primary link-icon">
+                    <i class="material-icons link-icon">attachment</i>
+                    <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "download")}'></th:block>
+                </button>
+            </a>
         </p>
         <p th:utext="${solution.getGrade()}" class="col-sm-2 right-aligned"></p>
     </div>

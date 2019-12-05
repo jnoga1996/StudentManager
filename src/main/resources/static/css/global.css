@@ -24,3 +24,7 @@ ul.side-menu-third {
     list-style: none;
     padding-left: 7%;
 }
+
+.link-icon {
+    vertical-align: middle;
+}
