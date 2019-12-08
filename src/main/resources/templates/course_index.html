@@ -10,28 +10,22 @@
 <h3>
     <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "courses")}'></th:block>
 </h3>
-<div class="btn-group">
-    <div th:if="${user != null && !user.isStudent()}">
-        <a href="/Course/Create">
-            <button type="button" class="btn btn-primary btn-sm">
-                <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "create")}'></th:block>
-            </button>
-        </a>
-    </div>
-    <div>
-        <a href="/Course/Register">
-            <button type="button" class="btn btn-primary btn-sm">
-                <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "registerToCourse")}'></th:block>
-            </button>
-        </a>
-    </div>
-    <div>
-        <a href="/Course/TeacherIndex">
-            <button type="button" class="btn btn-primary btn-sm">
-                <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "teacherCourses")}'></th:block>
-            </button>
-        </a>
-    </div>
+<div>
+    <a href="/Course/Create" th:if="${user != null && !user.isStudent()}">
+        <button type="button" class="btn btn-primary btn-sm">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "create")}'></th:block>
+        </button>
+    </a>
+    <a href="/Course/Register">
+        <button type="button" class="btn btn-primary btn-sm">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "registerToCourse")}'></th:block>
+        </button>
+    </a>
+    <a href="/Course/TeacherIndex">
+        <button type="button" class="btn btn-primary btn-sm">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "teacherCourses")}'></th:block>
+        </button>
+    </a>
 </div>
 <table class="table table-striped">
     <thead class="thead-dark">
@@ -81,5 +75,6 @@
         </th:block>
     </th:block>
 </table>
+<div th:insert="pagination_fragments :: pagination(pages=${pages}, url='/Course/Index/')"></div>
 </body>
 </html>

@@ -1,26 +1,22 @@
 package com.smanager.controllers;
 
-import com.smanager.Bundles;
-import com.smanager.WebSecurityConfig;
 import com.smanager.dao.models.*;
 import com.smanager.dao.repositories.*;
 import com.smanager.services.UserService;
+import com.smanager.utils.PaginationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 @RequestMapping("/Course")
@@ -34,6 +30,7 @@ public class CourseController {
     private SolutionRepository solutionRepository;
     private StudentRepository studentRepository;
     private UserService userService;
+    private PaginationHelper<Course> paginationHelper;
 
     @Autowired
     public CourseController(CourseRepository courseRepository, AssignmentRepository assignmentRepository,
@@ -44,13 +41,23 @@ public class CourseController {
         this.solutionRepository = solutionRepository;
         this.studentRepository = studentRepository;
         this.userService = userService;
+        paginationHelper = new PaginationHelper<>(courseRepository);
     }
 
     @GetMapping("Index")
     public String index(Model model) {
         User user = userService.getLoggedUser();
-        model.addAttribute("courses", courseRepository.findAll());
-        model.addAttribute("user", user);
+        List<Course> courses = courseRepository.findAll();
+        fillModel(model, courses, user);
+
+        return "course_index";
+    }
+
+    @GetMapping("Index/{page}")
+    public String index(Model model, @PathVariable("page") int page) {
+        User user = userService.getLoggedUser();
+        Page<Course> courses = paginationHelper.getPage(page);
+        fillModel(model, courses, user);
 
         return "course_index";
     }
@@ -216,5 +223,11 @@ public class CourseController {
         model.addAttribute("user", user);
 
         return INDEX_REDIRECT_STRING;
+    }
+
+    private void fillModel(Model model, Iterable<Course> courses, User user) {
+        model.addAttribute("courses", courses);
+        model.addAttribute("user", user);
+        model.addAttribute("pages", paginationHelper.getPageList());
     }
 }

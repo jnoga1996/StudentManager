@@ -61,7 +61,7 @@ public class WorkController {
             }
         }
         Long studentId = student.getId();
-        CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(studentId, s -> s.getStudent().getId().equals(studentId));
+        CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(studentId, s -> s.getStudent().getId().equals(studentId), UserType.STUDENT);
         List<String> paths = getPaths();
         fillModelForStudentReports(model, student, wrapper, user, paths);
 
@@ -73,7 +73,7 @@ public class WorkController {
     public String sideMenu(Model model) {
         User user = userService.getLoggedUser();
         Long studentOrTeacherId = userService.getStudentOrTeacherId(user);
-        CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(studentOrTeacherId, s -> s.getId() > 0);
+        CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(studentOrTeacherId, s -> s.getId() > 0, UserType.ADMIN);
         Teacher teacher = null;
         if (user != null) {
             if (user.getTeacherUser() != null) {
@@ -93,7 +93,7 @@ public class WorkController {
     public String teacherWork(Model model) {
         ReportWrapper methodReportWrapper = getData();
         Long teacherId = methodReportWrapper.getTeacher().getId();
-        CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(teacherId, s -> s.isFinished());
+        CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(teacherId, s -> s.isFinished(), UserType.TEACHER);
         List<String> paths = getPaths();
         fillModelForTeacherReports(model, methodReportWrapper.getTeacher(), wrapper, methodReportWrapper.getUser(), paths);
 
@@ -106,7 +106,7 @@ public class WorkController {
         ReportWrapper methodReportWrapper = getData();
         Long teacherId = methodReportWrapper.getTeacher().getId();
 
-        CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(teacherId, s -> s.getGrade() == null);
+        CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(teacherId, s -> s.getGrade() == null, UserType.TEACHER);
         List<String> paths = getPaths();
         fillModelForTeacherReports(model, methodReportWrapper.getTeacher(), wrapper, methodReportWrapper.getUser(), paths);
 
@@ -118,7 +118,7 @@ public class WorkController {
     public String generateReportForTeacherWithSolutionsWithoutComment(Model model) {
         ReportWrapper methodReportWrapper = getData();
         Long teacherId = methodReportWrapper.getTeacher().getId();
-        CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(teacherId, s -> s.getComments().isEmpty());
+        CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(teacherId, s -> s.getComments().isEmpty(), UserType.TEACHER);
         List<String> paths = getPaths();
         fillModelForTeacherReports(model, methodReportWrapper.getTeacher(), wrapper, methodReportWrapper.getUser(), paths);
 

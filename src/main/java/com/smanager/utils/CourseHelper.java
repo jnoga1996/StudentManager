@@ -3,6 +3,7 @@ package com.smanager.utils;
 import com.smanager.dao.models.Assignment;
 import com.smanager.dao.models.Course;
 import com.smanager.dao.models.Solution;
+import com.smanager.dao.models.UserType;
 import com.smanager.dao.repositories.AssignmentRepository;
 import com.smanager.dao.repositories.CourseRepository;
 import com.smanager.wrappers.CourseAssignmentSolutionWrapper;
@@ -28,14 +29,8 @@ public class CourseHelper {
         return this.courseRepository;
     }
 
-    public CourseAssignmentSolutionWrapper populateCoursesAssignmentsAndSolutions(Long id, Predicate<Solution> predicate) {
-        List<Course> courses;
-
-        if (id == null) {
-            courses = courseRepository.findAll();
-        } else {
-            courses = courseRepository.findCoursesByTeacherId(id);
-        }
+    public CourseAssignmentSolutionWrapper populateCoursesAssignmentsAndSolutions(Long id, Predicate<Solution> predicate, UserType userType) {
+        List<Course> courses = fillCoursesListByUserType(userType, id);
         Map<Course, List<Assignment>> courseAssignmentsMap = new HashMap<>();
         Map<Assignment, List<Solution>> assignmentSolutionsMap = new HashMap<>();
 
@@ -57,6 +52,18 @@ public class CourseHelper {
         }
 
         return new CourseAssignmentSolutionWrapper(courses, courseAssignmentsMap, assignmentSolutionsMap);
+    }
+
+    private List<Course> fillCoursesListByUserType(UserType userType, Long id) {
+        List<Course> courses = new ArrayList<>();
+        if (userType == UserType.TEACHER) {
+            courses = courseRepository.findCoursesByTeacherId(id);
+        } else if  (userType == UserType.STUDENT) {
+            courses = courseRepository.findCoursesByStudentId(id);
+        } else {
+            courses = courseRepository.findAll();
+        }
+        return courses;
     }
 
     public static List<Solution> filterSolutions(List<Solution> solutions, Predicate<Solution> predicate) {
