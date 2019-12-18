@@ -1,7 +1,6 @@
 package com.smanager.controllers;
 
-import com.smanager.Bundles;
-import com.smanager.dao.repositories.BundleRepository;
+import com.smanager.dao.models.Solution;
 import com.smanager.storage.StorageFileNotFoundException;
 import com.smanager.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,9 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
@@ -32,12 +34,27 @@ public class FileUploadController {
     @GetMapping("/")
     public String listUploadedFiles(Model model) throws IOException {
 
-        model.addAttribute("files", storageService.loadAll().map(
-                path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
-                        "serveFile", path.getFileName().toString()).build().toString())
-                .collect(Collectors.toList()));
+        model.addAttribute("files", getAllFiles());
 
         return "upload_form";
+    }
+
+    public List<String> getAllFiles() {
+        return storageService.loadAll().map(
+                path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
+                        "serveFile", path.getFileName().toString()).build().toString())
+                .collect(Collectors.toList());
+    }
+
+    public String getFile(String filename) {
+        List<String> files = getAllFiles();
+        for (String file : files) {
+            if (file.contains(filename)) {
+                return file;
+            }
+        }
+
+        return null;
     }
 
     @GetMapping("/files/{filename:.+}")
@@ -64,4 +81,5 @@ public class FileUploadController {
     public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
         return ResponseEntity.notFound().build();
     }
+
 }

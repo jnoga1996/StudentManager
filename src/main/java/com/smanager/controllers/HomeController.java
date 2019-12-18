@@ -50,6 +50,12 @@ public class HomeController {
         model.addAttribute("user", user);
         model.addAttribute("courses", courseRepository.findAll());
 
+        if (user.isStudent()) {
+            return "redirect:/Work/Index";
+        } else if (!user.isStudent()) {
+            return "redirect:/Work/TeacherWork";
+        }
+
         return "home_index";
     }
 

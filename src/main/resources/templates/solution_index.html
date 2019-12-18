@@ -38,6 +38,9 @@
             <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "creationDate")}'></th:block>
         </th>
         <th scope="col">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "attachment")}'></th:block>
+        </th>
+        <th scope="col">
             <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "edit")}'></th:block>
         </th>
         <th scope="col">
@@ -56,18 +59,6 @@
     </tbody>
 </table>
 <div th:insert="pagination_fragments :: pagination(pages=${pages}, url='/Solution/Index/')">
-</div>
-<div>
-    <p class="h3">
-        <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "uploadedFiles")}'></th:block>:
-    </p>
-    <ul class="list-group">
-    <th:block th:each="file : ${files}">
-        <li class="list-group-item">
-            <a th:href="${file}" th:text="${file}" />
-        </li>
-    </th:block>
-    </ul>
 </div>
 </body>
 </html>

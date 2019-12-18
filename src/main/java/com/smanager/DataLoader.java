@@ -210,8 +210,8 @@ public class DataLoader implements ApplicationRunner {
                 new Comment("Comment 1", LocalDateTime.now(), solutionRepository.getOne(1L), studentRepository.findAll().get(0), null),
                 new Comment("Comment 2", LocalDateTime.now(), solutionRepository.getOne(1L), null, teacherRepository.findAll().get(0)),
                 new Comment("Comment 3", LocalDateTime.now(), solutionRepository.getOne(1L), studentRepository.findAll().get(0), null),
-                new Comment("Comment 4", LocalDateTime.now(), solutionRepository.getOne(2L), studentRepository.findAll().get(0), null),
-                new Comment("Comment 5", LocalDateTime.now(), solutionRepository.getOne(2L), null, teacherRepository.findAll().get(0))
+                new Comment("Prosze o sprawdzenie zadania", LocalDateTime.now(), solutionRepository.getOne(2L), studentRepository.findAll().get(0), null),
+                new Comment("Wszystko jest ok", LocalDateTime.now(), solutionRepository.getOne(2L), null, teacherRepository.findAll().get(0))
         );
 
         commentRepository.saveAll(comments);

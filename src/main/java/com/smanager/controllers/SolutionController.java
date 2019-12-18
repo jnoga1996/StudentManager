@@ -18,8 +18,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
@@ -56,34 +59,49 @@ public class SolutionController {
 
     @GetMapping("Index")
     public String index(Model model) {
-        User user = userService.getLoggedUser();
-        model.addAttribute("solutions", solutionRepository.findAll());
-        model.addAttribute("files", storageService.loadAllByType(Solution.class).map(
-                path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
-                        "serveFile", path.getFileName().toString()).build().toString())
-                .collect(Collectors.toList()));
-
-        model.addAttribute("user", user);
-        model.addAttribute("pages", paginationHelper.getPageList());
-
+        List<Solution> solutions = solutionRepository.findAll();
+        fillModel(model, solutions);
 
         return "solution_index";
     }
 
     @GetMapping("Index/{page}")
     public String index(Model model, @PathVariable("page") int page) {
-        User user = userService.getLoggedUser();
         Page<Solution> solutions = paginationHelper.getPage(page);
+        fillModel(model, solutions);
+
+        return "solution_index";
+    }
+
+    private void fillModel(Model model, Iterable<Solution> solutions) {
+        User user = userService.getLoggedUser();
+        updateLinks(solutions, storageService.loadAllByType(Solution.class).collect(Collectors.toList()));
         model.addAttribute("solutions", solutions);
-        model.addAttribute("files", storageService.loadAllByType(Solution.class).map(
-                path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
-                        "serveFile", path.getFileName().toString()).build().toString())
-                .collect(Collectors.toList()));
+        model.addAttribute("files", getAllFiles());
 
         model.addAttribute("user", user);
         model.addAttribute("pages", paginationHelper.getPageList());
+    }
 
-        return "solution_index";
+    private List<String> getAllFiles() {
+        List<String> filePaths = new ArrayList<>();
+        List<Path> paths = storageService.loadAllByType(Solution.class).collect(Collectors.toList());
+        for (Path path : paths) {
+            String filePath = MvcUriComponentsBuilder.fromMethodName(FileUploadController.class, "serveFile", path.getFileName().toString()).build().toString();
+            filePaths.add(filePath);
+        }
+        return filePaths;
+    }
+
+    private void updateLinks(Iterable<Solution> solutions, List<Path> paths) {
+        for (Solution solution : solutions) {
+            for (Path path : paths) {
+                if (solution.getPath().contains(path.getFileName().toString())) {
+                    String filePath = MvcUriComponentsBuilder.fromMethodName(FileUploadController.class, "serveFile", path.getFileName().toString()).build().toString();
+                    solution.setPath(filePath);
+                }
+            }
+        }
     }
 
     @GetMapping("/Create")

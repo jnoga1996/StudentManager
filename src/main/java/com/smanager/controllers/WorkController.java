@@ -106,7 +106,7 @@ public class WorkController {
         ReportWrapper methodReportWrapper = getData();
         Long teacherId = methodReportWrapper.getTeacher().getId();
 
-        CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(teacherId, s -> s.getGrade() == null, UserType.TEACHER);
+        CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(teacherId, s -> s.getGrade() == Grades.NO_GRADE.getGrade(), UserType.TEACHER);
         List<String> paths = getPaths();
         fillModelForTeacherReports(model, methodReportWrapper.getTeacher(), wrapper, methodReportWrapper.getUser(), paths);
 
