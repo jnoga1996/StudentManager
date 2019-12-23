@@ -1,7 +1,6 @@
 package com.smanager.controllers;
 
 
-import com.smanager.Bundles;
 import com.smanager.dao.models.*;
 import com.smanager.dao.repositories.*;
 import com.smanager.services.FileUploadHelper;
@@ -12,7 +11,6 @@ import com.smanager.utils.PaginationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,31 +56,49 @@ public class AssignmentController {
 
     @GetMapping("Index")
     public String index(Model model) {
-        User user = userService.getLoggedUser();
-        model.addAttribute("assignments", assignmentRepository.findAll());
-        model.addAttribute("files", storageService.loadAllByType(Assignment.class).map(
-                path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
-                        "serveFile", path.getFileName().toString()).build().toString())
-                .collect(Collectors.toList()));
-        model.addAttribute("user", user);
-        model.addAttribute("pages", paginationHelper.getPageList());
+        List<Assignment> assignments = assignmentRepository.findAll();
+        fillModel(model, assignments);
 
         return "assignment_index";
     }
 
     @GetMapping("Index/{page}")
     public String index(Model model, @PathVariable("page") int page) {
-        User user = userService.getLoggedUser();
         Page<Assignment> assignments = paginationHelper.getPage(page);
-        model.addAttribute("assignments", assignments);
-        model.addAttribute("files", storageService.loadAllByType(Assignment.class).map(
-                path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
-                        "serveFile", path.getFileName().toString()).build().toString())
-                .collect(Collectors.toList()));
-        model.addAttribute("user", user);
-        model.addAttribute("pages", paginationHelper.getPageList());
+        fillModel(model, assignments);
 
         return "assignment_index";
+    }
+
+    private void fillModel(Model model, Iterable<Assignment> assignments) {
+        User user = userService.getLoggedUser();
+        updateLinks(assignments, storageService.loadAllByType(Assignment.class).collect(Collectors.toList()));
+        model.addAttribute("assignments", assignments);
+        model.addAttribute("files", getAllFiles());
+        model.addAttribute("user", user);
+        model.addAttribute("pages", paginationHelper.getPageList());
+    }
+
+    //TODO Extract getAllFiles and updateLinks to helper class
+    private List<String> getAllFiles() {
+        List<String> filePaths = new ArrayList<>();
+        List<Path> paths = storageService.loadAllByType(Assignment.class).collect(Collectors.toList());
+        for (Path path : paths) {
+            String filePath = MvcUriComponentsBuilder.fromMethodName(FileUploadController.class, "serveFile", path.getFileName().toString()).build().toString();
+            filePaths.add(filePath);
+        }
+        return filePaths;
+    }
+
+    private void updateLinks(Iterable<Assignment> assignments, List<Path> paths) {
+        for (Assignment assignment : assignments) {
+            for (Path path : paths) {
+                if (assignment.getPath().contains(path.getFileName().toString())) {
+                    String filePath = MvcUriComponentsBuilder.fromMethodName(FileUploadController.class, "serveFile", path.getFileName().toString()).build().toString();
+                    assignment.setPath(filePath);
+                }
+            }
+        }
     }
 
     @GetMapping("Create")
