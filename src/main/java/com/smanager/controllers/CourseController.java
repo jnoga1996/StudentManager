@@ -6,14 +6,12 @@ import com.smanager.services.UserService;
 import com.smanager.utils.PaginationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.*;
@@ -32,6 +30,8 @@ public class CourseController {
     private UserService userService;
     private PaginationHelper<Course> paginationHelper;
 
+    private String searchValue;
+
     @Autowired
     public CourseController(CourseRepository courseRepository, AssignmentRepository assignmentRepository,
                             SolutionRepository solutionRepository, StudentRepository studentRepository,
@@ -47,8 +47,14 @@ public class CourseController {
     @GetMapping("Index")
     public String index(Model model) {
         User user = userService.getLoggedUser();
-        List<Course> courses = courseRepository.findAll();
+        List<Course> courses;
+        if (searchValue != null && !searchValue.isEmpty()) {
+            courses = courseRepository.findCourseByTitleContaining(searchValue);
+        } else {
+            courses = courseRepository.findAll();
+        }
         fillModel(model, courses, user);
+        this.searchValue = "";
 
         return "course_index";
     }
@@ -60,6 +66,13 @@ public class CourseController {
         fillModel(model, courses, user);
 
         return "course_index";
+    }
+
+    @PostMapping("Search")
+    public String search(@RequestParam("search") String searchValue) {
+        this.searchValue = searchValue.toLowerCase().trim();
+
+        return INDEX_REDIRECT_STRING;
     }
 
     @GetMapping("TeacherIndex")

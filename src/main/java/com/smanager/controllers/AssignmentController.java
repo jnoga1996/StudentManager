@@ -40,6 +40,8 @@ public class AssignmentController {
     private UserService userService;
     private PaginationHelper<Assignment> paginationHelper;
 
+    private String searchValue;
+
     @Autowired
     public AssignmentController(AssignmentRepository assignmentRepository, FileHistoryRepository fileHistoryRepository,
                                 StorageService storageService, TeacherRepository teacherRepository,
@@ -56,10 +58,22 @@ public class AssignmentController {
 
     @GetMapping("Index")
     public String index(Model model) {
-        List<Assignment> assignments = assignmentRepository.findAll();
+        List<Assignment> assignments;
+        if (searchValue != null && !searchValue.isEmpty()) {
+             assignments = assignmentRepository.findAssignmentByTitleContaining(searchValue);
+        } else {
+            assignments = assignmentRepository.findAll();
+        }
         fillModel(model, assignments);
 
+        this.searchValue = "";
         return "assignment_index";
+    }
+
+    @PostMapping("Search")
+    public String search(@RequestParam("search") String searchValue) {
+        this.searchValue = searchValue.toLowerCase().trim();
+        return INDEX_REDIRECT_STRING;
     }
 
     @GetMapping("Index/{page}")

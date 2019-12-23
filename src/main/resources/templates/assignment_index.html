@@ -13,6 +13,7 @@
 <a href="/Assignment/Create">
     <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "createNewAssignment")}'></th:block>
 </a>
+<div th:insert="search :: bar(url=${'/Assignment/Search'})"></div>
 <table class="table table-striped">
     <thead class="thead-dark">
     <tr>
@@ -73,18 +74,6 @@
     </th:block>
 </table>
 <div th:insert="pagination_fragments :: pagination(pages=${pages}, url='/Assignment/Index/')">
-</div>
-<div>
-    <p class="h3">
-        <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "uploadedFiles")}'></th:block>:
-    </p>
-    <ul class="list-group">
-        <th:block th:each="file : ${files}">
-            <li class="list-group-item">
-                <a th:href="${file}" th:text="${file}" />
-            </li>
-        </th:block>
-    </ul>
 </div>
 </body>
 </html>

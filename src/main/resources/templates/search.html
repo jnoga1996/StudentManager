@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Search</title>
+    <div th:replace="head_fragment :: scripts"></div>
+</head>
+<body>
+<div th:fragment="bar(url)">
+    <form class="form-inline" action="#" th:action="${url}" method="post">
+        <i class="material-icons">search</i>
+        <input class="text-input" id="search_input" type="text" name="search">
+        <button class="btn-sm btn-dark btn-rounded" type="submit" value="send">Search</button>
+    </form>
+</div>
+</body>
+</html>
