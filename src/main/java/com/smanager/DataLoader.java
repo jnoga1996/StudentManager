@@ -20,22 +20,20 @@ public class DataLoader implements ApplicationRunner {
     private SolutionRepository solutionRepository;
     private AssignmentSolutionRepository assignmentSolutionRepository;
     private CourseRepository courseRepository;
-    private GroupRepository groupRepository;
     private CommentRepository commentRepository;
     private BundleRepository bundleRepository;
 
     @Autowired
     public DataLoader(StudentRepository studentRepository, TeacherRepository teacherRepository, AssignmentRepository assignmentRepository,
                       SolutionRepository solutionRepository, AssignmentSolutionRepository assignmentSolutionRepository,
-                      CourseRepository courseRepository, GroupRepository groupRepository,
-                      CommentRepository commentRepository, BundleRepository bundleRepository) {
+                      CourseRepository courseRepository, CommentRepository commentRepository,
+                      BundleRepository bundleRepository) {
         this.studentRepository = studentRepository;
         this.teacherRepository = teacherRepository;
         this.assignmentRepository = assignmentRepository;
         this.solutionRepository = solutionRepository;
         this.assignmentSolutionRepository = assignmentSolutionRepository;
         this.courseRepository = courseRepository;
-        this.groupRepository = groupRepository;
         this.commentRepository = commentRepository;
         this.bundleRepository = bundleRepository;
     }
@@ -54,8 +52,6 @@ public class DataLoader implements ApplicationRunner {
             registerStudents();
             registerTeachers();
         }
-        if (groupRepository.findAll().isEmpty())
-            initializeGroups();
 
         if (commentRepository.findAll().isEmpty()) {
             initializeComments();
@@ -110,17 +106,6 @@ public class DataLoader implements ApplicationRunner {
         courseRepository.saveAll(courses);
     }
 
-    private void initializeGroups() {
-        List<Group> groups = Arrays.asList(
-                createGroup(courseRepository.getOne(1L).getId(), teacherRepository.getOne(1L).getId()),
-                createGroup(courseRepository.getOne(1L).getId(), teacherRepository.getOne(2L).getId()),
-                createGroup(courseRepository.getOne(2L).getId(), teacherRepository.getOne(1L).getId()),
-                createGroup(courseRepository.getOne(2L).getId(), teacherRepository.getOne(2L).getId()),
-                createGroup(courseRepository.getOne(3L).getId(), teacherRepository.getOne(2L).getId()));
-
-        groupRepository.saveAll(groups);
-    }
-
     private AssignmentSolution createAssignmentSolution(Long assignmentId, Long solutionId) {
         Assignment assignment = assignmentRepository.getOne(assignmentId);
         Solution solution = solutionRepository.getOne(solutionId);
@@ -138,13 +123,6 @@ public class DataLoader implements ApplicationRunner {
         solution.setCreationDate(localDateTime);
 
         return solution;
-    }
-
-    private Group createGroup(Long courseId, Long teacherId) {
-        Course course = courseRepository.getOne(courseId);
-        Teacher teacher = teacherRepository.getOne(teacherId);
-
-        return new Group(course, teacher);
     }
 
     private void registerStudentToCourse(Long studentId, Long courseId) {
