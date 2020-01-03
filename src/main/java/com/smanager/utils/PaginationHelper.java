@@ -10,7 +10,7 @@ import java.util.List;
 
 public class PaginationHelper <T> {
     private JpaRepository repository;
-    public final static int PAGE_SIZE = 3;
+    public final static int PAGE_SIZE = 5;
 
     public PaginationHelper(JpaRepository repository) {
         this.repository = repository;
@@ -30,7 +30,7 @@ public class PaginationHelper <T> {
     }
 
     public List<Integer> getPageList() {
-        Long count = repository.count();
+        Long count = repository.count() - 1;
         Long availablePages = count / PAGE_SIZE;
         List<Integer> pages = new ArrayList<>();
 

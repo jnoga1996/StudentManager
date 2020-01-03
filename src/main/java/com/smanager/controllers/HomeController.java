@@ -1,25 +1,16 @@
 package com.smanager.controllers;
 
 import com.smanager.Bundles;
-import com.smanager.dao.models.Bundle;
 import com.smanager.dao.models.User;
 import com.smanager.dao.repositories.AssignmentRepository;
 import com.smanager.dao.repositories.BundleRepository;
 import com.smanager.dao.repositories.CourseRepository;
-import com.smanager.dao.repositories.UserRepository;
 import com.smanager.services.UserService;
 import com.smanager.utils.CourseHelper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
-import java.util.Locale;
 
 @Controller
 public class HomeController {
@@ -50,13 +41,13 @@ public class HomeController {
         model.addAttribute("user", user);
         model.addAttribute("courses", courseRepository.findAll());
 
-        if (user.isStudent()) {
+        if (user != null && user.isStudent()) {
             return "redirect:/Work/Index";
-        } else if (!user.isStudent()) {
+        } else if (user != null && user.isTeacher()) {
             return "redirect:/Work/TeacherWork";
         }
 
-        return "home_index";
+        return "login";
     }
 
 }

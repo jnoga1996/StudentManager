@@ -32,6 +32,7 @@ public class AssignmentController {
     private final static String INDEX_REDIRECT_STRING = "redirect:/Assignment/Index";
 
     private AssignmentRepository assignmentRepository;
+    private SolutionRepository solutionRepository;
     private FileHistoryRepository fileHistoryRepository;
     private StorageService storageService;
     private TeacherRepository teacherRepository;
@@ -45,8 +46,10 @@ public class AssignmentController {
     @Autowired
     public AssignmentController(AssignmentRepository assignmentRepository, FileHistoryRepository fileHistoryRepository,
                                 StorageService storageService, TeacherRepository teacherRepository,
-                                CourseRepository courseRepository, UserService userService) {
+                                CourseRepository courseRepository, UserService userService,
+                                SolutionRepository solutionRepository) {
         this.assignmentRepository = assignmentRepository;
+        this.solutionRepository = solutionRepository;
         this.fileHistoryRepository = fileHistoryRepository;
         this.storageService = storageService;
         this.teacherRepository = teacherRepository;
@@ -107,7 +110,7 @@ public class AssignmentController {
     private void updateLinks(Iterable<Assignment> assignments, List<Path> paths) {
         for (Assignment assignment : assignments) {
             for (Path path : paths) {
-                if (assignment.getPath().contains(path.getFileName().toString())) {
+                if (assignment != null && assignment.getPath().contains(path.getFileName().toString())) {
                     String filePath = MvcUriComponentsBuilder.fromMethodName(FileUploadController.class, "serveFile", path.getFileName().toString()).build().toString();
                     assignment.setPath(filePath);
                 }
@@ -196,6 +199,9 @@ public class AssignmentController {
         User user = userService.getLoggedUser();
         Assignment assignment = assignmentRepository.getOne(id);
         if (assignment != null) {
+            for (Solution solution : assignment.getSolutions()) {
+                solutionRepository.delete(solution);
+            }
             assignmentRepository.delete(assignment);
         }
         model.addAttribute("user", user);

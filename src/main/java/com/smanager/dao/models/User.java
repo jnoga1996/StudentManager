@@ -1,7 +1,6 @@
 package com.smanager.dao.models;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 @Table(name = "USERS")
@@ -106,6 +105,10 @@ public class User {
 
     public boolean isStudent() {
         return (getStudentUser() != null && getTeacherUser() == null);
+    }
+
+    public boolean isTeacher() {
+        return (getTeacherUser() != null && getStudentUser() == null);
     }
 
     @Override
