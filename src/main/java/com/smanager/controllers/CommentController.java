@@ -1,5 +1,6 @@
 package com.smanager.controllers;
 
+import com.smanager.Cache;
 import com.smanager.dao.models.Comment;
 import com.smanager.dao.models.Solution;
 import com.smanager.dao.models.User;
@@ -10,10 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
@@ -63,7 +61,8 @@ public class CommentController {
     }
 
     @PostMapping("/Create")
-    public String createComment(@Valid Comment comment, @RequestParam("solutionId") Long solutionId, BindingResult result, Model model) {
+    public String createComment(@Valid Comment comment, @RequestParam Long solutionId,
+                                BindingResult result, Model model) {
         User user = userService.getLoggedUser();
         if (result.hasErrors()) {
             return "comment_form";
@@ -84,7 +83,8 @@ public class CommentController {
         commentRepository.save(comment);
         model.addAttribute("user", user);
 
-        return INDEX_RETURN_STRING;
+        String url = Cache.get(user.getId());
+        return url != null ? url : "redirect:/";
     }
 
 }

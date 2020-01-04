@@ -27,6 +27,7 @@ public class CourseController {
     private AssignmentRepository assignmentRepository;
     private SolutionRepository solutionRepository;
     private StudentRepository studentRepository;
+    private TeacherRepository teacherRepository;
     private UserService userService;
     private PaginationHelper<Course> paginationHelper;
 
@@ -35,11 +36,12 @@ public class CourseController {
     @Autowired
     public CourseController(CourseRepository courseRepository, AssignmentRepository assignmentRepository,
                             SolutionRepository solutionRepository, StudentRepository studentRepository,
-                            UserService userService) {
+                            TeacherRepository teacherRepository, UserService userService) {
         this.courseRepository = courseRepository;
         this.assignmentRepository = assignmentRepository;
         this.solutionRepository = solutionRepository;
         this.studentRepository = studentRepository;
+        this.teacherRepository = teacherRepository;
         this.userService = userService;
         paginationHelper = new PaginationHelper<>(courseRepository);
     }
@@ -198,6 +200,17 @@ public class CourseController {
         return "courseStudentRegister_form";
     }
 
+    @GetMapping("/RegisterTeacher")
+    public String registerTeachertToCourse(Model model) {
+        User user = userService.getLoggedUser();
+        model.addAttribute("courses", courseRepository.findAll());
+        model.addAttribute("teachers", teacherRepository.findAll());
+        model.addAttribute("mapping", new CourseTeacherMapping());
+        model.addAttribute("user", user);
+
+        return "courseTeacherRegister_form";
+    }
+
     @PostMapping("/Register")
     public String registerStudentToCourse(@Valid CourseStudentMapping mapping, Model model) {
         User user = userService.getLoggedUser();
@@ -222,6 +235,30 @@ public class CourseController {
         return INDEX_REDIRECT_STRING;
     }
 
+    @PostMapping("/RegisterTeacher")
+    public String registerTeacherToCourse(@Valid CourseTeacherMapping mapping, Model model) {
+        User user = userService.getLoggedUser();
+        Course course = courseRepository.getOne(mapping.getCourse().getId());
+        Teacher teacher = teacherRepository.getOne(mapping.getTeacher().getId());
+        Set<Teacher> registeredTeachers = course.getTeachers();
+
+        if (registeredTeachers.isEmpty()) {
+            registeredTeachers = new HashSet<>();
+        }
+
+        if (teacher != null) {
+            registeredTeachers.add(teacher);
+        }
+
+        if (course != null) {
+            course.setTeachers(registeredTeachers);
+            courseRepository.save(course);
+        }
+        model.addAttribute("user", user);
+
+        return INDEX_REDIRECT_STRING;
+    }
+
     @GetMapping("/RemoveFromCourse")
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     public String removerStudentFromCourse(Long courseId, Long studentId, Model model) {
@@ -231,6 +268,22 @@ public class CourseController {
 
         if (course != null && student != null) {
             course.getStudents().remove(student);
+            courseRepository.save(course);
+        }
+        model.addAttribute("user", user);
+
+        return INDEX_REDIRECT_STRING;
+    }
+
+    @GetMapping("/RemoveTeacherFromCourse")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
+    public String removerTeacherFromCourse(Long courseId, Long teacherId, Model model) {
+        User user = userService.getLoggedUser();
+        Course course = courseRepository.getOne(courseId);
+        Teacher teacher = teacherRepository.getOne(teacherId);
+
+        if (course != null && teacher != null) {
+            course.getTeachers().remove(teacher);
             courseRepository.save(course);
         }
         model.addAttribute("user", user);

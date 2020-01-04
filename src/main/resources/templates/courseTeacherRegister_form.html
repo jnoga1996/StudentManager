@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <div th:replace="head_fragment :: scripts"></div>
+</head>
+<body>
+<div th:insert="header_selector :: selector(user=${user})"></div>
+
+<form action="#" th:action="@{/Course/RegisterTeacher}" th:object="${mapping}" enctype="multipart/form-data" method="post">
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "course")}'></th:block>:
+        </label>
+        <div class="col-sm-6">
+            <select th:field="*{course}" class="form-control">
+                <option th:each="cour : ${courses}" th:value="${cour.getId()}"
+                        th:text="${cour}"
+                        th:selected="${courses.get(0)}">
+                </option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "student")}'></th:block>:
+        </label>
+        <div class="col-sm-6">
+            <select th:field="*{teacher}" class="form-control">
+                <option th:each="th : ${teachers}" th:value="${th.getId()}"
+                        th:text="${th}"
+                        th:selected="${teachers.get(0)}">
+                </option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-6">
+            <button type="submit" class="btn btn-primary">
+                <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "submit")}'></th:block>
+            </button>
+        </div>
+    </div>
+</form>
+
+</body>
+</html>

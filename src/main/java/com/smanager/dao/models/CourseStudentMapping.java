@@ -1,17 +1,8 @@
 package com.smanager.dao.models;
 
-public class CourseStudentMapping {
+public class CourseStudentMapping extends CourseUserTypeMapping {
 
-    private Course course;
     private Student student;
-
-    public Course getCourse() {
-        return course;
-    }
-
-    public void setCourse(Course course) {
-        this.course = course;
-    }
 
     public Student getStudent() {
         return student;

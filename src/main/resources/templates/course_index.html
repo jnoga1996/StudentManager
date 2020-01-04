@@ -26,6 +26,11 @@
             <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "teacherCourses")}'></th:block>
         </button>
     </a>
+    <a href="/Course/RegisterTeacher">
+        <button type="button" class="btn btn-primary btn-sm">
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "registerTeacherToCourse")}'></th:block>
+        </button>
+    </a>
 </div>
 <div th:insert="search :: bar(url=${'/Course/Search'})"></div>
 <table class="table table-striped">
@@ -69,6 +74,20 @@
                 <td><a th:href="@{/Course/RemoveFromCourse(
                     courseId=${course.getId()},
                     studentId=${student.getId()}
+                    )}"/>
+                    <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "removeFromCourse")}'></th:block>
+                </td>
+            </tr>
+        </th:block>
+        <th:block th:each="teacher : ${course.getTeachers()}">
+            <tr class="table-dark">
+                <td th:utext="${teacher}"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><a th:href="@{/Course/RemoveTeacherFromCourse(
+                    courseId=${course.getId()},
+                    teacherId=${teacher.getId()}
                     )}"/>
                     <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "removeFromCourse")}'></th:block>
                 </td>

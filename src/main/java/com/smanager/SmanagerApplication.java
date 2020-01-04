@@ -1,5 +1,6 @@
 package com.smanager;
 
+import com.smanager.dao.models.User;
 import com.smanager.storage.StorageProperties;
 import com.smanager.storage.StorageService;
 import org.springframework.boot.CommandLineRunner;

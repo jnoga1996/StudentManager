@@ -1,5 +1,6 @@
 package com.smanager.controllers;
 
+import com.smanager.Cache;
 import com.smanager.dao.models.*;
 import com.smanager.dao.repositories.*;
 import com.smanager.services.UserService;
@@ -96,8 +97,9 @@ public class WorkController {
         CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(teacherId, s -> s.isFinished(), UserType.TEACHER);
         List<String> paths = getPaths();
         fillModelForTeacherReports(model, methodReportWrapper.getTeacher(), wrapper, methodReportWrapper.getUser(), paths);
+        Cache.put(userService.getLoggedUser().getId(), "redirect:/Work/TeacherWork");
 
-        return methodReportWrapper.isErrorOccurred() ? "redirect:/Index" : "work_index_teacher";
+        return methodReportWrapper.isErrorOccurred() ? "redirect:/Work/Index" : "work_index_teacher";
     }
 
     @GetMapping("/NoGradeReport")
@@ -109,6 +111,7 @@ public class WorkController {
         CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(teacherId, s -> s.getGrade() == Grades.NO_GRADE.getGrade(), UserType.TEACHER);
         List<String> paths = getPaths();
         fillModelForTeacherReports(model, methodReportWrapper.getTeacher(), wrapper, methodReportWrapper.getUser(), paths);
+        Cache.put(userService.getLoggedUser().getId(), "redirect:/Work/NoGradeReport");
 
         return methodReportWrapper.isErrorOccurred() ? "redirect:/Index" : "work_index_teacher";
     }
@@ -121,6 +124,7 @@ public class WorkController {
         CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(teacherId, s -> s.getComments().isEmpty(), UserType.TEACHER);
         List<String> paths = getPaths();
         fillModelForTeacherReports(model, methodReportWrapper.getTeacher(), wrapper, methodReportWrapper.getUser(), paths);
+        Cache.put(userService.getLoggedUser().getId(), "redirect:/Work/NoCommentReport");
 
         return methodReportWrapper.isErrorOccurred() ? "redirect:/Index" : "work_index_teacher";
     }

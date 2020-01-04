@@ -27,10 +27,16 @@ INSERT INTO users (user_id, username, password, role, enabled, student_id, teach
 INSERT INTO users (user_id, username, password, role, enabled, student_id, teacher_id) VALUES (16, 'Teacher2.Teacher2', '123456', 'TEACHER', true, NULL, 5);
 INSERT INTO users (user_id, username, password, role, enabled, student_id, teacher_id) VALUES (17, 'Teacher3.Teacher3', '123456', 'TEACHER', true, NULL, 6);
 
+CREATE INDEX BUNDLES_IDX ON bundles (bundle, key_value, message);
+
 INSERT INTO `courses` VALUES (1,5,'Analiza matematyczna 1'),(2,3,'Podstawy programowania'),(3,4,'Matematyka dyskretna');
 
 INSERT INTO `solutions` VALUES (1,'Jan solution 1','2019-11-23 14:12:12',_binary '',5,'solution.1.800px-MVC-Process.svg.png',1,1),(2,'Jan solution 2','2019-11-23 14:12:18',_binary '',3,'solution.2.controller.png',1,1),(3,'Jan solution2 1','2019-11-23 14:12:23',_binary '',4.5,'solution.3.dao.png',1,1),(4,'Jan solution2 2','2019-11-23 14:12:29',_binary '',3.5,'solution.4.data.png',2,1),(5,'Ewa solution 1','2019-11-23 14:12:34',_binary '',4,'solution.5.Java-EE-vs-Spring-1.jpg',2,2);
 
-INSERT INTO `assignments` VALUES (1,'Zaimplementuj 3 dowolne metody sortowania','assignment.3.800px-MVC-Process.svg','Wstep do sortowania',1,NULL,NULL),(2,'Content','assignment.4.1200px-MySQL.svg','Title',1,NULL,NULL);
+insert into course_student values (1, 1), (1, 2), (1, 3), (1, 4), (1, 5);
+
+insert into course_teacher values (1, 1);
+
+INSERT INTO `assignments` VALUES (1,'Zaimplementuj 3 dowolne metody sortowania','assignment.3.800px-MVC-Process.svg','Wstep do sortowania',1,NULL,1),(2,'Content','assignment.4.1200px-MySQL.svg','Title',1,NULL,1);
 
 INSERT INTO `file_history` VALUES (1,'800px-MVC-Process.svg.png','Solution','2019-11-23 14:12:12','solution.1.800px-MVC-Process.svg.png',1),(2,'controller.png','Solution','2019-11-23 14:12:18','solution.2.controller.png',2),(3,'dao.png','Solution','2019-11-23 14:12:23','solution.3.dao.png',3),(4,'data.png','Solution','2019-11-23 14:12:29','solution.4.data.png',4),(5,'Java-EE-vs-Spring-1.jpg','Solution','2019-11-23 14:12:34','solution.5.Java-EE-vs-Spring-1.jpg',5);
