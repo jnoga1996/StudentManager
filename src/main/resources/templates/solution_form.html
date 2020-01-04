@@ -43,7 +43,7 @@
     <div th:if="${user.isStudent()}">
         <input type="hidden" th:field="*{grade}">
     </div>
-    <div class="form-group row">
+    <div th:if="${!isCreate}" class="form-group row">
         <label class="col-sm-2 col-form-label">
             <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "student")}'></th:block>:
         </label>

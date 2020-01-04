@@ -113,6 +113,8 @@ public class AssignmentController {
                 if (assignment != null && assignment.getPath().contains(path.getFileName().toString())) {
                     String filePath = MvcUriComponentsBuilder.fromMethodName(FileUploadController.class, "serveFile", path.getFileName().toString()).build().toString();
                     assignment.setPath(filePath);
+                } else {
+                    assignment.setPath("");
                 }
             }
         }
@@ -123,6 +125,9 @@ public class AssignmentController {
         User user = userService.getLoggedUser();
         fillModel(model, new Assignment(), true);
         model.addAttribute("user", user);
+        Long teacherId = userService.getStudentOrTeacherId(user);
+        Teacher teacher = teacherRepository.getOne(teacherId);
+        model.addAttribute("teacher", teacher);
 
         return "assignment_form";
     }
@@ -134,7 +139,10 @@ public class AssignmentController {
         if (bindingResult.hasErrors()) {
             return "assignment_form";
         }
-
+        Long teacherId = userService.getStudentOrTeacherId(user);
+        Teacher teacher = teacherRepository.getOne(teacherId);
+        assignment.setTeacher(teacher);
+        assignment.setPath("");
         fileUploadHelper.saveFileToRepository(assignmentRepository, file, assignment);
         model.addAttribute("user", user);
 

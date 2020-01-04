@@ -1,7 +1,9 @@
 package com.smanager.controllers;
 
+import com.smanager.Cache;
 import com.smanager.dao.models.Grades;
 import com.smanager.dao.models.Solution;
+import com.smanager.dao.models.Student;
 import com.smanager.dao.models.User;
 import com.smanager.dao.repositories.*;
 import com.smanager.services.FileUploadHelper;
@@ -61,6 +63,7 @@ public class SolutionController {
     public String index(Model model) {
         List<Solution> solutions = solutionRepository.findAll();
         fillModel(model, solutions);
+        Cache.put(userService.getLoggedUser().getId(), "redirect:/Solution/Index");
 
         return "solution_index";
     }
@@ -121,6 +124,9 @@ public class SolutionController {
             return "solution_index";
         }
 
+        Long studentId = userService.getStudentOrTeacherId(user);
+        Student student = studentRepository.getOne(studentId);
+        solution.setStudent(student);
         fileUploadHelper.saveFileToRepository(solutionRepository, file, solution);
         model.addAttribute("user", user);
 

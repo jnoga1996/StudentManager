@@ -21,7 +21,7 @@
                 </div>
                 <div class="list-group">
                     <th:block th:each="assignment, i : ${courseAssignments.get(course)}">
-                        <div class="list-group-item">
+                        <div th:if="${!assignmentsSolutions.get(assignment).isEmpty()}" class="list-group-item">
                             <p th:utext="${assignment.getTitle()}"></p>
                             <p th:utext="${assignment.getContent()}"></p>
                             <button class="btn btn-success" type="button" data-toggle="collapse" th:href="'#solutions-container-' + ${assignment.getId()} + '-' + ${i.count}"
@@ -50,6 +50,11 @@
                                     </div>
                                 </th:block>
                             </div>
+                        </div>
+                        <div th:if="${assignmentsSolutions.get(assignment).isEmpty()}" class="list-group-item">
+                            <p th:utext="${assignment.getTitle()}"></p>
+                            <p th:utext="${assignment.getContent()}"></p>
+                            <h3 th:text='${T(com.smanager.Bundles).getMessage("work", "noResults")}'></h3>
                         </div>
                     </th:block>
                 </div>
