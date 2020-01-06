@@ -41,6 +41,7 @@ public class BundlesInitializer {
                 new Bundle(language, "menu", "teacher", "Nauczyciele"),
                 new Bundle(language, "menu", "fileHistory", "Historia plikow"),
                 new Bundle(language, "menu", "signOut", "Wyloguj"),
+                new Bundle(language, "menu", "signIn", "Zaloguj"),
 
                 new Bundle(language, "login", "username", "Nazwa uzytkownika"),
                 new Bundle(language, "login", "password", "Haslo"),
@@ -159,6 +160,7 @@ public class BundlesInitializer {
                 new Bundle(language, "menu", "teacher", "Teacher"),
                 new Bundle(language, "menu", "fileHistory", "File history"),
                 new Bundle(language, "menu", "signOut", "Sign out"),
+                new Bundle(language, "menu", "signIn", "Sign in"),
 
                 new Bundle(language, "login", "username", "User name"),
                 new Bundle(language, "login", "password", "Password"),
