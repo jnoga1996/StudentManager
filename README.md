@@ -29,3 +29,20 @@ spring.jpa.hibernate.ddl-auto = create
 - student
 
 7) For now, password is the same as login (for example login = student, password = student)
+
+# Available users
+## Student accounts (login - password):
+- JanKowalski@uwr.edu.pl - 123456
+- EwaKowalska@uwr.edu.pl - 123456
+- KrystianBrodaty@uwr.edu.pl - 123456
+- AgataHerbata@uwr.edu.pl - 123456
+- TomaszPlecak@uwr.edu.pl - 123456
+- EwelinaLina@uwr.edu.pl - 123456
+- EustachyRzeka@uwr.edu.pl - 123456
+- EustachiuszRzeka@uwr.edu.pl -123456
+
+## Teacher accounts (login - password):
+- MarianJezioro@uwr.edu.pl - 123456
+- JoannaTalerz@uwr.edu.pl - 123456
+- EdmundGruszka@uwr.edu.pl - 123456
+- TeacherTeacher@uwr.edu.pl - 123456
