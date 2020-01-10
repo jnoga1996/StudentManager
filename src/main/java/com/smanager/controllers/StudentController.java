@@ -1,11 +1,9 @@
 package com.smanager.controllers;
 
-import com.smanager.Bundles;
 import com.smanager.dao.models.User;
 import com.smanager.dao.repositories.*;
-import com.smanager.services.UserService;
+import com.smanager.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class StudentController {
 
     private StudentRepository studentRepository;
-    private UserService userService;
+    private IUserService userService;
     private UserRepository userRepository;
 
     @Autowired
-    public StudentController(StudentRepository studentRepository, UserRepository userRepository, UserService userService) {
+    public StudentController(StudentRepository studentRepository, UserRepository userRepository, IUserService userService) {
         this.studentRepository = studentRepository;
         this.userRepository = userRepository;
         this.userService = userService;

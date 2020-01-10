@@ -5,7 +5,7 @@ import com.smanager.dao.models.User;
 import com.smanager.dao.repositories.AssignmentRepository;
 import com.smanager.dao.repositories.BundleRepository;
 import com.smanager.dao.repositories.CourseRepository;
-import com.smanager.services.UserService;
+import com.smanager.interfaces.IUserService;
 import com.smanager.utils.CourseHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,11 +18,11 @@ public class HomeController {
     private Bundles bundles;
     private CourseHelper courseHelper;
     private CourseRepository courseRepository;
-    private UserService userService;
+    private IUserService userService;
 
     @Autowired
     public HomeController(BundleRepository bundleRepository, CourseRepository courseRepository,
-                          AssignmentRepository assignmentRepository, UserService userService) {
+                          AssignmentRepository assignmentRepository, IUserService userService) {
         bundles = new Bundles(bundleRepository);
         this.courseRepository = courseRepository;
         courseHelper = new CourseHelper(courseRepository, assignmentRepository);

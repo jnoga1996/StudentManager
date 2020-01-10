@@ -2,27 +2,29 @@ package com.smanager.services;
 
 import com.smanager.dao.models.User;
 import com.smanager.dao.repositories.UserRepository;
+import com.smanager.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService {
+public class UserService implements IUserService {
 
     private Authentication authentication;
-    @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public User getLoggedUser() {
         authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
             String currentUsername = authentication.getName();
-            User user = userRepository.getUserByUsername(currentUsername);
-
-            return user;
+            return userRepository.getUserByUsername(currentUsername);
         }
-
         return null;
     }
 
@@ -34,7 +36,6 @@ public class UserService {
                 return user.getTeacherUser().getId();
             }
         }
-
         return Long.valueOf(-1);
     }
 }

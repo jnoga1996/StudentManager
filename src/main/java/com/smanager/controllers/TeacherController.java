@@ -2,7 +2,7 @@ package com.smanager.controllers;
 
 import com.smanager.dao.repositories.TeacherRepository;
 import com.smanager.dao.repositories.UserRepository;
-import com.smanager.services.UserService;
+import com.smanager.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -16,13 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class TeacherController {
 
     private TeacherRepository teacherRepository;
-    private UserService userService;
+    private IUserService userService;
     private UserRepository userRepository;
 
     @Autowired
-    public TeacherController(TeacherRepository teacherRepository, UserRepository userRepository, UserService userService) {
+    public TeacherController(TeacherRepository teacherRepository, UserRepository userRepository, IUserService userService) {
         this.teacherRepository = teacherRepository;
         this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     @GetMapping("Index")

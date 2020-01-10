@@ -3,8 +3,8 @@ package com.smanager.controllers;
 
 import com.smanager.dao.models.*;
 import com.smanager.dao.repositories.*;
+import com.smanager.interfaces.IUserService;
 import com.smanager.services.FileUploadHelper;
-import com.smanager.services.UserService;
 import com.smanager.storage.StorageService;
 import com.smanager.utils.MultilineTextParser;
 import com.smanager.utils.PaginationHelper;
@@ -38,7 +38,7 @@ public class AssignmentController {
     private TeacherRepository teacherRepository;
     private CourseRepository courseRepository;
     private FileUploadHelper fileUploadHelper;
-    private UserService userService;
+    private IUserService userService;
     private PaginationHelper<Assignment> paginationHelper;
 
     private String searchValue;
@@ -46,7 +46,7 @@ public class AssignmentController {
     @Autowired
     public AssignmentController(AssignmentRepository assignmentRepository, FileHistoryRepository fileHistoryRepository,
                                 StorageService storageService, TeacherRepository teacherRepository,
-                                CourseRepository courseRepository, UserService userService,
+                                CourseRepository courseRepository, IUserService userService,
                                 SolutionRepository solutionRepository) {
         this.assignmentRepository = assignmentRepository;
         this.solutionRepository = solutionRepository;

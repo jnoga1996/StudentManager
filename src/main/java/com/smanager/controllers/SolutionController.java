@@ -6,8 +6,8 @@ import com.smanager.dao.models.Solution;
 import com.smanager.dao.models.Student;
 import com.smanager.dao.models.User;
 import com.smanager.dao.repositories.*;
+import com.smanager.interfaces.IUserService;
 import com.smanager.services.FileUploadHelper;
-import com.smanager.services.UserService;
 import com.smanager.storage.StorageService;
 import com.smanager.utils.PaginationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,14 +41,14 @@ public class SolutionController {
 
     private StorageService storageService;
     private FileUploadHelper fileUploadHelper;
-    private UserService userService;
+    private IUserService userService;
     private PaginationHelper<Solution> paginationHelper;
 
     @Autowired
     public SolutionController(SolutionRepository solutionRepository, TeacherRepository teacherRepository,
                               StudentRepository studentRepository, FileHistoryRepository fileHistoryRepository,
                               StorageService storageService, AssignmentRepository assignmentRepository,
-                              UserService userService) {
+                              IUserService userService) {
         this.solutionRepository = solutionRepository;
         this.teacherRepository = teacherRepository;
         this.studentRepository = studentRepository;

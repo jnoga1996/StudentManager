@@ -5,9 +5,8 @@ import com.smanager.dao.models.Comment;
 import com.smanager.dao.models.Solution;
 import com.smanager.dao.models.User;
 import com.smanager.dao.repositories.*;
-import com.smanager.services.UserService;
+import com.smanager.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,11 +24,11 @@ public class CommentController {
 
     private CommentRepository commentRepository;
     private SolutionRepository solutionRepository;
-    private UserService userService;
+    private IUserService userService;
 
     @Autowired
     public CommentController(CommentRepository commentRepository, SolutionRepository solutionRepository,
-                             UserService userService) {
+                             IUserService userService) {
         this.commentRepository = commentRepository;
         this.solutionRepository = solutionRepository;
         this.userService = userService;

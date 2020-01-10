@@ -3,7 +3,7 @@ package com.smanager.controllers;
 import com.smanager.Cache;
 import com.smanager.dao.models.*;
 import com.smanager.dao.repositories.*;
-import com.smanager.services.UserService;
+import com.smanager.interfaces.IUserService;
 import com.smanager.storage.StorageService;
 import com.smanager.utils.CourseHelper;
 import com.smanager.utils.WorkControllerPaths;
@@ -28,7 +28,7 @@ public class WorkController {
     private StudentRepository studentRepository;
     private TeacherRepository teacherRepository;
     private UserRepository userRepository;
-    private UserService userService;
+    private IUserService userService;
     private List<String> teacherReportList = Arrays.asList(
             "/TeacherWork",
             "/NoGradeReport",
@@ -43,7 +43,7 @@ public class WorkController {
     @Autowired
     public WorkController(CourseRepository courseRepository, AssignmentRepository assignmentRepository,
                           StudentRepository studentRepository, UserRepository userRepository,
-                          TeacherRepository teacherRepository, UserService userService, StorageService storageService) {
+                          TeacherRepository teacherRepository, IUserService userService, StorageService storageService) {
         this.studentRepository = studentRepository;
         this.userRepository = userRepository;
         this.teacherRepository = teacherRepository;
