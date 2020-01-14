@@ -35,6 +35,7 @@ public class User {
         this.username = userName;
         this.password = password;
         this.role = role;
+        this.enabled = enabled;
     }
 
     public User(String userName, String password, String role, boolean enabled, Student student) {

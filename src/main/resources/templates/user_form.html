@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>User</title>
+    <div th:replace="head_fragment :: scripts"></div>
+</head>
+<body>
+<div th:insert="header_selector :: selector(user=${user})"></div>
+<h2></h2>
+<form action="#" th:action="@{/User/Create}" th:object="${userWrapper}" enctype="multipart/form-data" method="post">
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">
+            First name:
+        </label>
+        <div class="col-sm-6">
+            <input type="text" th:field="*{firstName}" class="form-control"/>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">
+            Last name:
+        </label>
+        <div class="col-sm-6">
+            <input type="text" th:field="*{lastName}" class="form-control"/>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">
+            Login:
+        </label>
+        <div class="col-sm-6">
+            <input type="text" th:field="*{userName}" class="form-control"/>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">
+            Password:
+        </label>
+        <div class="col-sm-6">
+            <input type="password" th:field="*{password}" class="form-control"/>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">
+            Password:
+        </label>
+        <div class="col-sm-6">
+            <input type="password" th:field="*{passwordRetyped}" class="form-control"/>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">
+            Role:
+        </label>
+        <div class="col-sm-6">
+            <select th:field="*{role}" class="form-control">
+                <option th:each="rl : ${roles}" th:value="${rl.name()}"
+                        th:text="${rl}">
+                </option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-6">
+            <button type="submit" class="btn btn-primary">
+                <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "submit")}'></th:block>
+            </button>
+        </div>
+    </div>
+</form>
+</body>
+</html>
