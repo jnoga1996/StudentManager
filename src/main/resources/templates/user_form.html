@@ -11,7 +11,7 @@
 <form action="#" th:action="@{/User/Create}" th:object="${userWrapper}" enctype="multipart/form-data" method="post">
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">
-            First name:
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("user", "firstName")}'></th:block>
         </label>
         <div class="col-sm-6">
             <input type="text" th:field="*{firstName}" class="form-control"/>
@@ -19,7 +19,7 @@
     </div>
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">
-            Last name:
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("user", "lastName")}'></th:block>
         </label>
         <div class="col-sm-6">
             <input type="text" th:field="*{lastName}" class="form-control"/>
@@ -27,7 +27,7 @@
     </div>
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">
-            Login:
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("user", "login")}'></th:block>
         </label>
         <div class="col-sm-6">
             <input type="text" th:field="*{userName}" class="form-control"/>
@@ -35,7 +35,7 @@
     </div>
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">
-            Password:
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("user", "password")}'></th:block>
         </label>
         <div class="col-sm-6">
             <input type="password" th:field="*{password}" class="form-control"/>
@@ -43,7 +43,7 @@
     </div>
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">
-            Password:
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("user", "retypedPassword")}'></th:block>
         </label>
         <div class="col-sm-6">
             <input type="password" th:field="*{passwordRetyped}" class="form-control"/>
@@ -51,7 +51,7 @@
     </div>
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">
-            Role:
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("user", "role")}'></th:block>
         </label>
         <div class="col-sm-6">
             <select th:field="*{role}" class="form-control">

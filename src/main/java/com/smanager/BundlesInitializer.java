@@ -42,6 +42,7 @@ public class BundlesInitializer {
                 new Bundle(language, "menu", "fileHistory", "Historia plikow"),
                 new Bundle(language, "menu", "signOut", "Wyloguj"),
                 new Bundle(language, "menu", "signIn", "Zaloguj"),
+                new Bundle(language, "menu", "userCreate", "Nowy uzytkownik"),
 
                 new Bundle(language, "login", "username", "Nazwa uzytkownika"),
                 new Bundle(language, "login", "password", "Haslo"),
@@ -138,7 +139,14 @@ public class BundlesInitializer {
                 new Bundle(language, "report", "/TeacherWork", "Rozwiazania bez ocen"),
                 new Bundle(language, "report", "/NoGradeReport", "Ukonczone rozwiazania"),
                 new Bundle(language, "report", "/NoCommentReport", "Rozwiazania bez komentarzy"),
-                new Bundle(language, "report", "/GradesReport", "Oceny")
+                new Bundle(language, "report", "/GradesReport", "Oceny"),
+
+                new Bundle(language, "user", "firstName", "Imie:"),
+                new Bundle(language, "user", "lastName", "Nazwisko:"),
+                new Bundle(language, "user", "login", "Login:"),
+                new Bundle(language, "user", "password", "Haslo:"),
+                new Bundle(language, "user", "retypedPassword", "Powtorz haslo:"),
+                new Bundle(language, "user", "role", "Rola:")
                 );
 
         bundleRepository.saveAll(polishBundles);
@@ -161,6 +169,7 @@ public class BundlesInitializer {
                 new Bundle(language, "menu", "fileHistory", "File history"),
                 new Bundle(language, "menu", "signOut", "Sign out"),
                 new Bundle(language, "menu", "signIn", "Sign in"),
+                new Bundle(language, "menu", "userCreate", "Create user"),
 
                 new Bundle(language, "login", "username", "User name"),
                 new Bundle(language, "login", "password", "Password"),
@@ -257,7 +266,14 @@ public class BundlesInitializer {
                 new Bundle(language, "report", "/TeacherWork", "Solutions without grades"),
                 new Bundle(language, "report", "/NoGradeReport", "Finished solutions"),
                 new Bundle(language, "report", "/NoCommentReport", "Solutions without comments"),
-                new Bundle(language, "report", "/GradesReport", "Grades")
+                new Bundle(language, "report", "/GradesReport", "Grades"),
+
+                new Bundle(language, "user", "firstName", "First name:"),
+                new Bundle(language, "user", "lastName", "Last name:"),
+                new Bundle(language, "user", "login", "Login:"),
+                new Bundle(language, "user", "password", "Password:"),
+                new Bundle(language, "user", "retypedPassword", "Retyped password:"),
+                new Bundle(language, "user", "role", "Role:")
         );
 
         bundleRepository.saveAll(englishBundles);

@@ -19,7 +19,7 @@ INSERT INTO teachers (teacher_id, first_name, last_name) VALUES
 INSERT INTO users (user_id, username, password, role, enabled, student_id, teacher_id) VALUES
     (1, 'student', 'student', 'STUDENT', true, NULL, NULL),
     (2, 'teacher', 'teacher', 'TEACHER', true, NULL, NULL),
-    (3, 'admin', 'admin', 'ADMIN', true, NULL, NULL),
+    (3, 'admin', '123456', 'ADMIN', true, NULL, NULL),
     (4, 'JanKowalski@uwr.edu.pl', '123456', 'STUDENT', true, 1, NULL),
     (5, 'EwaKowalska@uwr.edu.pl', '123456', 'STUDENT', true, 2, NULL),
     (6, 'KrystianBrodaty@uwr.edu.pl', '123456', 'STUDENT', true, 3, NULL),
@@ -56,7 +56,7 @@ INSERT INTO `solutions` VALUES
     (2,'Jan solution 2','2019-11-23 14:12:18',_binary '',3,'solution.2.controller.png',1,1),
     (3,'Jan solution2 1','2019-11-23 14:12:23',_binary '',4.5,'solution.3.dao.png',1,1),
     (4,'Jan solution2 2','2019-11-23 14:12:29',_binary '',3.5,'solution.4.data.png',2,1),
-    (5,'Ewa solution 1','2019-11-23 14:12:34',_binary '',4,'solution.5.Java-EE-vs-Spring-1.jpg',2,2);
+    (5,'Ewa solution 1','2019-11-23 14:12:34',_binary '',4,'solution.5.dupa.png',2,2);
 
 insert into course_student values
     (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (1, 9), (1, 10), (1, 11),

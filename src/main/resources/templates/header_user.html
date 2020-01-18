@@ -47,6 +47,9 @@
                     <th:block th:text='${T(com.smanager.Bundles).getMessage("menu", "features")}'></th:block>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a th:if="${user.getRole().equals('ADMIN')}" class="dropdown-item" href="/User/Create">
+                        <th:block th:text='${T(com.smanager.Bundles).getMessage("menu", "userCreate")}'></th:block>
+                    </a>
                     <a class="dropdown-item" href="/AssignmentSolution/Index">
                         <th:block th:text='${T(com.smanager.Bundles).getMessage("menu", "assignmentSolution")}'></th:block>
                     </a>

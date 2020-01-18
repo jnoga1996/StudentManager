@@ -47,7 +47,7 @@ public class HomeController {
             return "redirect:/Work/TeacherWork";
         }
 
-        return "login";
+        return "redirect:/Solution/Index";
     }
 
 }
