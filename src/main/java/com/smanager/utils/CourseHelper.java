@@ -29,8 +29,11 @@ public class CourseHelper {
         return this.courseRepository;
     }
 
-    public CourseAssignmentSolutionWrapper populateCoursesAssignmentsAndSolutions(Long id, Predicate<Solution> predicate, UserType userType) {
+    public CourseAssignmentSolutionWrapper populateCoursesAssignmentsAndSolutions(Long id, Predicate<Solution> predicate, UserType userType, Long courseToFilter) {
         List<Course> courses = fillCoursesListByUserType(userType, id);
+        if (courseToFilter != null) {
+            courses = courses.stream().filter(c -> c.getId() == courseToFilter.longValue()).collect(Collectors.toList());
+        }
         Map<Course, List<Assignment>> courseAssignmentsMap = new HashMap<>();
         Map<Assignment, List<Solution>> assignmentSolutionsMap = new HashMap<>();
 
@@ -54,8 +57,12 @@ public class CourseHelper {
         return new CourseAssignmentSolutionWrapper(courses, courseAssignmentsMap, assignmentSolutionsMap);
     }
 
+    public CourseAssignmentSolutionWrapper populateCoursesAssignmentsAndSolutions(Long id, Predicate<Solution> predicate, UserType userType) {
+        return populateCoursesAssignmentsAndSolutions(id, predicate, userType, null);
+    }
+
     private List<Course> fillCoursesListByUserType(UserType userType, Long id) {
-        List<Course> courses = new ArrayList<>();
+        List<Course> courses;
         if (userType == UserType.TEACHER) {
             courses = courseRepository.findCoursesByTeacherId(id);
         } else if  (userType == UserType.STUDENT) {

@@ -16,4 +16,7 @@ public class WorkControllerPaths {
         return REDIRECT_PREFIX + CONTROLLER_PREFIX + workControllerPath;
     }
 
+    public static String getUrl(String workControllerPath) {
+        return CONTROLLER_PREFIX + workControllerPath;
+    }
 }

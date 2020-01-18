@@ -15,10 +15,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Controller
@@ -39,6 +42,7 @@ public class WorkController {
     );
     private CourseHelper courseHelper;
     private StorageService storageService;
+    private Map<Long, List<Course>> userCoursesCache;
 
     @Autowired
     public WorkController(CourseRepository courseRepository, AssignmentRepository assignmentRepository,
@@ -50,6 +54,7 @@ public class WorkController {
         this.courseHelper = new CourseHelper(courseRepository, assignmentRepository);
         this.userService = userService;
         this.storageService = storageService;
+        userCoursesCache = new HashMap<>();
     }
 
     @GetMapping(WorkControllerPaths.INDEX)
@@ -95,40 +100,82 @@ public class WorkController {
 
     @GetMapping(WorkControllerPaths.TEACHER_WORK)
     @PreAuthorize("hasRole('TEACHER')")
-    public String teacherWork(Model model) {
+    public String teacherWork(Model model, @RequestParam(value = "shouldUpdateCache", required = false) boolean shouldUpdateCache,
+                              @RequestParam(value = "courseToDisplay", required = false) Long courseToDisplay) {
         ReportWrapper methodReportWrapper = getData();
         Long teacherId = methodReportWrapper.getTeacher().getId();
-        CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(teacherId, s -> s.isFinished(), UserType.TEACHER);
+        CourseAssignmentSolutionWrapper wrapper = getCourses(courseToDisplay, teacherId, s -> s.isFinished());
         List<String> paths = getPaths();
         fillModelForTeacherReports(model, methodReportWrapper.getTeacher(), wrapper, methodReportWrapper.getUser(), paths);
         Cache.put(userService.getLoggedUser().getId(), WorkControllerPaths.getRedirectPath(WorkControllerPaths.TEACHER_WORK));
+        updateCache(teacherId);
+        model.addAttribute("cachedCourses", userCoursesCache.get(teacherId));
+        model.addAttribute("url", WorkControllerPaths.getUrl(WorkControllerPaths.TEACHER_WORK));
 
         return methodReportWrapper.isErrorOccurred() ? WorkControllerPaths.getRedirectPath(WorkControllerPaths.TEACHER_WORK) : "work_index_teacher";
     }
 
+    private CourseAssignmentSolutionWrapper getCourses(Long courseToDisplay, Long teacherId, Predicate<Solution> predicate) {
+        if (courseToDisplay != null) {
+            return courseHelper.populateCoursesAssignmentsAndSolutions(teacherId, predicate, UserType.TEACHER, courseToDisplay);
+        } else {
+            return courseHelper.populateCoursesAssignmentsAndSolutions(teacherId, predicate, UserType.TEACHER);
+        }
+    }
+
+    private void updateCache(Long teacherId) {
+        if (userCoursesCache.containsKey(teacherId)) {
+            userCoursesCache.remove(teacherId);
+        }
+        userCoursesCache.put(teacherId, courseHelper.populateCoursesAssignmentsAndSolutions(teacherId, s -> s.isFinished(), UserType.TEACHER).getCourses());
+    }
+
+    @PostMapping(WorkControllerPaths.TEACHER_WORK)
+    public String teacherWork(Long courseToDisplay) {
+        return WorkControllerPaths.getRedirectPath(WorkControllerPaths.TEACHER_WORK) + "?shouldUpdateCache=true&courseToDisplay=" + courseToDisplay;
+    }
+
+    @PostMapping(WorkControllerPaths.NO_GRADES_REPORT)
+    public String noGradesReport(Long courseToDisplay) {
+        return WorkControllerPaths.getRedirectPath(WorkControllerPaths.NO_GRADES_REPORT) + "?shouldUpdateCache=true&courseToDisplay=" + courseToDisplay;
+    }
+
+    @PostMapping(WorkControllerPaths.NO_COMMENT_REPORT)
+    public String noCommentsReport(Long courseToDisplay) {
+        return WorkControllerPaths.getRedirectPath(WorkControllerPaths.NO_COMMENT_REPORT) + "?shouldUpdateCache=true&courseToDisplay=" + courseToDisplay;
+    }
+
     @GetMapping(WorkControllerPaths.NO_GRADES_REPORT)
     @PreAuthorize("hasRole('TEACHER')")
-    public String generateReportForTeacherWithSolutionsWithoutGrade(Model model) {
+    public String generateReportForTeacherWithSolutionsWithoutGrade(Model model, @RequestParam(value = "shouldUpdateCache", required = false) boolean shouldUpdateCache,
+                                @RequestParam(value = "courseToDisplay", required = false) Long courseToDisplay) {
         ReportWrapper methodReportWrapper = getData();
         Long teacherId = methodReportWrapper.getTeacher().getId();
 
-        CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(teacherId, s -> s.getGrade() == Grades.NO_GRADE.getGrade(), UserType.TEACHER);
+        CourseAssignmentSolutionWrapper wrapper = getCourses(courseToDisplay, teacherId, s -> s.getGrade() == Grades.NO_GRADE.getGrade());//courseHelper.populateCoursesAssignmentsAndSolutions(teacherId, s -> s.getGrade() == Grades.NO_GRADE.getGrade(), UserType.TEACHER);
         List<String> paths = getPaths();
         fillModelForTeacherReports(model, methodReportWrapper.getTeacher(), wrapper, methodReportWrapper.getUser(), paths);
         Cache.put(userService.getLoggedUser().getId(), WorkControllerPaths.getRedirectPath(WorkControllerPaths.NO_GRADES_REPORT));
+        updateCache(teacherId);
+        model.addAttribute("cachedCourses", userCoursesCache.get(teacherId));
+        model.addAttribute("url", WorkControllerPaths.getUrl(WorkControllerPaths.NO_GRADES_REPORT));
 
         return methodReportWrapper.isErrorOccurred() ? WorkControllerPaths.getRedirectPath(WorkControllerPaths.TEACHER_WORK)  : "work_index_teacher";
     }
 
     @GetMapping(WorkControllerPaths.NO_COMMENT_REPORT)
     @PreAuthorize("hasRole('TEACHER')")
-    public String generateReportForTeacherWithSolutionsWithoutComment(Model model) {
+    public String generateReportForTeacherWithSolutionsWithoutComment(Model model, @RequestParam(value = "shouldUpdateCache", required = false) boolean shouldUpdateCache,
+                                @RequestParam(value = "courseToDisplay", required = false) Long courseToDisplay) {
         ReportWrapper methodReportWrapper = getData();
         Long teacherId = methodReportWrapper.getTeacher().getId();
-        CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(teacherId, s -> s.getComments().isEmpty(), UserType.TEACHER);
+        CourseAssignmentSolutionWrapper wrapper = getCourses(courseToDisplay, teacherId, s -> s.getComments().isEmpty());//courseHelper.populateCoursesAssignmentsAndSolutions(teacherId, s -> s.getComments().isEmpty(), UserType.TEACHER);
         List<String> paths = getPaths();
         fillModelForTeacherReports(model, methodReportWrapper.getTeacher(), wrapper, methodReportWrapper.getUser(), paths);
         Cache.put(userService.getLoggedUser().getId(), WorkControllerPaths.getRedirectPath(WorkControllerPaths.NO_COMMENT_REPORT));
+        updateCache(teacherId);
+        model.addAttribute("cachedCourses", userCoursesCache.get(teacherId));
+        model.addAttribute("url", WorkControllerPaths.getUrl(WorkControllerPaths.NO_COMMENT_REPORT));
 
         return methodReportWrapper.isErrorOccurred() ? WorkControllerPaths.getRedirectPath(WorkControllerPaths.TEACHER_WORK)  : "work_index_teacher";
     }

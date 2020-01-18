@@ -110,11 +110,9 @@ public class AssignmentController {
     private void updateLinks(Iterable<Assignment> assignments, List<Path> paths) {
         for (Assignment assignment : assignments) {
             for (Path path : paths) {
-                if (assignment != null && assignment.getPath().contains(path.getFileName().toString())) {
+                if (assignment.getPath() != null && path.getFileName().toString().contains(assignment.getPath())) {
                     String filePath = MvcUriComponentsBuilder.fromMethodName(FileUploadController.class, "serveFile", path.getFileName().toString()).build().toString();
                     assignment.setPath(filePath);
-                } else {
-                    assignment.setPath("");
                 }
             }
         }

@@ -1,7 +1,5 @@
 package com.smanager;
 
-import com.smanager.dao.models.User;
-
 import java.util.HashMap;
 import java.util.Map;
 

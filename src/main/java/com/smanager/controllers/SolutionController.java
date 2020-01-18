@@ -99,7 +99,7 @@ public class SolutionController {
     private void updateLinks(Iterable<Solution> solutions, List<Path> paths) {
         for (Solution solution : solutions) {
             for (Path path : paths) {
-                if (solution.getPath() != null && solution.getPath().contains(path.getFileName().toString())) {
+                if (solution.getPath() != null && path.getFileName().toString().contains(solution.getPath())) {
                     String filePath = MvcUriComponentsBuilder.fromMethodName(FileUploadController.class, "serveFile", path.getFileName().toString()).build().toString();
                     solution.setPath(filePath);
                 }
