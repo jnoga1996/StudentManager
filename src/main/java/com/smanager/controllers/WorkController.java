@@ -190,7 +190,16 @@ public class WorkController {
         Map<Course, GradeWrapper> courseGradeMap = new HashMap<>();
 
         for (Course course : courses) {
-            int grade = CourseHelper.getGradeForCourse(course, id);
+            List<Assignment> studentAssignmentsForCourse = course.getAssignments()
+                    .stream()
+                    .filter(a -> a.getStudent().getId() == id)
+                    .collect(Collectors.toList());
+            Optional<Long> courseTeacherId = studentAssignmentsForCourse.stream().map(a -> a.getTeacher().getId()).findFirst();
+            int grade = 0;
+            if (courseTeacherId.isPresent()) {
+                Long teacherId = courseTeacherId.get().longValue();
+                grade = CourseHelper.getGradeForCourse(course, id, teacherId);
+            }
             List<Integer> courseGrades = CourseHelper.getGradesForCourse(course, id);
             courseGradeMap.put(course, new GradeWrapper(grade, courseGrades));
         }
@@ -215,7 +224,7 @@ public class WorkController {
         Map<Course, GradeWrapper> courseGradeMap = new HashMap<>();
 
         for (Course course : courses) {
-            int grade = CourseHelper.getGradeForCourse(course, studentId);
+            int grade = CourseHelper.getGradeForCourse(course, studentId, userService.getLoggedUser().getTeacherUser().getId());
             List<Integer> courseGrades = CourseHelper.getGradesForCourse(course, studentId);
             courseGradeMap.put(course, new GradeWrapper(grade, courseGrades));
         }

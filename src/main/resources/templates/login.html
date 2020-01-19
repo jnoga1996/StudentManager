@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"><head>
     <meta charset="UTF-8">
     <title>Login</title>
     <div th:replace="head_fragment :: scripts"></div>
@@ -13,7 +12,10 @@
 <div th:if="${param.logout}">
     You have been logged out.
 </div>
-<h2></h2>
+<div>
+    <img src="/css/logo.jpg">
+    <p><th:block th:text='${T(com.smanager.Bundles).getMessage("login", "welcomeMessage")}'></th:block></p>
+</div>
 <form th:action="@{/login}" method="post" class="form-group">
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">

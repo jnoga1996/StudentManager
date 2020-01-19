@@ -47,6 +47,7 @@ public class BundlesInitializer {
                 new Bundle(language, "login", "username", "Nazwa uzytkownika"),
                 new Bundle(language, "login", "password", "Haslo"),
                 new Bundle(language, "login", "signIn", "Zaloguj"),
+                new Bundle(language, "login", "welcomeMessage", "Witaj w aplikacji SManager, zaloguj sie uzywajac otrzymanych danych aby kontynuowac."),
 
                 new Bundle(language, "assignment", "title", "Tytul"),
                 new Bundle(language, "assignment", "content", "Tresc"),
@@ -176,6 +177,7 @@ public class BundlesInitializer {
                 new Bundle(language, "login", "username", "User name"),
                 new Bundle(language, "login", "password", "Password"),
                 new Bundle(language, "login", "signIn", "Sign in"),
+                new Bundle(language, "login", "welcomeMessage", "Welcome to SManager application, please log in with provided credentials to start using the application."),
 
                 new Bundle(language, "assignment", "title", "Title"),
                 new Bundle(language, "assignment", "content", "Content"),

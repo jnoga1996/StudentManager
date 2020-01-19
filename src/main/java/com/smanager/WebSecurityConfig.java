@@ -28,6 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) {
         web.ignoring().antMatchers("/resources/**");
         web.ignoring().antMatchers("/css/**");
+        web.ignoring().antMatchers("/icons/**");
     }
 
     @Override

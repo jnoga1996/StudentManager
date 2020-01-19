@@ -129,11 +129,11 @@ public class CourseHelper {
         return grades;
     }
 
-    public static int getGradeForCourse(Course course, Long studentId) {
+    public static int getGradeForCourse(Course course, Long studentId, Long teacherId) {
         double sum = 0;
         List<Assignment> assignments = course.getAssignments()
                 .stream()
-                .filter(s -> s.getCourse().getId() == course.getId())
+                .filter(s -> s.getCourse().getId() == course.getId() && s.getTeacher().getId() == teacherId)
                 .collect(Collectors.toList());
 
         for (Assignment assignment : assignments) {
@@ -141,6 +141,8 @@ public class CourseHelper {
         }
 
         int grade = 0;
+        int size = assignments.size();
+        if (size == 0) return 0;
         try {
             grade = (int)(sum / assignments.size());
         } catch (ArithmeticException ex) {

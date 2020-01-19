@@ -52,11 +52,13 @@ INSERT INTO `courses` VALUES
     (14, 4, 'Bazy danych');
 
 INSERT INTO `solutions` VALUES
-    (1,'Jan solution 1','2019-11-23 14:12:12',_binary '',5,'solution.1.800px-MVC-Process.svg.png',1,1),
-    (2,'Jan solution 2','2019-11-23 14:12:18',_binary '',3,'solution.2.controller.png',1,1),
-    (3,'Jan solution2 1','2019-11-23 14:12:23',_binary '',4.5,'solution.3.dao.png',1,1),
-    (4,'Jan solution2 2','2019-11-23 14:12:29',_binary '',3.5,'solution.4.data.png',2,1),
-    (5,'Ewa solution 1','2019-11-23 14:12:34',_binary '',4,'solution.5.dupa.png',2,2);
+    (1,'Jan solution 1','2019-11-23 14:12:12',_binary '',5,'solution.1.1.png',1,1),
+    (2,'Jan solution 2','2019-11-23 14:12:18',_binary '',3,'solution.2.2.png',1,1),
+    (3,'Jan solution2 1','2019-11-23 14:12:23',_binary '',4.5,'solution.3.3.png',1,1),
+    (4,'Jan solution2 2','2019-11-23 14:12:29',_binary '',3.5,'solution.4.4.png',2,1),
+    (5,'Jan solution 4','2019-11-23 14:12:34',_binary '',4,'solution.5.5.png',3,1),
+    (6,'Jan solution 5','2019-11-23 14:12:34',_binary '',4,'solution.6.6.png',4,1),
+    (7,'Jan solution 6','2019-11-23 14:12:34',_binary '',4,'solution.7.7.png',5,1);
 
 insert into course_student values
     (1, 1), (2, 1), (3, 1), (4, 1), (5, 1),
@@ -76,6 +78,20 @@ insert into course_teacher values
     (8, 3), (9, 3), (10, 3),
     (11, 4), (12, 4), (13, 4);
 
-INSERT INTO `assignments` VALUES (1,'Zaimplementuj 3 dowolne metody sortowania','assignment.3.800px-MVC-Process.svg','Wstep do sortowania',1,NULL,1),(2,'Content','assignment.4.1200px-MySQL.svg','Title',1,NULL,1),(3,'Oblicz pochodne z zalacznika','assignment.3.How-to-set-up-the-Heroku.png','Pochodne',1,NULL,1),(4,'Napisz program ktory wykorzystuje wspomniany algorytm','assignment.4.1200px-MySQL.svg.png','Sortowanie szybkie',2,NULL,1),(5,'Napisz program ktory wykorzystuje wspomniany algorytm','assignment.5.loop.PNG','Wyszukiwanie binarne',2,NULL,1);
+INSERT INTO `assignments` VALUES
+    (1,'Zaimplementuj 3 dowolne metody sortowania','assignment.1.sort.PNG','Wstep do sortowania',5,NULL,1),
+    (2,'Napisz testy jednostkowe','assignment.2.test.PNG','Testy jednostkowe',5,NULL,1),
+    (3,'Oblicz pochodne z zalacznika','assignment.3.pochodne.png','Pochodne',1,NULL,1),
+    (4,'Napisz program ktory wykorzystuje wspomniany algorytm','assignment.4.quicksort.png','Sortowanie szybkie',5,NULL,1),
+    (5,'Napisz program ktory wykorzystuje wspomniany algorytm','assignment.5.binarysearch.PNG','Wyszukiwanie binarne',5,NULL,1),
+    (6, 'Oblicz podane calki', 'assignment.6.calki.PNG', 'Calki - wstep', 1, NULL, 1),
+    (7, 'Oblicz podane calki', 'assignment.7.calki.PNG', 'Calki - wstep', 1, NULL, 2),
+    (8, 'Oblicz podane calki', 'assignment.8.calki.PNG', 'Calki - wstep', 1, NULL, 3),
+    (9, 'SQL - wyzwalacze', 'assignment.9.triggers.PNG', 'Mechanizmy bazodanowe', 14, NULL, 1),
+    (10, 'SQL - indeksy', 'assignment.10.indexes.PNG', 'Mechanizmy bazodanowe 2', 14, NULL, 1),
+    (11, 'Drzewa binarne', 'assignment.11.lista1.pdf', 'Struktury danych 1', 5, NULL, 1),
+    (12, 'Drzewa czerwono-czarne', 'assignment.12.lista2.pdf', 'Struktury danych 2', 5, NULL, 1),
+    (13, 'B-drzewa', 'assignment.13.lista3.pdf', 'Struktury danych 3', 5, NULL, 1),
+    (14, 'Twierdzenie o rekursji uniwersalnej', 'assignment.14.recurence.rar', 'Zlozonosc obliczeniowa', 5, NULL, 1);
 
 INSERT INTO `file_history` VALUES (1,'800px-MVC-Process.svg.png','Solution','2019-11-23 14:12:12','solution.1.800px-MVC-Process.svg.png',1),(2,'controller.png','Solution','2019-11-23 14:12:18','solution.2.controller.png',2),(3,'dao.png','Solution','2019-11-23 14:12:23','solution.3.dao.png',3),(4,'data.png','Solution','2019-11-23 14:12:29','solution.4.data.png',4),(5,'Java-EE-vs-Spring-1.jpg','Solution','2019-11-23 14:12:34','solution.5.Java-EE-vs-Spring-1.jpg',5),(6,'How-to-set-up-the-Heroku.png','Assignment','2020-01-06 18:46:37','assignment.3.How-to-set-up-the-Heroku.png',3),(7,'1200px-MySQL.svg.png','Assignment','2020-01-06 18:47:05','assignment.4.1200px-MySQL.svg.png',4),(8,'loop.PNG','Assignment','2020-01-06 18:47:29','assignment.5.loop.PNG',5);
