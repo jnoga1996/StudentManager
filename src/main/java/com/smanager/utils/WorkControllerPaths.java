@@ -8,6 +8,7 @@ public class WorkControllerPaths {
     public static final String NO_GRADES_REPORT = "/NoGradeReport";
     public static final String NO_COMMENT_REPORT = "/NoCommentReport";
     public static final String GRADES_REPORT = "/GradesReport";
+    public static final String TEACHER_GRADES_REPORT = "/TeacherGradesReport";
 
     private static final String CONTROLLER_PREFIX = "/Work";
     private static final String REDIRECT_PREFIX = "redirect:";

@@ -202,6 +202,32 @@ public class WorkController {
         return "grade_report";
     }
 
+    @GetMapping(WorkControllerPaths.TEACHER_GRADES_REPORT)
+    public String generateGradesReportForTeacher(Model model, Long id) {
+        User user = userRepository.getUserById(id);
+        if (id == null) {
+            return WorkControllerPaths.getRedirectPath(WorkControllerPaths.TEACHER_WORK);
+        }
+        User viewedUser = userRepository.getUserById(id);
+        Long studentId = userService.getStudentOrTeacherId(user);
+
+        List<Course> courses = courseHelper.getCourseRepository().findCoursesByStudentId(studentId);
+        Map<Course, GradeWrapper> courseGradeMap = new HashMap<>();
+
+        for (Course course : courses) {
+            int grade = CourseHelper.getGradeForCourse(course, studentId);
+            List<Integer> courseGrades = CourseHelper.getGradesForCourse(course, studentId);
+            courseGradeMap.put(course, new GradeWrapper(grade, courseGrades));
+        }
+
+        model.addAttribute("courseGrades", courseGradeMap);
+        model.addAttribute("user", user);
+        model.addAttribute("viewedUser", viewedUser);
+        Cache.put(userService.getLoggedUser().getId(), WorkControllerPaths.getRedirectPath(WorkControllerPaths.TEACHER_GRADES_REPORT));
+
+        return "teacher_grade_report";
+    }
+
     private void fillModelForTeacherReports(Model model, Teacher teacher, CourseAssignmentSolutionWrapper wrapper,
                                      User user, List<String> paths) {
         fillModelForReports(model, wrapper, user, paths);

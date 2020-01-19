@@ -89,8 +89,10 @@ public class CourseHelper {
         }
 
         int grade = 0;
+        int size = solutions.size();
+        if (size == 0) return 0;
         try {
-            grade = (int)(sum / solutions.size());
+            grade = (int)(sum / size);
         } catch (ArithmeticException ex) {
             grade = -1;
         }

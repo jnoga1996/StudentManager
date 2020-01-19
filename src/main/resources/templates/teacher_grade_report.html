@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Teacher grade report</title>
+    <div th:replace="head_fragment :: scripts"></div>
+</head>
+<body>
+<div th:insert="header_selector :: selector(user=${user})"></div>
+<h2 th:text="${viewedUser.getStudentUser()}"></h2>
+<table class="table table-striped">
+    <thead class="table-dark">
+    <tr>
+        <th>Course</th>
+        <th>Grades</th>
+        <th>Grade</th>
+    </tr>
+    </thead>
+    <th:block th:each="course : ${courseGrades.keySet()}">
+        <tr>
+            <td th:utext="${course}"></td>
+            <td th:utext="${courseGrades.get(course).getGrades()}"></td>
+            <td th:utext="${courseGrades.get(course).getGrade()}"></td>
+        </tr>
+    </th:block>
+</table>
+</body>
+</html>

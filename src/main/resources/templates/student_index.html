@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Index</title>
@@ -31,6 +31,9 @@
                 <th scope="col">
                     <th:block th:text='${T(com.smanager.Bundles).getMessage("student", "courses")}'></th:block>
                 </th>
+                <th scope="col">
+                    <th:block th:text='${T(com.smanager.Bundles).getMessage("student", "grades")}'></th:block>
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -44,6 +47,10 @@
                     <td>
                         <a th:href="@{/Course/MyCourses(id=${student.getId()})}"/>
                         <th:block th:text='${T(com.smanager.Bundles).getMessage("student", "courses")}'></th:block>
+                    </td>
+                    <td>
+                        <a th:href="@{/Work/TeacherGradesReport(id=${student.getUser().getId()})}"/>
+                        <th:block th:text='${T(com.smanager.Bundles).getMessage("student", "grades")}'></th:block>
                     </td>
                 </tr>
             </th:block>

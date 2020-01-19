@@ -127,6 +127,7 @@ public class BundlesInitializer {
                 new Bundle(language, "student", "year", "Rok"),
                 new Bundle(language, "student", "courses", "Kursy"),
                 new Bundle(language, "student", "students", "Studenci"),
+                new Bundle(language, "student", "grades", "Oceny"),
 
                 new Bundle(language, "teacher", "id", "Id"),
                 new Bundle(language, "teacher", "firstName", "Imie"),
@@ -255,6 +256,7 @@ public class BundlesInitializer {
                 new Bundle(language, "student", "year", "Year"),
                 new Bundle(language, "student", "courses", "Courses"),
                 new Bundle(language, "student", "students", "Students"),
+                new Bundle(language, "student", "grades", "Grades"),
 
                 new Bundle(language, "teacher", "id", "Id"),
                 new Bundle(language, "teacher", "firstName", "First name"),

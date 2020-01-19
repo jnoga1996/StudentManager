@@ -9,4 +9,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "select * from users where username = lower(:username)", nativeQuery = true)
     User getUserByUsername(@Param("username") String username);
+
+    User getUserById(Long id);
 }

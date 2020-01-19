@@ -19,5 +19,10 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             "where ct.teacher_id = :teacher_id", nativeQuery = true)
     List<Course> findCoursesByTeacherId(@Param("teacher_id") Long teacherId);
 
+    @Query(value = "select * from courses c " +
+            "inner join course_teacher ct on c.course_id = ct.course_id " +
+            "where ct.teacher_id = :teacher_id and c.course_id = :courseId", nativeQuery = true)
+    Course findCourseByIdAndTeacherId(@Param("teacher_id") Long teacherId, Long courseId);
+
     List<Course> findCourseByTitleContaining(String title);
 }
