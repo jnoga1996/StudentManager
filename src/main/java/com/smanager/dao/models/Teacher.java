@@ -25,7 +25,8 @@ public class Teacher implements IUser {
     private User user;
 
     @OneToMany
-    @JoinColumn(name = "teacher_comment_id")
+    @JoinColumn(name = "teacher_comment_id",
+        foreignKey = @ForeignKey(name = "Teacher_Comment_FK"))
     private Set<Comment> comments;
 
     @ManyToMany(mappedBy = "teachers")

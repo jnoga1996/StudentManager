@@ -12,11 +12,13 @@ public class AssignmentSolution {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "assignment_id", referencedColumnName = "assignment_id")
+    @JoinColumn(name = "assignment_id", referencedColumnName = "assignment_id",
+        foreignKey = @ForeignKey(name = "AssignmentSolution_Assignment_FK"))
     private Assignment assignment;
 
     @ManyToOne
-    @JoinColumn(name = "solution_id", referencedColumnName = "solution_id")
+    @JoinColumn(name = "solution_id", referencedColumnName = "solution_id",
+        foreignKey = @ForeignKey(name = "AssignmentSolution_Solution_FK"))
     private Solution solution;
 
     public AssignmentSolution() {};

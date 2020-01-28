@@ -29,14 +29,15 @@ public class Assignment implements ISaveable {
     private List<Solution> solutions;
 
     @ManyToOne
-    @JoinColumn(name = "student_id", referencedColumnName = "student_id")
+    @JoinColumn(name = "student_id", referencedColumnName = "student_id", foreignKey = @ForeignKey(name = "Assignment_Student_FK"))
     private Student student;
 
     @ManyToOne
-    @JoinColumn(name = "assignment_course_id", referencedColumnName = "course_id")
+    @JoinColumn(name = "assignment_course_id", referencedColumnName = "course_id", foreignKey = @ForeignKey(name = "Assignment_Course_FK"))
     private Course course;
 
     @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "Assignment_Teacher_FK"))
     private Teacher teacher;
 
     public Assignment() {}

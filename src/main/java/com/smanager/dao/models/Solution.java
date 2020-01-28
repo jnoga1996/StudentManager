@@ -18,6 +18,7 @@ public class Solution implements ISaveable{
     private Long id;
 
     @OneToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "Solution_Student_FK"))
     private Student student;
 
     @NotBlank
@@ -26,6 +27,7 @@ public class Solution implements ISaveable{
     private Double grade;
 
     @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "Solution_Assignment_FK"))
     private Assignment assignment;
 
     private String path;

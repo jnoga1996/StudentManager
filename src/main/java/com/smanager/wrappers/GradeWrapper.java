@@ -3,27 +3,27 @@ package com.smanager.wrappers;
 import java.util.List;
 
 public class GradeWrapper {
-    private Integer grade;
-    private List<Integer> grades;
+    private Double grade;
+    private List<Double> grades;
 
-    public GradeWrapper(Integer grade, List<Integer> grades) {
+    public GradeWrapper(Double grade, List<Double> grades) {
         this.grade = grade;
         this.grades = grades;
     }
 
-    public Integer getGrade() {
+    public Double getGrade() {
         return grade;
     }
 
-    public void setGrade(Integer grade) {
+    public void setGrade(Double grade) {
         this.grade = grade;
     }
 
-    public List<Integer> getGrades() {
+    public List<Double> getGrades() {
         return grades;
     }
 
-    public void setGrades(List<Integer> grades) {
+    public void setGrades(List<Double> grades) {
         this.grades = grades;
     }
 }

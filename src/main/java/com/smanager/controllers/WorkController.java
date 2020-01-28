@@ -6,6 +6,7 @@ import com.smanager.dao.repositories.*;
 import com.smanager.interfaces.IUserService;
 import com.smanager.storage.StorageService;
 import com.smanager.utils.CourseHelper;
+import com.smanager.utils.GradesUtil;
 import com.smanager.utils.WorkControllerPaths;
 import com.smanager.wrappers.CourseAssignmentSolutionWrapper;
 import com.smanager.wrappers.GradeWrapper;
@@ -43,11 +44,13 @@ public class WorkController {
     private CourseHelper courseHelper;
     private StorageService storageService;
     private Map<Long, List<Course>> userCoursesCache;
+    private GradesUtil gradesUtil;
 
     @Autowired
     public WorkController(CourseRepository courseRepository, AssignmentRepository assignmentRepository,
                           StudentRepository studentRepository, UserRepository userRepository,
-                          TeacherRepository teacherRepository, IUserService userService, StorageService storageService) {
+                          TeacherRepository teacherRepository, IUserService userService, StorageService storageService,
+                          GradesUtil gradesUtil) {
         this.studentRepository = studentRepository;
         this.userRepository = userRepository;
         this.teacherRepository = teacherRepository;
@@ -55,6 +58,7 @@ public class WorkController {
         this.userService = userService;
         this.storageService = storageService;
         userCoursesCache = new HashMap<>();
+        this.gradesUtil = gradesUtil;
     }
 
     @GetMapping(WorkControllerPaths.INDEX)
@@ -190,18 +194,10 @@ public class WorkController {
         Map<Course, GradeWrapper> courseGradeMap = new HashMap<>();
 
         for (Course course : courses) {
-            List<Assignment> studentAssignmentsForCourse = course.getAssignments()
-                    .stream()
-                    .filter(a -> a.getStudent().getId() == id)
-                    .collect(Collectors.toList());
-            Optional<Long> courseTeacherId = studentAssignmentsForCourse.stream().map(a -> a.getTeacher().getId()).findFirst();
-            int grade = 0;
-            if (courseTeacherId.isPresent()) {
-                Long teacherId = courseTeacherId.get().longValue();
-                grade = CourseHelper.getGradeForCourse(course, id, teacherId);
-            }
-            List<Integer> courseGrades = CourseHelper.getGradesForCourse(course, id);
-            courseGradeMap.put(course, new GradeWrapper(grade, courseGrades));
+            CustomGrade grade = gradesUtil.getCourseGrade(id, course.getId());
+            List<Double> grades = gradesUtil.getAssignmentGrades(id, course.getId());
+            GradeWrapper gw = new GradeWrapper(grade != null ? grade.getGrade() : 0, grades);
+            courseGradeMap.put(course, gw);
         }
 
         model.addAttribute("courseGrades", courseGradeMap);
@@ -224,9 +220,10 @@ public class WorkController {
         Map<Course, GradeWrapper> courseGradeMap = new HashMap<>();
 
         for (Course course : courses) {
-            int grade = CourseHelper.getGradeForCourse(course, studentId, userService.getLoggedUser().getTeacherUser().getId());
-            List<Integer> courseGrades = CourseHelper.getGradesForCourse(course, studentId);
-            courseGradeMap.put(course, new GradeWrapper(grade, courseGrades));
+            CustomGrade grade = gradesUtil.getCourseGrade(id, course.getId());
+            List<Double> grades = gradesUtil.getAssignmentGrades(id, course.getId());
+            GradeWrapper gw = new GradeWrapper(grade != null ? grade.getGrade() : 0, grades);
+            courseGradeMap.put(course, gw);
         }
 
         model.addAttribute("courseGrades", courseGradeMap);

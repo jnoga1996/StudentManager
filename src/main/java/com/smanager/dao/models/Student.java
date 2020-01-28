@@ -35,7 +35,8 @@ public class Student implements IUser {
     private Set<Course> courses;
 
     @OneToMany
-    @JoinColumn(name = "student_comment_id")
+    @JoinColumn(name = "student_comment_id",
+            foreignKey = @ForeignKey(name = "Student_Comment_FK"))
     private Set<Comment> comments;
 
     @OneToOne(mappedBy = "studentUser")

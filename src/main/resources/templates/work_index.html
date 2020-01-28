@@ -55,6 +55,11 @@
                             <p th:utext="${assignment.getTitle()}"></p>
                             <p th:utext="${assignment.getContent()}"></p>
                             <h3 th:text='${T(com.smanager.Bundles).getMessage("work", "noResults")}'></h3>
+                            <a th:href="@{/Solution/Create(courseId=${course.getId()})}">
+                                <button class="btn btn-primary">
+                                    <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "create")}'></th:block>
+                                </button>
+                            </a>
                         </div>
                     </th:block>
                 </div>

@@ -26,7 +26,8 @@ public class Course {
     @JoinTable(
             name = "course_student",
             joinColumns = @JoinColumn(name = "course_id"),
-            inverseJoinColumns = @JoinColumn(name = "student_id")
+            inverseJoinColumns = @JoinColumn(name = "student_id", foreignKey = @ForeignKey(name = "CourseStudent_Student_FK")),
+            foreignKey = @ForeignKey(name = "CourseStudent_FK")
     )
     private Set<Student> students;
 
@@ -34,7 +35,8 @@ public class Course {
     @JoinTable(
             name = "course_teacher",
             joinColumns = @JoinColumn(name = "course_id"),
-            inverseJoinColumns = @JoinColumn(name = "teacher_id")
+            inverseJoinColumns = @JoinColumn(name = "teacher_id", foreignKey = @ForeignKey(name = "CourseTeacher_Teacher_FK")),
+            foreignKey = @ForeignKey(name = "CourseTeacher_Course_FK")
     )
     private Set<Teacher> teachers;
 

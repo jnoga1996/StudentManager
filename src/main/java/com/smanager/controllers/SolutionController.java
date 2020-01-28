@@ -1,10 +1,7 @@
 package com.smanager.controllers;
 
 import com.smanager.Cache;
-import com.smanager.dao.models.Grades;
-import com.smanager.dao.models.Solution;
-import com.smanager.dao.models.Student;
-import com.smanager.dao.models.User;
+import com.smanager.dao.models.*;
 import com.smanager.dao.repositories.*;
 import com.smanager.interfaces.IUserService;
 import com.smanager.services.FileUploadHelper;
@@ -108,9 +105,9 @@ public class SolutionController {
     }
 
     @GetMapping("/Create")
-    public String showForm(Model model) {
+    public String showForm(Model model, @RequestParam(name = "courseId", required = false) Long courseId) {
         User user = userService.getLoggedUser();
-        fillModel(model, new Solution(), true);
+        fillModel(model, new Solution(), true, courseId);
         model.addAttribute("user", user);
         model.addAttribute("grade", Grades.NO_GRADE);
 
@@ -200,12 +197,23 @@ public class SolutionController {
         return INDEX_REDIRECT_STRING;
     }
 
+    private void fillModel(Model model, Solution solution, boolean isCreate, Long courseId) {
+        fillModel(model, solution, isCreate);
+        List<Assignment> assignments;
+        if (courseId == null) {
+            assignments = assignmentRepository.findAll();
+        } else {
+            assignments = assignmentRepository.findAllByCourseId(courseId);
+        }
+        model.addAttribute("assignments", assignments);
+    }
+
     private void fillModel(Model model, Solution solution, boolean isCreate) {
         model.addAttribute("solution", solution);
         model.addAttribute("isCreate", isCreate);
         model.addAttribute("teachers", teacherRepository.findAll());
         model.addAttribute("students", studentRepository.findAll());
-        model.addAttribute("assignments", assignmentRepository.findAll());
+        //model.addAttribute("assignments", assignmentRepository.findAll());
         model.addAttribute("grades", Arrays.asList(Grades.values()));
         model.addAttribute("creationDate", LocalDateTime.now());
     }

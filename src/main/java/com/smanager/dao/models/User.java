@@ -22,11 +22,13 @@ public class User {
     private String role;
 
     @OneToOne
-    @JoinColumn(name = "student_id")
+    @JoinColumn(name = "student_id",
+        foreignKey = @ForeignKey(name = "User_Student_FK"))
     private Student studentUser;
 
     @OneToOne
-    @JoinColumn(name = "teacher_id")
+    @JoinColumn(name = "teacher_id",
+        foreignKey = @ForeignKey(name = "User_Teacher_FK"))
     private Teacher teacherUser;
 
     public User() {}

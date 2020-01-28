@@ -20,15 +20,18 @@ public class Comment {
     private LocalDateTime creationDate;
 
     @ManyToOne
-    @JoinColumn(name = "comment_solution_id", referencedColumnName = "solution_id")
+    @JoinColumn(name = "comment_solution_id", referencedColumnName = "solution_id",
+        foreignKey = @ForeignKey(name = "Comment_Solution_FK"))
     private Solution solution;
 
     @ManyToOne
-    @JoinColumn(name = "student_comment_id")
+    @JoinColumn(name = "student_comment_id",
+        foreignKey = @ForeignKey(name = "Comment_Student_FK"))
     private Student student;
 
     @ManyToOne
-    @JoinColumn(name = "teacher_comment_id")
+    @JoinColumn(name = "teacher_comment_id",
+        foreignKey = @ForeignKey(name = "Comment_Teacher_FK"))
     private Teacher teacher;
 
     public Comment() {}
