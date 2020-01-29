@@ -19,7 +19,7 @@ public class GradesUtil {
     private String url;// = "jdbc:mysql://localhost:3306/smanager?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false";
     private String username;// = "jacor";
     private String password;// = "#Dupa123";
-    private final static String QUERY = "select avg(assignment_grade) as course_grade, course from (" +
+    private final static String QUERY = "select ifnull(avg(assignment_grade), 0) as course_grade, course from (" +
             "   select " +
             "          ROUND(AVG(grade))    as assignment_grade," +
             "          assignment_course_id as course" +
@@ -34,6 +34,9 @@ public class GradesUtil {
             "on s.assignment_assignment_id = a.assignment_id " +
             "where student_student_id = ? and assignment_id = ?";
 
+    private final static String GET_GRADE_IF_NULL_QUERY = "select round(avg(grade)) as grd, assignment_id as ass from ( " +
+            GRADES_QUERY + ") as Query ";
+
     private DataSource dataSource;
 
     public GradesUtil(@Value("${spring.datasource.url}") String url, @Value("${spring.datasource.username}")String username,
@@ -46,7 +49,6 @@ public class GradesUtil {
 
     private DataSource initializeDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
         dataSource.setUrl(url);
         dataSource.setUsername(username);
         dataSource.setPassword(password);
@@ -68,6 +70,25 @@ public class GradesUtil {
 
             result.next();
             return new CustomGrade(result.getLong("course"), result.getDouble("course_grade"));
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+
+    public CustomGrade getGradeIfNull(Long studentId, Long courseId) {
+        ResultSet result;
+        PreparedStatement statement;
+        Connection connection;
+
+        try {
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement(GET_GRADE_IF_NULL_QUERY);
+            statement.setLong(1, studentId);
+            statement.setLong(2, courseId);
+            result = statement.executeQuery();
+
+            result.next();
+            return new CustomGrade(result.getLong("ass"), result.getDouble("grd"));
         } catch (SQLException ex) {
             return null;
         }

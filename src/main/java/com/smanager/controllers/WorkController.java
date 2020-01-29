@@ -195,6 +195,9 @@ public class WorkController {
 
         for (Course course : courses) {
             CustomGrade grade = gradesUtil.getCourseGrade(id, course.getId());
+            if (grade == null) {
+                grade = gradesUtil.getGradeIfNull(id, course.getId());
+            }
             List<Double> grades = gradesUtil.getAssignmentGrades(id, course.getId());
             GradeWrapper gw = new GradeWrapper(grade != null ? grade.getGrade() : 0, grades);
             courseGradeMap.put(course, gw);
@@ -220,8 +223,11 @@ public class WorkController {
         Map<Course, GradeWrapper> courseGradeMap = new HashMap<>();
 
         for (Course course : courses) {
-            CustomGrade grade = gradesUtil.getCourseGrade(id, course.getId());
-            List<Double> grades = gradesUtil.getAssignmentGrades(id, course.getId());
+            CustomGrade grade = gradesUtil.getCourseGrade(studentId, course.getId());
+            if (grade == null) {
+                grade = gradesUtil.getGradeIfNull(studentId, course.getId());
+            }
+            List<Double> grades = gradesUtil.getAssignmentGrades(studentId, course.getId());
             GradeWrapper gw = new GradeWrapper(grade != null ? grade.getGrade() : 0, grades);
             courseGradeMap.put(course, gw);
         }

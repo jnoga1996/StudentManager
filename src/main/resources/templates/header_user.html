@@ -53,10 +53,10 @@
                     <a class="dropdown-item" href="/AssignmentSolution/Index">
                         <th:block th:text='${T(com.smanager.Bundles).getMessage("menu", "assignmentSolution")}'></th:block>
                     </a>
-                    <a class="dropdown-item" href="/Student/Index">
+                    <a th:if="${user != null && user.getTeacherUser() != null}" class="dropdown-item" href="/Student/Index">
                         <th:block th:text='${T(com.smanager.Bundles).getMessage("menu", "student")}'></th:block>
                     </a>
-                    <a class="dropdown-item" href="/Teacher/Index">
+                    <a th:if="${user != null && user.getTeacherUser() != null}" class="dropdown-item" href="/Teacher/Index">
                         <th:block th:text='${T(com.smanager.Bundles).getMessage("menu", "teacher")}'></th:block>
                     </a>
                     <a class="dropdown-item" href="/FileHistory/Index">
