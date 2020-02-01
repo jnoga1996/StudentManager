@@ -6,7 +6,7 @@ import com.smanager.dao.repositories.*;
 import com.smanager.interfaces.IUserService;
 import com.smanager.services.FileUploadHelper;
 import com.smanager.storage.StorageService;
-import com.smanager.utils.PaginationHelper;
+import com.smanager.utils.SolutionPaginationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -39,7 +39,7 @@ public class SolutionController {
     private StorageService storageService;
     private FileUploadHelper fileUploadHelper;
     private IUserService userService;
-    private PaginationHelper<Solution> paginationHelper;
+    private SolutionPaginationHelper paginationHelper;
 
     @Autowired
     public SolutionController(SolutionRepository solutionRepository, TeacherRepository teacherRepository,
@@ -53,12 +53,13 @@ public class SolutionController {
         this.assignmentRepository = assignmentRepository;
         fileUploadHelper = new FileUploadHelper(fileHistoryRepository, storageService);
         this.userService = userService;
-        paginationHelper = new PaginationHelper<>(solutionRepository);
+        paginationHelper = new SolutionPaginationHelper(solutionRepository);
     }
 
     @GetMapping("Index")
     public String index(Model model) {
-        List<Solution> solutions = solutionRepository.findAll();
+        User user = userService.getLoggedUser();
+        List<Solution> solutions = paginationHelper.getAll(user);
         fillModel(model, solutions);
         Cache.put(userService.getLoggedUser().getId(), "redirect:/Solution/Index");
 
@@ -67,7 +68,8 @@ public class SolutionController {
 
     @GetMapping("Index/{page}")
     public String index(Model model, @PathVariable("page") int page) {
-        Page<Solution> solutions = paginationHelper.getPage(page);
+        User user = userService.getLoggedUser();
+        Page<Solution> solutions = paginationHelper.getPage(page, user);
         fillModel(model, solutions);
 
         return "solution_index";
@@ -213,9 +215,7 @@ public class SolutionController {
         model.addAttribute("isCreate", isCreate);
         model.addAttribute("teachers", teacherRepository.findAll());
         model.addAttribute("students", studentRepository.findAll());
-        //model.addAttribute("assignments", assignmentRepository.findAll());
         model.addAttribute("grades", Arrays.asList(Grades.values()));
         model.addAttribute("creationDate", LocalDateTime.now());
     }
-
 }
