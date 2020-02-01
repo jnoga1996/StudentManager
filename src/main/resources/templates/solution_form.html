@@ -11,6 +11,7 @@
 <form action="#" th:action="${isCreate} ? @{/Solution/Create} : @{/Solution/Edit}" th:object="${solution}" enctype="multipart/form-data" method="post">
     <input type="hidden" th:field="*{id}">
     <input type="hidden" th:field="*{creationDate}">
+    <input th:if="${!isCreate}" type="hidden" th:field="*{assignment}">
     <div class="form-group row">
         <label for="titleInput" class="col-sm-2 col-form-label">
             <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "content")}'></th:block>:
@@ -56,7 +57,7 @@
             </select>
         </div>
     </div>
-    <div class="form-group row">
+    <div class="form-group row" th:if="${isCreate}">
         <label class="col-sm-2 col-form-label">
             <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "assignment")}'></th:block>:
         </label>
@@ -75,6 +76,9 @@
         </label>
         <div class="col-sm-6">
             <input type="file" name="file" class="form-control-file"/>
+        </div>
+        <div th:if="${uploadedFile != null}">
+            <a th:href="${uploadedFile}">Download</a>
         </div>
     </div>
     <div class="form-group row">

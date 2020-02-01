@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 
 import javax.validation.Valid;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -144,6 +145,13 @@ public class SolutionController {
         model.addAttribute("user", user);
         model.addAttribute("grade", Grades.NO_GRADE);
 
+        if (solution.getPath() != null) {
+            Path path = Paths.get(solution.getPath());
+            String filePath = MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
+                    "serveFile", path.getFileName().toString()).build().toString();
+            model.addAttribute("uploadedFile", filePath);
+        }
+
         return "solution_form";
     }
 
@@ -164,7 +172,12 @@ public class SolutionController {
             solutionFromDb.setFinished(solution.isFinished());
             solutionFromDb.setCreationDate(LocalDateTime.now());
 
-            fileUploadHelper.updateFileHistory(solutionFromDb, file);
+            if (file.isEmpty() && solutionFromDb.getPath() != null) {
+                storageService.delete(solutionFromDb.getPath());
+                solutionFromDb.setPath(null);
+            } else {
+                fileUploadHelper.updateFileHistory(solutionFromDb, file);
+            }
 
             solutionRepository.save(solutionFromDb);
         }
@@ -215,6 +228,7 @@ public class SolutionController {
         model.addAttribute("isCreate", isCreate);
         model.addAttribute("teachers", teacherRepository.findAll());
         model.addAttribute("students", studentRepository.findAll());
+        model.addAttribute("assignments", assignmentRepository.findAll());
         model.addAttribute("grades", Arrays.asList(Grades.values()));
         model.addAttribute("creationDate", LocalDateTime.now());
     }

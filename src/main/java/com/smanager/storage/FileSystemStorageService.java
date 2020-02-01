@@ -71,7 +71,12 @@ public class FileSystemStorageService implements StorageService {
                 return path;
             }
         } catch (IOException e) {
-            throw new StorageException("Failed to store file " + filename, e);
+            try {
+                Files.createFile(this.rootLocation.resolve(filename));
+                return path;
+            } catch (IOException ex) {
+                throw new StorageException("Failed to store file " + filename, ex);
+            }
         }
     }
 
