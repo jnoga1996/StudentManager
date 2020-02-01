@@ -156,7 +156,8 @@ public class SolutionController {
     }
 
     @PostMapping("/Edit")
-    public String edit(@Valid Solution solution, @RequestPart MultipartFile file, Model model, BindingResult binding) {
+    public String edit(@Valid Solution solution, @RequestPart MultipartFile file, Model model,
+                       BindingResult binding, @RequestParam(name = "removeFile", required = false) boolean removeFile) {
         User user = userService.getLoggedUser();
         if (binding.hasErrors()) {
             model.addAttribute("user", user);
@@ -172,10 +173,12 @@ public class SolutionController {
             solutionFromDb.setFinished(solution.isFinished());
             solutionFromDb.setCreationDate(LocalDateTime.now());
 
-            if (file.isEmpty() && solutionFromDb.getPath() != null) {
+            if (removeFile || (file.isEmpty() && solutionFromDb.getPath() != null)) {
                 storageService.delete(solutionFromDb.getPath());
                 solutionFromDb.setPath(null);
-            } else {
+                if (!file.isEmpty())
+                    fileUploadHelper.updateFileHistory(solutionFromDb, file);
+            } else if (!removeFile && !file.isEmpty() && solutionFromDb.getPath() == null) {
                 fileUploadHelper.updateFileHistory(solutionFromDb, file);
             }
 

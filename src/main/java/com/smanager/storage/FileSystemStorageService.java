@@ -130,6 +130,9 @@ public class FileSystemStorageService implements StorageService {
     }
 
     public void delete(String path) {
+        if (path.equals("")) {
+            return;
+        }
         try {
             Path filename = rootLocation.resolve(path);
             FileSystemUtils.deleteRecursively(filename);
