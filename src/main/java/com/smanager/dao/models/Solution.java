@@ -150,12 +150,12 @@ public class Solution implements ISaveable{
     public String getPath(List<String> paths) {
         if (paths != null) {
             for (String path : paths) {
-                if (path.contains(getPath())) {
+                String pathToCheck = getPath();
+                if (pathToCheck != null && path.contains(pathToCheck)) {
                     return path;
                 }
             }
         }
-
         return null;
     }
 

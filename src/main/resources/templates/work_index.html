@@ -30,6 +30,12 @@
                                 <th:block th:if="${!assignment.getSolutions().isEmpty()}"
                                         th:text='${T(com.smanager.Bundles).getMessage("work", "showSolutions")}'></th:block>
                             </button>
+                            <a th:href="@{/Solution/Create(courseId=${course.getId()}, assignmentId=${assignment.getId()})}">
+                                <button class="btn btn-primary">
+                                    <th:block th:if="${!assignment.getSolutions().isEmpty()}"
+                                             th:text='${T(com.smanager.Bundles).getMessage("work", "createAnotherSolution")}'></th:block>
+                                </button>
+                            </a>
                             <div class="collapse" th:id="'solutions-container-' + ${assignment.getId()} + '-' + ${i.count}">
                                 <th:block th:each="solution : ${assignmentsSolutions.get(assignment)}">
                                     <div class="list-group-item">
@@ -56,7 +62,7 @@
                             <p th:utext="${assignment.getTitle()}"></p>
                             <p th:utext="${assignment.getContent()}"></p>
                             <h3 th:text='${T(com.smanager.Bundles).getMessage("work", "noResults")}'></h3>
-                            <a th:href="@{/Solution/Create(courseId=${course.getId()})}">
+                            <a th:href="@{/Solution/Create(courseId=${course.getId()}, assignmentId=${assignment.getId()})}">
                                 <button class="btn btn-primary">
                                     <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "create")}'></th:block>
                                 </button>

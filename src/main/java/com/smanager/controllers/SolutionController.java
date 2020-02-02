@@ -108,9 +108,13 @@ public class SolutionController {
     }
 
     @GetMapping("/Create")
-    public String showForm(Model model, @RequestParam(name = "courseId", required = false) Long courseId) {
+    public String showForm(Model model, @RequestParam(name = "courseId", required = false) Long courseId,
+                           @RequestParam(name = "assignmentId", required = false) Long assignmentId) {
         User user = userService.getLoggedUser();
         fillModel(model, new Solution(), true, courseId);
+        model.addAttribute("providedAssignmentId", assignmentId);
+        Assignment providedAssignment = assignmentRepository.getOne(assignmentId);
+        model.addAttribute("providedAssignment",providedAssignment);
         model.addAttribute("user", user);
         model.addAttribute("grade", Grades.NO_GRADE);
 
@@ -118,7 +122,8 @@ public class SolutionController {
     }
 
     @PostMapping("/Create")
-    public String create(@Valid Solution solution, @RequestParam MultipartFile file, Model model, BindingResult binding) {
+    public String create(@Valid Solution solution, @RequestParam MultipartFile file, Model model, BindingResult binding,
+                         @RequestParam(name = "providedAssignmentId", required = false) Long providedAssignmentId) {
         User user = userService.getLoggedUser();
         if (binding.hasErrors()) {
             return "solution_index";
@@ -126,6 +131,10 @@ public class SolutionController {
 
         Long studentId = userService.getStudentOrTeacherId(user);
         Student student = studentRepository.getOne(studentId);
+        if (providedAssignmentId != null) {
+            Assignment providedAssignment = assignmentRepository.getOne(providedAssignmentId);
+            solution.setAssignment(providedAssignment);
+        }
         solution.setStudent(student);
         solution.setPath("");
         fileUploadHelper.saveFileToRepository(solutionRepository, file, solution);

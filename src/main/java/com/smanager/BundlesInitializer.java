@@ -81,6 +81,7 @@ public class BundlesInitializer {
                 new Bundle(language, "course", "solution", "Rozwiazanie"),
                 new Bundle(language, "course", "course", "Kurs"),
                 new Bundle(language, "course", "student", "Student"),
+                new Bundle(language, "course", "teacher", "Nauczyciel"),
                 new Bundle(language, "course", "edit", "Edytuj"),
                 new Bundle(language, "course", "delete", "Usun"),
                 new Bundle(language, "course", "create", "Utworz kurs"),
@@ -113,7 +114,7 @@ public class BundlesInitializer {
                 new Bundle(language, "solution", "submit", "Wyslij"),
                 new Bundle(language, "solution", "delete", "Usun"),
                 new Bundle(language, "solution", "edit", "Edytuj"),
-                new Bundle(language, "solution", "create", "Utworz"),
+                new Bundle(language, "solution", "create", "Przeslij rozwiazanie"),
                 new Bundle(language, "solution", "showComments", "Pokaz komentarze"),
                 new Bundle(language, "solution", "showAllComments", "Pokaz wszystkie komentarze"),
                 new Bundle(language, "solution", "addComment", "Dodaj komentarz"),
@@ -135,8 +136,9 @@ public class BundlesInitializer {
                 new Bundle(language, "teacher", "lastName", "Nazwisko"),
 
                 new Bundle(language, "work", "showSolutions", "Pokaz rozwiazania"),
-                new Bundle(language, "work", "noResults", "Brak wpisow"),
+                new Bundle(language, "work", "noResults", "Brak rozwiazan"),
                 new Bundle(language, "work", "filter", "Wybierz"),
+                new Bundle(language, "work", "createAnotherSolution", "Przeslij kolejne rozwiazanie"),
 
                 new Bundle(language, "report", "header", "Raporty"),
                 new Bundle(language, "report", "/TeacherWork", "Rozwiazania bez ocen"),
@@ -211,6 +213,7 @@ public class BundlesInitializer {
                 new Bundle(language, "course", "solution", "Solution"),
                 new Bundle(language, "course", "course", "Course"),
                 new Bundle(language, "course", "student", "Student"),
+                new Bundle(language, "course", "teacher", "Teacher"),
                 new Bundle(language, "course", "edit", "Edit"),
                 new Bundle(language, "course", "delete", "Delete"),
                 new Bundle(language, "course", "create", "Create new course"),
@@ -243,7 +246,7 @@ public class BundlesInitializer {
                 new Bundle(language, "solution", "submit", "Submit"),
                 new Bundle(language, "solution", "delete", "Delete"),
                 new Bundle(language, "solution", "edit", "Edit"),
-                new Bundle(language, "solution", "create", "Create"),
+                new Bundle(language, "solution", "create", "Create solution"),
                 new Bundle(language, "solution", "showComments", "Show comments"),
                 new Bundle(language, "solution", "showAllComments", "Show all comments"),
                 new Bundle(language, "solution", "addComment", "Add comment"),
@@ -265,8 +268,10 @@ public class BundlesInitializer {
                 new Bundle(language, "teacher", "lastName", "Last name"),
 
                 new Bundle(language, "work", "showSolutions", "Show solutions"),
-                new Bundle(language, "work", "noResults", "No results"),
+                new Bundle(language, "work", "noResults", "No solutions available"),
                 new Bundle(language, "work", "filter", "Filter"),
+                new Bundle(language, "work", "createAnotherSolution", "Create another solution"),
+
 
                 new Bundle(language, "report", "header", "Reports"),
                 new Bundle(language, "report", "/TeacherWork", "Solutions without grades"),

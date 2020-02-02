@@ -13,6 +13,8 @@
     <input type="hidden" th:field="*{creationDate}">
     <input th:if="${!isCreate}" type="hidden" th:field="*{assignment}">
     <input type="hidden" th:field="*{student}">
+    <input th:if="${providedAssignmentId != null}" type="hidden" name="providedAssignmentId" th:value="${providedAssignmentId}">
+    <h2 th:if="${providedAssignmentId != null}" th:text="${providedAssignment.getContent()}"></h2>
     <div class="form-group row">
         <label for="titleInput" class="col-sm-2 col-form-label">
             <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "content")}'></th:block>:
@@ -58,7 +60,7 @@
             </select>
         </div>
     </div>
-    <div class="form-group row" th:if="${isCreate}">
+    <div class="form-group row" th:if="${isCreate && providedAssignmentId == null}">
         <label class="col-sm-2 col-form-label">
             <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "assignment")}'></th:block>:
         </label>

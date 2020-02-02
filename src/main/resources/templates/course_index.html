@@ -16,17 +16,17 @@
             <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "create")}'></th:block>
         </button>
     </a>
-    <a href="/Course/Register">
+    <a href="/Course/Register" th:if="${user != null && user.isTeacher()}">
         <button type="button" class="btn btn-primary btn-sm">
             <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "registerToCourse")}'></th:block>
         </button>
     </a>
-    <a href="/Course/TeacherIndex">
+    <a href="/Course/TeacherIndex" th:if="${user != null && user.isTeacher()}">
         <button type="button" class="btn btn-primary btn-sm">
             <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "teacherCourses")}'></th:block>
         </button>
     </a>
-    <a href="/Course/RegisterTeacher">
+    <a href="/Course/RegisterTeacher" th:if="${user != null && (user.isTeacher() || user.isAdmin())}">
         <button type="button" class="btn btn-primary btn-sm">
             <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "registerTeacherToCourse")}'></th:block>
         </button>
