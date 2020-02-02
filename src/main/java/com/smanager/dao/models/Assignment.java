@@ -25,6 +25,9 @@ public class Assignment implements ISaveable {
 
     private String path;
 
+    @Transient
+    private String filename;
+
     @OneToMany(mappedBy = "assignment")
     private List<Solution> solutions;
 
@@ -105,6 +108,14 @@ public class Assignment implements ISaveable {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 
     @Override

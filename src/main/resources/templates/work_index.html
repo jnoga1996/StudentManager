@@ -24,6 +24,7 @@
                         <div th:if="${!assignmentsSolutions.get(assignment).isEmpty()}" class="list-group-item">
                             <p th:utext="${assignment.getTitle()}"></p>
                             <p th:utext="${assignment.getContent()}"></p>
+                            <p><a th:href="${assignment.getFilename()}"><th:block th:text="${assignment.getPath()}"></th:block></a></p>
                             <button class="btn btn-success" type="button" data-toggle="collapse" th:href="'#solutions-container-' + ${assignment.getId()} + '-' + ${i.count}"
                                     role="button" aria-controls="'solutions-container-' + ${assignment.getId()} + '-' + ${i.count}">
                                 <th:block th:if="${!assignment.getSolutions().isEmpty()}"

@@ -1,5 +1,6 @@
 package com.smanager.utils;
 
+import com.smanager.controllers.FileUploadController;
 import com.smanager.dao.models.Assignment;
 import com.smanager.dao.models.Course;
 import com.smanager.dao.models.Solution;
@@ -7,7 +8,10 @@ import com.smanager.dao.models.UserType;
 import com.smanager.dao.repositories.AssignmentRepository;
 import com.smanager.dao.repositories.CourseRepository;
 import com.smanager.wrappers.CourseAssignmentSolutionWrapper;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +48,7 @@ public class CourseHelper {
 
                 for (Assignment assignment : courseAssignments) {
                     List<Solution> assignmentSolutions = assignment.getSolutions();
+                    assignment.setFilename(prepareLink(assignment));
 
                     assignmentSolutions = filterSolutions(assignmentSolutions, predicate);
 
@@ -150,5 +155,15 @@ public class CourseHelper {
         }
 
         return grade;
+    }
+
+    private String prepareLink(Assignment assignment) {
+        String filePath = null;
+        if (assignment.getPath() != null) {
+            Path path = Paths.get(assignment.getPath());
+            filePath = MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
+                    "serveFile", path.getFileName().toString()).build().toString();
+        }
+        return filePath;
     }
 }

@@ -127,6 +127,7 @@ public class SolutionController {
         Long studentId = userService.getStudentOrTeacherId(user);
         Student student = studentRepository.getOne(studentId);
         solution.setStudent(student);
+        solution.setPath("");
         fileUploadHelper.saveFileToRepository(solutionRepository, file, solution);
         model.addAttribute("user", user);
 

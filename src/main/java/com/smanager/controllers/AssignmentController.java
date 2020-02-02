@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 
 import javax.validation.Valid;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -142,6 +143,7 @@ public class AssignmentController {
         assignment.setTeacher(teacher);
         assignment.setPath("");
         fileUploadHelper.saveFileToRepository(assignmentRepository, file, assignment);
+
         model.addAttribute("user", user);
 
         return INDEX_REDIRECT_STRING;
@@ -158,6 +160,13 @@ public class AssignmentController {
         model.addAttribute("user", user);
         model.addAttribute("parsedContent", MultilineTextParser.getMultilineTextFromString(assignment.getContent()));
 
+        if (assignment.getPath() != null) {
+            Path path = Paths.get(assignment.getPath());
+            String filePath = MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
+                    "serveFile", path.getFileName().toString()).build().toString();
+            model.addAttribute("uploadedFile", filePath);
+        }
+
         return "assignment_details";
     }
 
@@ -172,12 +181,20 @@ public class AssignmentController {
         model.addAttribute("id", id);
         model.addAttribute("user", user);
 
+        if (assignment.getPath() != null) {
+            Path path = Paths.get(assignment.getPath());
+            String filePath = MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
+                    "serveFile", path.getFileName().toString()).build().toString();
+            model.addAttribute("uploadedFile", filePath);
+        }
+
         return "assignment_form";
     }
 
     @PostMapping("/Edit")
     @PreAuthorize("hasAnyRole('TEACHER', 'ADMIN')")
-    public String edit(@Valid Assignment assignment, @RequestParam MultipartFile file, BindingResult binding, Model model) {
+    public String edit(@Valid Assignment assignment, @RequestParam MultipartFile file, BindingResult binding,
+                       Model model, @RequestParam(name = "removeFile", required = false) boolean removeFile) {
         User user = userService.getLoggedUser();
         if (binding.hasErrors()) {
             return INDEX_REDIRECT_STRING;
@@ -190,7 +207,14 @@ public class AssignmentController {
             assignmentFromDb.setCourse(assignment.getCourse());
             assignmentFromDb.setTeacher(assignment.getTeacher());
 
-            fileUploadHelper.updateFileHistory(assignmentFromDb, file);
+            if (removeFile || (file.isEmpty() && assignmentFromDb.getPath() != null)) {
+                storageService.delete(assignmentFromDb.getPath());
+                assignmentFromDb.setPath(null);
+                if (!file.isEmpty())
+                    fileUploadHelper.updateFileHistory(assignmentFromDb, file);
+            } else if (!removeFile && !file.isEmpty() && assignmentFromDb.getPath() == null) {
+                fileUploadHelper.updateFileHistory(assignmentFromDb, file);
+            }
 
             assignmentRepository.save(assignmentFromDb);
         }

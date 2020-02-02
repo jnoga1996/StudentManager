@@ -42,6 +42,9 @@ public class FileUploadHelper {
             fileHistoryRepository.save(fileHistory);
             entry.setPath(path);
             repository.save(entry);
+        } else {
+            entry.setPath(null);
+            repository.save(entry);
         }
     }
 
