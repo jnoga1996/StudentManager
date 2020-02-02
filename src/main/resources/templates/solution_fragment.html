@@ -53,6 +53,8 @@
                     <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "download")}'></th:block>
                 </button>
             </a>
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "attachment")}'></th:block>:
+            <th:block th:text="${solution.getPath()}"></th:block>
         </p>
         <p th:utext="${solution.getGrade()}" class="col-sm-2 right-aligned"></p>
     </div>
