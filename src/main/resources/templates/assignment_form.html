@@ -10,6 +10,8 @@
 <h2></h2>
 <form action="#" th:action="${isCreateAction} ? @{/Assignment/Create} : @{/Assignment/Edit}" th:object="${assignment}" enctype="multipart/form-data" method="post">
     <input type="hidden" th:field="*{id}">
+    <input th:if="${providedCourseId != null}" type="hidden" name="providedCourseId" th:value="${providedCourseId}">
+    <h2 th:if="${providedCourseId != null}" th:text="${providedCourse.getTitle()}"></h2>
     <div class="form-group row">
         <label for="titleInput" class="col-sm-2 col-form-label">
             <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "title")}'></th:block>:
@@ -26,7 +28,7 @@
             <input type="text" th:field="*{content}" class="form-control"/>
         </div>
     </div>
-    <div class="form-group row">
+    <div class="form-group row" th:if="${providedCourseId == null}">
         <label class="col-sm-2 col-form-label">
             <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "course")}'></th:block>:
         </label>
@@ -75,7 +77,7 @@
             Remove file:
         </label>
         <div class="form-check">
-            <input type="checkbox" name="removeFile" class="form-control">
+            <input type="checkbox" name="removeFile" class="form-check-input">
         </div>
     </div>
 

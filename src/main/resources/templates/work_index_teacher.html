@@ -31,9 +31,14 @@
                 <div class="list-group-item list-group-item-primary">
                     <p th:utext="${course.getTitle()}"></p>
                 </div>
+                <div class="list-group-item">
+                    <a class="col-sm-2" th:href="@{/Assignment/Create(providedCourseId=${course.getId()})}">
+                        <th:block th:text='${T(com.smanager.Bundles).getMessage("work", "addAssignment")}'></th:block>
+                    </a>
+                </div>
                 <div class="list-group">
                     <th:block th:each="assignment, i : ${courseAssignments.get(course)}">
-                        <div th:if="${!assignmentsSolutions.get(assignment).isEmpty()}" class="list-group-item">
+                        <div th:if="${!assignmentsSolutions.get(assignment).isEmpty()}" class="list-group-item" th:id="${course.getId()} + '' + ${assignment.getId()}">
                             <p th:utext="${assignment.getTitle()}"></p>
                             <p th:utext="${assignment.getContent()}"></p>
                             <p><a th:href="${assignment.getFilename()}"><th:block th:text="${assignment.getPath()}"></th:block></a></p>
@@ -41,6 +46,11 @@
                                     role="button" aria-controls="'solutions-container-' + ${assignment.getId()} + '-' + ${i.count}">
                                 <th:block th:if="${!assignment.getSolutions().isEmpty()}"
                                         th:text='${T(com.smanager.Bundles).getMessage("work", "showSolutions")}'></th:block>
+                            </button>
+                            <button class="btn btn-danger" type="button">
+                                <a th:href="@{/Assignment/Edit(id=${assignment.getId()}, entryId=${course.getId()} + '' + ${assignment.getId()})}">
+                                    <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "edit")}'></th:block>
+                                </a>
                             </button>
                             <div class="collapse" th:id="'solutions-container-' + ${assignment.getId()} + '-' + ${i.count}">
                                 <th:block th:each="solution : ${assignmentsSolutions.get(assignment)}">

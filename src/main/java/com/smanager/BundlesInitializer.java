@@ -139,6 +139,7 @@ public class BundlesInitializer {
                 new Bundle(language, "work", "noResults", "Brak rozwiazan"),
                 new Bundle(language, "work", "filter", "Wybierz"),
                 new Bundle(language, "work", "createAnotherSolution", "Przeslij kolejne rozwiazanie"),
+                new Bundle(language, "work", "addAssignment", "Dodaj zadanie"),
 
                 new Bundle(language, "report", "header", "Raporty"),
                 new Bundle(language, "report", "/TeacherWork", "Rozwiazania bez ocen"),
@@ -271,7 +272,7 @@ public class BundlesInitializer {
                 new Bundle(language, "work", "noResults", "No solutions available"),
                 new Bundle(language, "work", "filter", "Filter"),
                 new Bundle(language, "work", "createAnotherSolution", "Create another solution"),
-
+                new Bundle(language, "work", "addAssignment", "Create assignment"),
 
                 new Bundle(language, "report", "header", "Reports"),
                 new Bundle(language, "report", "/TeacherWork", "Solutions without grades"),

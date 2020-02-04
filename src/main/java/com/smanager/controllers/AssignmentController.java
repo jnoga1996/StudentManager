@@ -5,6 +5,7 @@ import com.smanager.dao.models.*;
 import com.smanager.dao.repositories.*;
 import com.smanager.interfaces.IUserService;
 import com.smanager.services.FileUploadHelper;
+import com.smanager.services.RedirectService;
 import com.smanager.storage.StorageService;
 import com.smanager.utils.MultilineTextParser;
 import com.smanager.utils.PaginationHelper;
@@ -30,7 +31,7 @@ import java.util.stream.Collectors;
 public class AssignmentController {
 
     public final static String DETAILS_URL = "/Assignment/Details";
-    private final static String INDEX_REDIRECT_STRING = "redirect:/Assignment/Index";
+    public final static String INDEX_REDIRECT_STRING = "redirect:/Assignment/Index";
 
     private AssignmentRepository assignmentRepository;
     private SolutionRepository solutionRepository;
@@ -41,6 +42,8 @@ public class AssignmentController {
     private FileUploadHelper fileUploadHelper;
     private IUserService userService;
     private PaginationHelper<Assignment> paginationHelper;
+    private RedirectService redirectService;
+    private String entryId;
 
     private String searchValue;
 
@@ -48,7 +51,7 @@ public class AssignmentController {
     public AssignmentController(AssignmentRepository assignmentRepository, FileHistoryRepository fileHistoryRepository,
                                 StorageService storageService, TeacherRepository teacherRepository,
                                 CourseRepository courseRepository, IUserService userService,
-                                SolutionRepository solutionRepository) {
+                                SolutionRepository solutionRepository, RedirectService redirectService) {
         this.assignmentRepository = assignmentRepository;
         this.solutionRepository = solutionRepository;
         this.fileHistoryRepository = fileHistoryRepository;
@@ -58,6 +61,7 @@ public class AssignmentController {
         fileUploadHelper = new FileUploadHelper(fileHistoryRepository, storageService);
         this.userService = userService;
         paginationHelper = new PaginationHelper<>(assignmentRepository);
+        this.redirectService = redirectService;
     }
 
     @GetMapping("Index")
@@ -120,7 +124,7 @@ public class AssignmentController {
     }
 
     @GetMapping("Create")
-    public String showForm(Model model) {
+    public String showForm(Model model, @RequestParam(name = "providedCourseId", required = false) Long providedCourseId) {
         User user = userService.getLoggedUser();
         fillModel(model, new Assignment(), true);
         model.addAttribute("user", user);
@@ -128,25 +132,37 @@ public class AssignmentController {
         Teacher teacher = teacherRepository.getOne(teacherId);
         model.addAttribute("teacher", teacher);
 
+        model.addAttribute("providedCourseId", providedCourseId);
+        if (providedCourseId != null) {
+            Course providedCourse = courseRepository.getOne(providedCourseId);
+            model.addAttribute("providedCourse", providedCourse);
+        }
+
         return "assignment_form";
     }
 
     @PostMapping("Create")
     @PreAuthorize("hasAnyRole('TEACHER', 'ADMIN')")
-    public String create(@Valid Assignment assignment, @RequestParam MultipartFile file, BindingResult bindingResult, Model model) {
+    public String create(@Valid Assignment assignment, @RequestParam MultipartFile file,
+                         BindingResult bindingResult, Model model,
+                         @RequestParam(name = "providedCourseId", required = false) Long providedCourseId) {
         User user = userService.getLoggedUser();
         if (bindingResult.hasErrors()) {
             return "assignment_form";
         }
         Long teacherId = userService.getStudentOrTeacherId(user);
         Teacher teacher = teacherRepository.getOne(teacherId);
+        if (providedCourseId != null) {
+            Course providedCourse = courseRepository.getOne(providedCourseId);
+            assignment.setCourse(providedCourse);
+        }
         assignment.setTeacher(teacher);
         assignment.setPath("");
         fileUploadHelper.saveFileToRepository(assignmentRepository, file, assignment);
 
         model.addAttribute("user", user);
 
-        return INDEX_REDIRECT_STRING;
+        return redirectService.getAssignmentRedirectWorkUrl(user);
     }
 
     @GetMapping("/Details")
@@ -171,7 +187,7 @@ public class AssignmentController {
     }
 
     @GetMapping("/Edit")
-    public String edit(Model model, Long id) {
+    public String edit(Model model, Long id, @RequestParam(name = "entryId", required = false) String entryId) {
         User user = userService.getLoggedUser();
         Assignment assignment = assignmentRepository.getOne(id);
         if (assignment == null) {
@@ -186,6 +202,10 @@ public class AssignmentController {
             String filePath = MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
                     "serveFile", path.getFileName().toString()).build().toString();
             model.addAttribute("uploadedFile", filePath);
+        }
+
+        if (entryId != null) {
+            this.entryId = entryId;
         }
 
         return "assignment_form";
@@ -220,7 +240,7 @@ public class AssignmentController {
         }
         model.addAttribute("user", user);
 
-        return INDEX_REDIRECT_STRING;
+        return redirectService.getAssignmentRedirectWorkUrlAndScrollToSelectedId(user, this.entryId);
     }
 
     @GetMapping("/Delete")

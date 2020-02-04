@@ -5,6 +5,7 @@ import com.smanager.dao.models.*;
 import com.smanager.dao.repositories.*;
 import com.smanager.interfaces.IUserService;
 import com.smanager.services.FileUploadHelper;
+import com.smanager.services.RedirectService;
 import com.smanager.storage.StorageService;
 import com.smanager.utils.SolutionPaginationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,23 +31,26 @@ import java.util.stream.Collectors;
 public class SolutionController {
 
     public final static String DETAILS_URL = "/Solution/Details";
-    private final static String INDEX_REDIRECT_STRING = "redirect:/Solution/Index";
+    public final static String INDEX_REDIRECT_STRING = "redirect:/Solution/Index";
 
     private SolutionRepository solutionRepository;
     private TeacherRepository teacherRepository;
     private StudentRepository studentRepository;
     private AssignmentRepository assignmentRepository;
+    private RedirectService redirectService;
 
     private StorageService storageService;
     private FileUploadHelper fileUploadHelper;
     private IUserService userService;
     private SolutionPaginationHelper paginationHelper;
 
+    private String entryId;
+
     @Autowired
     public SolutionController(SolutionRepository solutionRepository, TeacherRepository teacherRepository,
                               StudentRepository studentRepository, FileHistoryRepository fileHistoryRepository,
                               StorageService storageService, AssignmentRepository assignmentRepository,
-                              IUserService userService) {
+                              IUserService userService, RedirectService redirectService) {
         this.solutionRepository = solutionRepository;
         this.teacherRepository = teacherRepository;
         this.studentRepository = studentRepository;
@@ -55,6 +59,7 @@ public class SolutionController {
         fileUploadHelper = new FileUploadHelper(fileHistoryRepository, storageService);
         this.userService = userService;
         paginationHelper = new SolutionPaginationHelper(solutionRepository);
+        this.redirectService = redirectService;
     }
 
     @GetMapping("Index")
@@ -113,8 +118,10 @@ public class SolutionController {
         User user = userService.getLoggedUser();
         fillModel(model, new Solution(), true, courseId);
         model.addAttribute("providedAssignmentId", assignmentId);
-        Assignment providedAssignment = assignmentRepository.getOne(assignmentId);
-        model.addAttribute("providedAssignment",providedAssignment);
+        if (assignmentId != null) {
+            Assignment providedAssignment = assignmentRepository.getOne(assignmentId);
+            model.addAttribute("providedAssignment", providedAssignment);
+        }
         model.addAttribute("user", user);
         model.addAttribute("grade", Grades.NO_GRADE);
 
@@ -140,11 +147,11 @@ public class SolutionController {
         fileUploadHelper.saveFileToRepository(solutionRepository, file, solution);
         model.addAttribute("user", user);
 
-        return INDEX_REDIRECT_STRING;
+        return redirectService.getSolutionRedirectWorkUrl(user);
     }
 
     @GetMapping("/Edit")
-    public String edit(Model model, Long id) {
+    public String edit(Model model, Long id, @RequestParam(name = "entryId", required = false) String entryId) {
         User user = userService.getLoggedUser();
         Solution solution = solutionRepository.getOne(id);
         if (solution == null) {
@@ -160,6 +167,10 @@ public class SolutionController {
             String filePath = MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
                     "serveFile", path.getFileName().toString()).build().toString();
             model.addAttribute("uploadedFile", filePath);
+        }
+
+        if (entryId != null) {
+            this.entryId = entryId;
         }
 
         return "solution_form";
@@ -197,7 +208,7 @@ public class SolutionController {
 
         model.addAttribute("user", user);
 
-        return INDEX_REDIRECT_STRING;
+        return redirectService.getSolutionRedirectWorkUrlAndScrollToSelectedId(user, this.entryId);
     }
 
     @GetMapping("/Details")

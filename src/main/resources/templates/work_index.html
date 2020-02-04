@@ -36,9 +36,9 @@
                                              th:text='${T(com.smanager.Bundles).getMessage("work", "createAnotherSolution")}'></th:block>
                                 </button>
                             </a>
-                            <div class="collapse" th:id="'solutions-container-' + ${assignment.getId()} + '-' + ${i.count}">
+                            <div class="collapse show" th:id="'solutions-container-' + ${assignment.getId()} + '-' + ${i.count}">
                                 <th:block th:each="solution : ${assignmentsSolutions.get(assignment)}">
-                                    <div class="list-group-item">
+                                    <div class="list-group-item" th:id="${course.getId()} + '' + ${assignment.getId()} + '' + ${solution.getId()}">
                                         <div th:insert="solution_fragment :: div_view(solution=${solution}, user=${user})"></div>
                                         <button class="btn btn-primary" type="button" data-toggle="collapse" th:href="'#comments-' + ${solution.getId()}"
                                                 role="button" aria-controls="'comments-' + ${solution.getId()}">
@@ -48,6 +48,12 @@
                                         <a th:href="@{/Comment/Create(solutionId=${solution.getId()})}">
                                             <button class="btn btn-primary">
                                                 <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "addComment")}'></th:block>
+                                            </button>
+                                        </a>
+
+                                        <a th:href="@{/Solution/Edit(id=${solution.getId()}, entryId=${course.getId()} + '' + ${assignment.getId()} + '' + ${solution.getId()})}">
+                                            <button class="btn btn-primary">
+                                                <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "edit")}'></th:block>
                                             </button>
                                         </a>
 

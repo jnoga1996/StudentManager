@@ -52,7 +52,13 @@ public class CourseController {
         if (searchValue != null && !searchValue.isEmpty()) {
             courses = courseRepository.findCourseByTitleContaining(searchValue);
         } else {
-            courses = courseRepository.findAll();
+            if (user != null && user.isStudent()) {
+                courses = courseRepository.findCoursesByStudentId(user.getStudentUser().getId());
+            } else if (user != null && user.isTeacher()) {
+                courses = courseRepository.findCoursesByTeacherId(user.getTeacherUser().getId());
+            } else {
+                courses = courseRepository.findAll();
+            }
         }
         fillModel(model, courses, user);
         this.searchValue = "";
