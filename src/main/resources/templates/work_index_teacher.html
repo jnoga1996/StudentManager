@@ -47,11 +47,11 @@
                                 <th:block th:if="${!assignment.getSolutions().isEmpty()}"
                                         th:text='${T(com.smanager.Bundles).getMessage("work", "showSolutions")}'></th:block>
                             </button>
-                            <button class="btn btn-danger" type="button">
-                                <a th:href="@{/Assignment/Edit(id=${assignment.getId()}, entryId=${course.getId()} + '' + ${assignment.getId()})}">
+                            <a th:href="@{/Assignment/Edit(id=${assignment.getId()}, entryId=${course.getId()} + '' + ${assignment.getId()})}">
+                                <button  class="btn btn-danger">
                                     <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "edit")}'></th:block>
-                                </a>
-                            </button>
+                                </button>
+                            </a>
                             <div class="collapse" th:id="'solutions-container-' + ${assignment.getId()} + '-' + ${i.count}">
                                 <th:block th:each="solution : ${assignmentsSolutions.get(assignment)}">
                                     <div class="list-group-item">
