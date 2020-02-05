@@ -15,18 +15,6 @@
     <div class="row">
         <div th:insert="side_menu :: menu(courses=${courses})" class="col-2"></div>
         <div class="list-group col-10">
-            <div class="form-row">
-                <form action="#" th:action="@{${url}}" method="post" class="form-inline">
-                    <select class="form-control" name="courseToDisplay">
-                        <option th:each="cour : ${cachedCourses}" th:value="${cour.getId()}"
-                                th:text="${cour}"
-                                th:selected="${cachedCourses.get(0)}">
-                            <a th:href="@{${url}}" th:value="All"></a>
-                        </option>
-                    </select>
-                    <button class="btn btn-dark" type="submit"><th:block th:text='${T(com.smanager.Bundles).getMessage("work", "filter")}'></th:block></button>
-                </form>
-            </div>
             <th:block th:each="course : ${courses}">
                 <div class="list-group-item list-group-item-primary">
                     <p th:utext="${course.getTitle()}"></p>

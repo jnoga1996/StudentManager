@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Side menu</title>
@@ -14,7 +14,7 @@
                     th:href="'#course-' + ${c_i.count}" role="button" aria-controls="'course-' + ${c_i.count}">
                     <i class="material-icons">double_arrow</i>
                 </button>
-                <a th:href="${course.getDetailsUrl()}">
+                <a th:href="${url} + '?shouldUpdateCache=true&courseToDisplay=' + ${course.getId()}">
                     <th:block th:utext="${course.getTitle()}"></th:block>
                 </a>
                 <ul class="collapse side-menu-second" th:id="'course-' + ${c_i.count}">

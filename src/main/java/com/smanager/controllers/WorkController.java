@@ -63,7 +63,7 @@ public class WorkController {
 
     @GetMapping(WorkControllerPaths.INDEX)
     @PreAuthorize("hasRole('STUDENT')")
-    public String index(Model model) {
+    public String index(Model model, @RequestParam(value = "courseToDisplay", required = false) Long courseToDisplay) {
         User user = userService.getLoggedUser();
         Student student = null;
         if (user != null) {
@@ -74,12 +74,19 @@ public class WorkController {
             }
         }
         Long studentId = student.getId();
-        CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(studentId, s -> s.getStudent().getId().equals(studentId), UserType.STUDENT);
+        CourseAssignmentSolutionWrapper wrapper = getCourses(courseToDisplay, studentId, s -> s.getStudent().getId().equals(studentId));
+                //courseHelper.populateCoursesAssignmentsAndSolutions(studentId, s -> s.getStudent().getId().equals(studentId), UserType.STUDENT);
         List<String> paths = getPaths();
         fillModelForStudentReports(model, student, wrapper, user, paths);
         Cache.put(user.getId(), WorkControllerPaths.getRedirectPath(WorkControllerPaths.INDEX));
+        model.addAttribute("url", WorkControllerPaths.getUrl(WorkControllerPaths.INDEX));
 
         return "work_index";
+    }
+
+    @PostMapping(WorkControllerPaths.INDEX)
+    public String studentWork(Long courseToDisplay) {
+        return WorkControllerPaths.getRedirectPath(WorkControllerPaths.INDEX) + "?shouldUpdateCache=true&courseToDisplay=" + courseToDisplay;
     }
 
     @GetMapping(WorkControllerPaths.MENU)
@@ -113,7 +120,6 @@ public class WorkController {
         fillModelForTeacherReports(model, methodReportWrapper.getTeacher(), wrapper, methodReportWrapper.getUser(), paths);
         Cache.put(userService.getLoggedUser().getId(), WorkControllerPaths.getRedirectPath(WorkControllerPaths.TEACHER_WORK));
         updateCache(teacherId);
-        model.addAttribute("cachedCourses", userCoursesCache.get(teacherId));
         model.addAttribute("url", WorkControllerPaths.getUrl(WorkControllerPaths.TEACHER_WORK));
 
         return methodReportWrapper.isErrorOccurred() ? WorkControllerPaths.getRedirectPath(WorkControllerPaths.TEACHER_WORK) : "work_index_teacher";
@@ -161,7 +167,6 @@ public class WorkController {
         fillModelForTeacherReports(model, methodReportWrapper.getTeacher(), wrapper, methodReportWrapper.getUser(), paths);
         Cache.put(userService.getLoggedUser().getId(), WorkControllerPaths.getRedirectPath(WorkControllerPaths.NO_GRADES_REPORT));
         updateCache(teacherId);
-        model.addAttribute("cachedCourses", userCoursesCache.get(teacherId));
         model.addAttribute("url", WorkControllerPaths.getUrl(WorkControllerPaths.NO_GRADES_REPORT));
 
         return methodReportWrapper.isErrorOccurred() ? WorkControllerPaths.getRedirectPath(WorkControllerPaths.TEACHER_WORK)  : "work_index_teacher";
@@ -178,7 +183,6 @@ public class WorkController {
         fillModelForTeacherReports(model, methodReportWrapper.getTeacher(), wrapper, methodReportWrapper.getUser(), paths);
         Cache.put(userService.getLoggedUser().getId(), WorkControllerPaths.getRedirectPath(WorkControllerPaths.NO_COMMENT_REPORT));
         updateCache(teacherId);
-        model.addAttribute("cachedCourses", userCoursesCache.get(teacherId));
         model.addAttribute("url", WorkControllerPaths.getUrl(WorkControllerPaths.NO_COMMENT_REPORT));
 
         return methodReportWrapper.isErrorOccurred() ? WorkControllerPaths.getRedirectPath(WorkControllerPaths.TEACHER_WORK)  : "work_index_teacher";
