@@ -8,7 +8,7 @@
 <body>
 <div th:fragment="menu(courses)">
     <ul class="side-menu-first">
-        <th:block th:each="course, c_i : ${courses}">
+        <th:block th:each="course, c_i : ${cachedCourses}">
             <li th:if="${course != null}">
                 <button data-toggle="collapse" class="btn"
                     th:href="'#course-' + ${c_i.count}" role="button" aria-controls="'course-' + ${c_i.count}">

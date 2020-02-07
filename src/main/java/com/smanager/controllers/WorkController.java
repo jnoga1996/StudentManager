@@ -75,9 +75,9 @@ public class WorkController {
         }
         Long studentId = student.getId();
         CourseAssignmentSolutionWrapper wrapper = getCourses(courseToDisplay, studentId, s -> s.getStudent().getId().equals(studentId));
-                //courseHelper.populateCoursesAssignmentsAndSolutions(studentId, s -> s.getStudent().getId().equals(studentId), UserType.STUDENT);
+        CourseAssignmentSolutionWrapper cachedCourses = getCourses(null, studentId, s -> s.getStudent().getId().equals(studentId));
         List<String> paths = getPaths();
-        fillModelForStudentReports(model, student, wrapper, user, paths);
+        fillModelForStudentReports(model, student, wrapper, user, paths, cachedCourses);
         Cache.put(user.getId(), WorkControllerPaths.getRedirectPath(WorkControllerPaths.INDEX));
         model.addAttribute("url", WorkControllerPaths.getUrl(WorkControllerPaths.INDEX));
 
@@ -94,6 +94,7 @@ public class WorkController {
         User user = userService.getLoggedUser();
         Long studentOrTeacherId = userService.getStudentOrTeacherId(user);
         CourseAssignmentSolutionWrapper wrapper = courseHelper.populateCoursesAssignmentsAndSolutions(studentOrTeacherId, s -> s.getId() > 0, UserType.ADMIN);
+        CourseAssignmentSolutionWrapper cachedCourses = courseHelper.populateCoursesAssignmentsAndSolutions(studentOrTeacherId, s -> s.getId() > 0, UserType.ADMIN);
         Teacher teacher = null;
         if (user != null) {
             if (user.getTeacherUser() != null) {
@@ -103,7 +104,7 @@ public class WorkController {
             }
         }
         List<String> paths = getPaths();
-        fillModelForTeacherReports(model, teacher, wrapper, user, paths);
+        fillModelForTeacherReports(model, teacher, wrapper, user, paths, cachedCourses);
         Cache.put(user.getId(), WorkControllerPaths.getRedirectPath(WorkControllerPaths.MENU));
 
         return "side_menu";
@@ -116,8 +117,9 @@ public class WorkController {
         ReportWrapper methodReportWrapper = getData();
         Long teacherId = methodReportWrapper.getTeacher().getId();
         CourseAssignmentSolutionWrapper wrapper = getCourses(courseToDisplay, teacherId, s -> s.isFinished());
+        CourseAssignmentSolutionWrapper cachedCourses = getCourses(null, teacherId, s -> s.isFinished());
         List<String> paths = getPaths();
-        fillModelForTeacherReports(model, methodReportWrapper.getTeacher(), wrapper, methodReportWrapper.getUser(), paths);
+        fillModelForTeacherReports(model, methodReportWrapper.getTeacher(), wrapper, methodReportWrapper.getUser(), paths, cachedCourses);
         Cache.put(userService.getLoggedUser().getId(), WorkControllerPaths.getRedirectPath(WorkControllerPaths.TEACHER_WORK));
         updateCache(teacherId);
         model.addAttribute("url", WorkControllerPaths.getUrl(WorkControllerPaths.TEACHER_WORK));
@@ -162,9 +164,10 @@ public class WorkController {
         ReportWrapper methodReportWrapper = getData();
         Long teacherId = methodReportWrapper.getTeacher().getId();
 
-        CourseAssignmentSolutionWrapper wrapper = getCourses(courseToDisplay, teacherId, s -> s.getGrade() == Grades.NO_GRADE.getGrade());//courseHelper.populateCoursesAssignmentsAndSolutions(teacherId, s -> s.getGrade() == Grades.NO_GRADE.getGrade(), UserType.TEACHER);
+        CourseAssignmentSolutionWrapper wrapper = getCourses(courseToDisplay, teacherId, s -> s.getGrade() == Grades.NO_GRADE.getGrade());
+        CourseAssignmentSolutionWrapper cachedCourses = getCourses(null, teacherId, s -> s.getGrade() == Grades.NO_GRADE.getGrade());
         List<String> paths = getPaths();
-        fillModelForTeacherReports(model, methodReportWrapper.getTeacher(), wrapper, methodReportWrapper.getUser(), paths);
+        fillModelForTeacherReports(model, methodReportWrapper.getTeacher(), wrapper, methodReportWrapper.getUser(), paths, cachedCourses);
         Cache.put(userService.getLoggedUser().getId(), WorkControllerPaths.getRedirectPath(WorkControllerPaths.NO_GRADES_REPORT));
         updateCache(teacherId);
         model.addAttribute("url", WorkControllerPaths.getUrl(WorkControllerPaths.NO_GRADES_REPORT));
@@ -178,9 +181,10 @@ public class WorkController {
                                 @RequestParam(value = "courseToDisplay", required = false) Long courseToDisplay) {
         ReportWrapper methodReportWrapper = getData();
         Long teacherId = methodReportWrapper.getTeacher().getId();
-        CourseAssignmentSolutionWrapper wrapper = getCourses(courseToDisplay, teacherId, s -> s.getComments().isEmpty());//courseHelper.populateCoursesAssignmentsAndSolutions(teacherId, s -> s.getComments().isEmpty(), UserType.TEACHER);
+        CourseAssignmentSolutionWrapper wrapper = getCourses(courseToDisplay, teacherId, s -> s.getComments().isEmpty());
+        CourseAssignmentSolutionWrapper cachedCourses = getCourses(null, teacherId, s -> s.getComments().isEmpty());
         List<String> paths = getPaths();
-        fillModelForTeacherReports(model, methodReportWrapper.getTeacher(), wrapper, methodReportWrapper.getUser(), paths);
+        fillModelForTeacherReports(model, methodReportWrapper.getTeacher(), wrapper, methodReportWrapper.getUser(), paths, cachedCourses);
         Cache.put(userService.getLoggedUser().getId(), WorkControllerPaths.getRedirectPath(WorkControllerPaths.NO_COMMENT_REPORT));
         updateCache(teacherId);
         model.addAttribute("url", WorkControllerPaths.getUrl(WorkControllerPaths.NO_COMMENT_REPORT));
@@ -245,21 +249,24 @@ public class WorkController {
     }
 
     private void fillModelForTeacherReports(Model model, Teacher teacher, CourseAssignmentSolutionWrapper wrapper,
-                                     User user, List<String> paths) {
-        fillModelForReports(model, wrapper, user, paths);
+                                     User user, List<String> paths, CourseAssignmentSolutionWrapper cachedCourses) {
+        fillModelForReports(model, wrapper, user, paths, cachedCourses);
         model.addAttribute("teacher", teacher);
         model.addAttribute("reports", teacherReportList);
     }
 
+
     private void fillModelForStudentReports(Model model, Student student, CourseAssignmentSolutionWrapper wrapper,
-                                            User user, List<String> paths) {
-        fillModelForReports(model, wrapper, user, paths);
+                                            User user, List<String> paths, CourseAssignmentSolutionWrapper cachedCourses) {
+        fillModelForReports(model, wrapper, user, paths, cachedCourses);
         model.addAttribute("student", student);
         model.addAttribute("reports", studentReportList);
     }
 
-    private void fillModelForReports(Model model, CourseAssignmentSolutionWrapper wrapper, User user, List<String> paths) {
+    private void fillModelForReports(Model model, CourseAssignmentSolutionWrapper wrapper, User user,
+                                     List<String> paths, CourseAssignmentSolutionWrapper cachedCourses) {
         model.addAttribute("courses", wrapper.getCourses());
+        model.addAttribute("cachedCourses", cachedCourses.getCourses());
         model.addAttribute("courseAssignments", wrapper.getCourseAssignmentsMap());
         model.addAttribute("assignmentsSolutions", wrapper.getAssignmentSolutionsMap());
         model.addAttribute("user", user);
