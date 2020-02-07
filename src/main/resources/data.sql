@@ -33,7 +33,7 @@ INSERT INTO users (user_id, username, password, role, enabled, student_id, teach
     (14, 'EdmundGruszka@uwr.edu.pl', '123456', 'TEACHER', true, NULL, 3),
     (15, 'TeacherTeacher@uwr.edu.pl', '123456', 'TEACHER', true, NULL, 4);
 
-CREATE INDEX BUNDLES_IDX ON bundles (bundle, key_value, message);
+-- CREATE INDEX BUNDLES_IDX ON bundles (bundle, key_value, message);
 
 INSERT INTO courses VALUES
     (1, 5, 'Analiza matematyczna 1'),

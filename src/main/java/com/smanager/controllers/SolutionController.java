@@ -194,7 +194,7 @@ public class SolutionController {
             solutionFromDb.setFinished(solution.isFinished());
             solutionFromDb.setCreationDate(LocalDateTime.now());
 
-            if (removeFile || (file.isEmpty() && solutionFromDb.getPath() != null)) {
+            if (removeFile) {
                 storageService.delete(solutionFromDb.getPath());
                 solutionFromDb.setPath(null);
                 if (!file.isEmpty())

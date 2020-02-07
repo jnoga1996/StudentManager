@@ -55,21 +55,23 @@ public class FileUploadHelper {
         }
         String path = "";
         String fileType = "";
-        if (entry instanceof Assignment && !file.isEmpty()) {
-            path = storageService.storeAssignment(file, entry.getId());
-            fileType = FileType.ASSIGNMENT.getName();
-        } else if (entry instanceof Solution && !file.isEmpty()) {
-            path = storageService.storeSolution(file, entry.getId());
-            fileType = FileType.SOLUTION.getName();
-        }
-        FileHistory fileHistory = new FileHistory();
-        fileHistory.setFileName(file.getOriginalFilename());
-        fileHistory.setModificationDate(new Date(System.currentTimeMillis()));
-        fileHistory.setPath(path);
-        fileHistory.setReferencedId(entry.getId());
-        fileHistory.setFileType(fileType);
-        entry.setPath(path);
+        if (!file.isEmpty()) {
+            if (entry instanceof Assignment && !file.isEmpty()) {
+                path = storageService.storeAssignment(file, entry.getId());
+                fileType = FileType.ASSIGNMENT.getName();
+            } else if (entry instanceof Solution && !file.isEmpty()) {
+                path = storageService.storeSolution(file, entry.getId());
+                fileType = FileType.SOLUTION.getName();
+            }
+            FileHistory fileHistory = new FileHistory();
+            fileHistory.setFileName(file.getOriginalFilename());
+            fileHistory.setModificationDate(new Date(System.currentTimeMillis()));
+            fileHistory.setPath(path);
+            fileHistory.setReferencedId(entry.getId());
+            fileHistory.setFileType(fileType);
+            entry.setPath(path);
 
-        fileHistoryRepository.save(fileHistory);
+            fileHistoryRepository.save(fileHistory);
+        }
     }
 }

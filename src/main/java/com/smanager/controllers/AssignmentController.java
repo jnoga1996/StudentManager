@@ -227,7 +227,7 @@ public class AssignmentController {
             assignmentFromDb.setCourse(assignment.getCourse());
             assignmentFromDb.setTeacher(assignment.getTeacher());
 
-            if (removeFile || (file.isEmpty() && assignmentFromDb.getPath() != null)) {
+            if (removeFile) {
                 storageService.delete(assignmentFromDb.getPath());
                 assignmentFromDb.setPath(null);
                 if (!file.isEmpty())
