@@ -3,6 +3,7 @@ package com.smanager.controllers;
 import com.smanager.dao.models.*;
 import com.smanager.dao.repositories.*;
 import com.smanager.interfaces.IUserService;
+import com.smanager.utils.CoursePaginationHelper;
 import com.smanager.utils.PaginationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,7 +29,7 @@ public class CourseController {
     private StudentRepository studentRepository;
     private TeacherRepository teacherRepository;
     private IUserService userService;
-    private PaginationHelper<Course> paginationHelper;
+    private CoursePaginationHelper paginationHelper;
 
     private String searchValue;
 
@@ -42,23 +43,17 @@ public class CourseController {
         this.studentRepository = studentRepository;
         this.teacherRepository = teacherRepository;
         this.userService = userService;
-        paginationHelper = new PaginationHelper<>(courseRepository);
+        paginationHelper = new CoursePaginationHelper(courseRepository);
     }
 
     @GetMapping("Index")
     public String index(Model model) {
         User user = userService.getLoggedUser();
-        List<Course> courses;
+        Iterable<Course> courses;
         if (searchValue != null && !searchValue.isEmpty()) {
             courses = courseRepository.findCourseByTitleContaining(searchValue);
         } else {
-            if (user != null && user.isStudent()) {
-                courses = courseRepository.findCoursesByStudentId(user.getStudentUser().getId());
-            } else if (user != null && user.isTeacher()) {
-                courses = courseRepository.findCoursesByTeacherId(user.getTeacherUser().getId());
-            } else {
-                courses = courseRepository.findAll();
-            }
+            courses = paginationHelper.getPage(0, user);
         }
         fillModel(model, courses, user);
         this.searchValue = "";
@@ -69,7 +64,7 @@ public class CourseController {
     @GetMapping("Index/{page}")
     public String index(Model model, @PathVariable("page") int page) {
         User user = userService.getLoggedUser();
-        Page<Course> courses = paginationHelper.getPage(page);
+        Page<Course> courses = paginationHelper.getPage(page, user);
         fillModel(model, courses, user);
 
         return "course_index";

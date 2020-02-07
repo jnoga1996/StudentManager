@@ -39,10 +39,6 @@ public class SolutionPaginationHelper extends PaginationHelper<Solution> {
         return getSolutions(user, page);
     }
 
-    public List<Solution> getAll(User user) {
-        return getSolutions(user);
-    }
-
     public List<Solution> getSolutions(User user) {
         List<Solution> solutions;
         if (user.isStudent()) {

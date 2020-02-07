@@ -1,5 +1,6 @@
 package com.smanager.services;
 
+import com.smanager.Cache;
 import com.smanager.controllers.AssignmentController;
 import com.smanager.controllers.SolutionController;
 import com.smanager.dao.models.User;
@@ -29,6 +30,7 @@ public class RedirectService {
         if (id == null) {
             return getSolutionRedirectWorkUrl(user);
         }
+        Cache.putDiv(user.getId(), id);
         return getSolutionRedirectWorkUrl(user) + SUFFIX + id;
     }
 
@@ -50,6 +52,7 @@ public class RedirectService {
         if (id == null) {
             return getAssignmentRedirectWorkUrl(user);
         }
+        Cache.putDiv(user.getId(), id);
         return getAssignmentRedirectWorkUrl(user) + SUFFIX + id;
     }
 }

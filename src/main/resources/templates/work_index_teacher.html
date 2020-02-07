@@ -20,11 +20,11 @@
                     <p th:utext="${course.getTitle()}"></p>
                 </div>
                 <div class="list-group-item">
-                    <a class="col-sm-2" th:href="@{/Assignment/Create(providedCourseId=${course.getId()})}">
+                    <a class="col-sm-2" th:href="@{/Assignment/Create(providedCourseId=${course.getId()}, entryId=${course.getId()})}">
                         <th:block th:text='${T(com.smanager.Bundles).getMessage("work", "addAssignment")}'></th:block>
                     </a>
                 </div>
-                <div class="list-group">
+                <div class="list-group" th:id="${course.getId()}">
                     <th:block th:each="assignment, i : ${courseAssignments.get(course)}">
                         <div th:if="${!assignmentsSolutions.get(assignment).isEmpty()}" class="list-group-item" th:id="${course.getId()} + '' + ${assignment.getId()}">
                             <p th:utext="${assignment.getTitle()}"></p>
@@ -42,7 +42,7 @@
                             </a>
                             <div class="collapse" th:id="'solutions-container-' + ${assignment.getId()} + '-' + ${i.count}">
                                 <th:block th:each="solution : ${assignmentsSolutions.get(assignment)}">
-                                    <div class="list-group-item">
+                                    <div class="list-group-item" th:id="${course.getId() + '' + assignment.getId()}">
                                         <div th:insert="solution_fragment :: div_view(solution=${solution}, user=${user})"></div>
                                         <button class="btn btn-primary" type="button" data-toggle="collapse" th:href="'#comments-' + ${solution.getId()}"
                                                 role="button" aria-controls="'comments-' + ${solution.getId()}">

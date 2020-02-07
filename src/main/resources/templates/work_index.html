@@ -25,8 +25,8 @@
                             <p th:utext="${assignment.getTitle()}"></p>
                             <p th:utext="${assignment.getContent()}"></p>
                             <p><a th:href="${assignment.getFilename()}"><th:block th:text="${assignment.getPath()}"></th:block></a></p>
-                            <button class="btn btn-success" type="button" data-toggle="collapse" th:href="'#solutions-container-' + ${assignment.getId()} + '-' + ${i.count}"
-                                    role="button" aria-controls="'solutions-container-' + ${assignment.getId()} + '-' + ${i.count}">
+                            <button class="btn btn-success" type="button" data-toggle="collapse" th:href="'#solutions-container-' + ${course.getId()} + '' + ${assignment.getId()}"
+                                    role="button" aria-controls="'solutions-container-' + ${course.getId()} + '' + ${assignment.getId()}">
                                 <th:block th:if="${!assignment.getSolutions().isEmpty()}"
                                         th:text='${T(com.smanager.Bundles).getMessage("work", "showSolutions")}'></th:block>
                             </button>
@@ -36,7 +36,8 @@
                                              th:text='${T(com.smanager.Bundles).getMessage("work", "createAnotherSolution")}'></th:block>
                                 </button>
                             </a>
-                            <div class="collapse show" th:id="'solutions-container-' + ${assignment.getId()} + '-' + ${i.count}">
+                            <div th:class="${divId != null && divId.contains(assignment.getDivId())} ? 'collapse show' : 'collapse'"
+                                 th:id="'solutions-container-' + ${course.getId()} + '' + ${assignment.getId()}">
                                 <th:block th:each="solution : ${assignmentsSolutions.get(assignment)}">
                                     <div class="list-group-item" th:id="${course.getId()} + '' + ${assignment.getId()} + '' + ${solution.getId()}">
                                         <div th:insert="solution_fragment :: div_view(solution=${solution}, user=${user})">

@@ -65,7 +65,7 @@ public class SolutionController {
     @GetMapping("Index")
     public String index(Model model) {
         User user = userService.getLoggedUser();
-        List<Solution> solutions = paginationHelper.getAll(user);
+        Page<Solution> solutions = paginationHelper.getPage(0, user);
         fillModel(model, solutions);
         Cache.put(userService.getLoggedUser().getId(), "redirect:/Solution/Index");
 

@@ -146,4 +146,8 @@ public class Assignment implements ISaveable {
 
         return stringBuilder.toString();
     }
+
+    public String getDivId() {
+        return getCourse().getId() + "" + getId();
+    }
 }

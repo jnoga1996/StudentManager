@@ -66,11 +66,11 @@ public class AssignmentController {
 
     @GetMapping("Index")
     public String index(Model model) {
-        List<Assignment> assignments;
+        Iterable<Assignment> assignments;
         if (searchValue != null && !searchValue.isEmpty()) {
              assignments = assignmentRepository.findAssignmentByTitleContaining(searchValue);
         } else {
-            assignments = assignmentRepository.findAll();
+            assignments = paginationHelper.getPage(0);
         }
         fillModel(model, assignments);
 
@@ -124,7 +124,8 @@ public class AssignmentController {
     }
 
     @GetMapping("Create")
-    public String showForm(Model model, @RequestParam(name = "providedCourseId", required = false) Long providedCourseId) {
+    public String showForm(Model model, @RequestParam(name = "providedCourseId", required = false) Long providedCourseId,
+                           @RequestParam(name = "entryId", required = false) String entryId) {
         User user = userService.getLoggedUser();
         fillModel(model, new Assignment(), true);
         model.addAttribute("user", user);
@@ -136,6 +137,10 @@ public class AssignmentController {
         if (providedCourseId != null) {
             Course providedCourse = courseRepository.getOne(providedCourseId);
             model.addAttribute("providedCourse", providedCourse);
+        }
+
+        if (entryId != null) {
+            this.entryId = entryId;
         }
 
         return "assignment_form";
@@ -162,7 +167,7 @@ public class AssignmentController {
 
         model.addAttribute("user", user);
 
-        return redirectService.getAssignmentRedirectWorkUrl(user);
+        return redirectService.getAssignmentRedirectWorkUrlAndScrollToSelectedId(user, this.entryId);
     }
 
     @GetMapping("/Details")
