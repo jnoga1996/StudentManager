@@ -91,7 +91,7 @@
     </div>
     <div th:if="${uploadedFile != null}" class="form-group row">
         <label class="col-sm-2 col-form-label">
-            Remove file:
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "removeFile")}'></th:block>:
         </label>
         <div class="form-check">
             <input type="checkbox" name="removeFile" class="form-check-input">

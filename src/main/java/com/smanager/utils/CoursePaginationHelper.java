@@ -1,7 +1,6 @@
 package com.smanager.utils;
 
 import com.smanager.dao.models.Course;
-import com.smanager.dao.models.Solution;
 import com.smanager.dao.models.User;
 import com.smanager.dao.repositories.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +27,9 @@ public class CoursePaginationHelper extends PaginationHelper<Course> {
     }
 
     public Page<Course> getPage(int index, User user) {
-        Long count = repository.count();
-        Long availablePages = count / PAGE_SIZE;
+        List<Course> userCourses = getCourses(user);
+        int count = userCourses.size();
+        int availablePages = count / PAGE_SIZE;
         Pageable page;
         if (index > availablePages) {
             page = PageRequest.of(1, PAGE_SIZE);

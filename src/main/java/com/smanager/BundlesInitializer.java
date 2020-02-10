@@ -62,6 +62,7 @@ public class BundlesInitializer {
                 new Bundle(language, "assignment", "uploadedFiles", "Pliki"),
                 new Bundle(language, "assignment", "details", "Szczegoly"),
                 new Bundle(language, "assignment", "assignments", "Zadania"),
+                new Bundle(language, "assignment", "removeFile", "Usun zalacznik"),
 
                 new Bundle(language, "assignmentSolution", "checkSolutions", "Sprawdz rozwiazania"),
 
@@ -91,6 +92,7 @@ public class BundlesInitializer {
                 new Bundle(language, "course", "submit", "Wyslij"),
                 new Bundle(language, "course", "teacherCourses", "Kursy nauczyciela"),
                 new Bundle(language, "course", "courses", "Kursy"),
+                new Bundle(language, "course", "saveToCourse", "Zapisz na kurs"),
 
                 new Bundle(language, "file", "id", "Id"),
                 new Bundle(language, "file", "filename", "Nazwa pliku"),
@@ -121,6 +123,7 @@ public class BundlesInitializer {
                 new Bundle(language, "solution", "uploadedFiles", "Zalaczone pliki"),
                 new Bundle(language, "solution", "solutions", "Rozwiazania"),
                 new Bundle(language, "solution", "download", "Pobierz"),
+                new Bundle(language, "solution", "removeFile", "Usun zalacznik"),
 
                 new Bundle(language, "student", "id", "Id"),
                 new Bundle(language, "student", "firstName", "Imie"),
@@ -195,6 +198,7 @@ public class BundlesInitializer {
                 new Bundle(language, "assignment", "uploadedFiles", "Files"),
                 new Bundle(language, "assignment", "details", "Details"),
                 new Bundle(language, "assignment", "assignments", "Assignments"),
+                new Bundle(language, "assignment", "removeFile", "Remove file"),
 
                 new Bundle(language, "assignmentSolution", "checkSolutions", "Check solutions"),
 
@@ -224,6 +228,7 @@ public class BundlesInitializer {
                 new Bundle(language, "course", "submit", "Submit"),
                 new Bundle(language, "course", "teacherCourses", "Teacher courses"),
                 new Bundle(language, "course", "courses", "Courses"),
+                new Bundle(language, "course", "saveToCourse", "Register to course"),
 
                 new Bundle(language, "file", "id", "Id"),
                 new Bundle(language, "file", "filename", "File name"),
@@ -254,6 +259,7 @@ public class BundlesInitializer {
                 new Bundle(language, "solution", "uploadedFiles", "Uploaded files"),
                 new Bundle(language, "solution", "solutions", "Solutions"),
                 new Bundle(language, "solution", "download", "Download"),
+                new Bundle(language, "solution", "removeFile", "Remove file"),
 
                 new Bundle(language, "student", "id", "Id"),
                 new Bundle(language, "student", "firstName", "First name"),

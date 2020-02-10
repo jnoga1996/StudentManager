@@ -11,7 +11,7 @@ import java.util.List;
 public class PaginationHelper <T> {
 
     protected JpaRepository repository;
-    public final static int PAGE_SIZE = 5;
+    public final static int PAGE_SIZE = 10;
 
     public PaginationHelper(JpaRepository repository) {
         this.repository = repository;
