@@ -93,6 +93,8 @@ public class BundlesInitializer {
                 new Bundle(language, "course", "teacherCourses", "Kursy nauczyciela"),
                 new Bundle(language, "course", "courses", "Kursy"),
                 new Bundle(language, "course", "saveToCourse", "Zapisz na kurs"),
+                new Bundle(language, "course", "registerStudents", "Studenci do zapisania"),
+                new Bundle(language, "course", "unregisterStudents", "Studenci do wypisania"),
 
                 new Bundle(language, "file", "id", "Id"),
                 new Bundle(language, "file", "filename", "Nazwa pliku"),
@@ -155,7 +157,9 @@ public class BundlesInitializer {
                 new Bundle(language, "user", "login", "Login:"),
                 new Bundle(language, "user", "password", "Haslo:"),
                 new Bundle(language, "user", "retypedPassword", "Powtorz haslo:"),
-                new Bundle(language, "user", "role", "Rola:")
+                new Bundle(language, "user", "role", "Rola:"),
+
+                new Bundle(language, "button", "cancel", "Anuluj")
                 );
 
         bundleRepository.saveAll(polishBundles);
@@ -229,6 +233,8 @@ public class BundlesInitializer {
                 new Bundle(language, "course", "teacherCourses", "Teacher courses"),
                 new Bundle(language, "course", "courses", "Courses"),
                 new Bundle(language, "course", "saveToCourse", "Register to course"),
+                new Bundle(language, "course", "registerStudents", "Register students"),
+                new Bundle(language, "course", "unregisterStudents", "Unregister students"),
 
                 new Bundle(language, "file", "id", "Id"),
                 new Bundle(language, "file", "filename", "File name"),
@@ -291,7 +297,9 @@ public class BundlesInitializer {
                 new Bundle(language, "user", "login", "Login:"),
                 new Bundle(language, "user", "password", "Password:"),
                 new Bundle(language, "user", "retypedPassword", "Retyped password:"),
-                new Bundle(language, "user", "role", "Role:")
+                new Bundle(language, "user", "role", "Role:"),
+
+                new Bundle(language, "button", "cancel", "Cancel")
         );
 
         bundleRepository.saveAll(englishBundles);

@@ -87,6 +87,9 @@
             <button type="submit" class="btn btn-primary">
                 <th:block th:text='${T(com.smanager.Bundles).getMessage("assignment", "submit")}'></th:block>
             </button>
+            <button type="button" class="btn btn-primary" onclick="history.back()">
+                <th:block th:text='${T(com.smanager.Bundles).getMessage("button", "cancel")}'></th:block>
+            </button>
         </div>
     </div>
 </form>

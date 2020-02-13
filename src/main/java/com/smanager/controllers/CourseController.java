@@ -5,6 +5,9 @@ import com.smanager.dao.repositories.*;
 import com.smanager.interfaces.IUserService;
 import com.smanager.utils.CoursePaginationHelper;
 import com.smanager.utils.PaginationHelper;
+import com.smanager.wrappers.RegisterUnregisterWrapper;
+import com.smanager.wrappers.StudentRegisterWrapper;
+import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -110,13 +113,20 @@ public class CourseController {
 
     @PostMapping("/Create")
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
-    public String create(@Valid Course course, BindingResult bindingResult, Model model) {
+    public String create(@Valid Course course, BindingResult bindingResult, Model model,
+                         @RequestParam(name = "saveToCourse", required = false) boolean saveToCourse) {
         User user = userService.getLoggedUser();
         if (bindingResult.hasErrors()) {
             return "course_form";
         }
         courseRepository.save(course);
         model.addAttribute("user", user);
+        if (saveToCourse) {
+            CourseTeacherMapping mapping = new CourseTeacherMapping();
+            mapping.setTeacher(user.getTeacherUser());
+            mapping.setCourse(course);
+            registerTeacher(mapping);
+        }
 
         return INDEX_REDIRECT_STRING;
     }
@@ -152,6 +162,100 @@ public class CourseController {
 
         model.addAttribute("user", user);
 
+        return INDEX_REDIRECT_STRING;
+    }
+
+    @GetMapping("/RegisterNew")
+    public String registerStudentsToCourse(Model model, Long courseId) {
+        if (courseId == null) {
+            return INDEX_REDIRECT_STRING;
+        }
+        User user = userService.getLoggedUser();
+        Course course = courseRepository.getOne(courseId);
+        List<Student> students = studentRepository.findStudentsNotYetRegisteredForCourse(courseId);
+        List<Student> registeredStudents = studentRepository.findAllByCoursesIn(courseId);
+        List<Long> studentIdsList = new ArrayList<>();
+        List<Boolean> registeredList = new ArrayList<>();
+        List<Long> registeredStudentIdsList = new ArrayList<>();
+        List<Boolean> unregisteredList = new ArrayList<>();
+        StudentRegisterWrapper wrapper = prepareWrapper(course, students, studentIdsList, registeredList, registeredStudents, registeredStudentIdsList, unregisteredList);
+
+        model.addAttribute("user", user);
+        model.addAttribute("course", course);
+        model.addAttribute("students", students);
+        model.addAttribute("registeredStudents", registeredStudents);
+        model.addAttribute("wrapper", wrapper);
+
+        return "register_students";
+    }
+
+    private StudentRegisterWrapper prepareWrapper(Course course, List<Student> students, List<Long> studentIdsList,
+                                                  List<Boolean> registeredList, List<Student> registeredStudents,
+                                                  List<Long> registeredStudentIdsList, List<Boolean> unregisteredList) {
+        StudentRegisterWrapper wrapper = new StudentRegisterWrapper();
+        wrapper.setCourse(course);
+        for (Student student : students) {
+            studentIdsList.add(student.getId());
+            registeredList.add(Boolean.FALSE);
+        }
+        for (Student student : registeredStudents) {
+            registeredStudentIdsList.add(student.getId());
+            unregisteredList.add(Boolean.TRUE);
+        }
+        wrapper.setRegisteredList(registeredList);
+        wrapper.setStudentIdList(studentIdsList);
+        wrapper.setUnregisteredList(unregisteredList);
+        wrapper.setRegisteredStudentIdList(registeredStudentIdsList);
+
+        return wrapper;
+    }
+
+    @PostMapping("/RegisterNew")
+    public String registerStudents(@ModelAttribute("wrapper") StudentRegisterWrapper wrapper,
+                                   @RequestParam(name = "courseId") Long courseId) {
+        int index = 0;
+        if (wrapper.getStudentIdList() != null) {
+            for (Long studentId : wrapper.getStudentIdList()) {
+                Boolean shouldBeAdded;
+                try {
+                    shouldBeAdded = wrapper.getRegisteredList().get(index);
+                } catch (IndexOutOfBoundsException ex) {
+                    shouldBeAdded = false;
+                } catch (NullPointerException ex) {
+                    shouldBeAdded = false;
+                }
+                if (shouldBeAdded != null && shouldBeAdded.booleanValue()) {
+                    Student student = studentRepository.getOne(studentId);
+                    Course course = courseRepository.getOne(courseId);
+                    CourseStudentMapping mapping = new CourseStudentMapping();
+                    mapping.setCourse(course);
+                    mapping.setStudent(student);
+                    registerStudent(mapping);
+                }
+                index++;
+            }
+        }
+
+        index = 0;
+        if (wrapper.getRegisteredStudentIdList() != null) {
+            for (Long unregisteredStudent : wrapper.getRegisteredStudentIdList()) {
+                Course course = courseRepository.getOne(courseId);
+                Student student = studentRepository.getOne(unregisteredStudent);
+                Boolean shouldBeUnregistered;
+                try {
+                    shouldBeUnregistered = wrapper.getUnregisteredList().get(index);
+                } catch (IndexOutOfBoundsException ex) {
+                    shouldBeUnregistered = false;
+                } catch (NullPointerException ex) {
+                    shouldBeUnregistered = false;
+                }
+                if (course != null && student != null && shouldBeUnregistered.booleanValue()) {
+                    course.getStudents().remove(student);
+                    courseRepository.save(course);
+                }
+                index++;
+            }
+        }
         return INDEX_REDIRECT_STRING;
     }
 
@@ -214,11 +318,18 @@ public class CourseController {
     @PostMapping("/Register")
     public String registerStudentToCourse(@Valid CourseStudentMapping mapping, Model model) {
         User user = userService.getLoggedUser();
+        registerStudent(mapping);
+        model.addAttribute("user", user);
+
+        return INDEX_REDIRECT_STRING;
+    }
+
+    private void registerStudent(@Valid CourseStudentMapping mapping) {
         Course course = courseRepository.getOne(mapping.getCourse().getId());
         Student student = studentRepository.getOne(mapping.getStudent().getId());
         Set<Student> registeredStudents = course.getStudents();
 
-        if (registeredStudents.isEmpty()) {
+        if (registeredStudents == null || registeredStudents.isEmpty()) {
             registeredStudents = new HashSet<>();
         }
 
@@ -230,19 +341,23 @@ public class CourseController {
             course.setStudents(registeredStudents);
             courseRepository.save(course);
         }
-        model.addAttribute("user", user);
-
-        return INDEX_REDIRECT_STRING;
     }
 
     @PostMapping("/RegisterTeacher")
     public String registerTeacherToCourse(@Valid CourseTeacherMapping mapping, Model model) {
         User user = userService.getLoggedUser();
+        registerTeacher(mapping);
+        model.addAttribute("user", user);
+
+        return INDEX_REDIRECT_STRING;
+    }
+
+    private void registerTeacher(@Valid CourseTeacherMapping mapping) {
         Course course = courseRepository.getOne(mapping.getCourse().getId());
         Teacher teacher = teacherRepository.getOne(mapping.getTeacher().getId());
         Set<Teacher> registeredTeachers = course.getTeachers();
 
-        if (registeredTeachers.isEmpty()) {
+        if (registeredTeachers == null || registeredTeachers.isEmpty()) {
             registeredTeachers = new HashSet<>();
         }
 
@@ -254,9 +369,6 @@ public class CourseController {
             course.setTeachers(registeredTeachers);
             courseRepository.save(course);
         }
-        model.addAttribute("user", user);
-
-        return INDEX_REDIRECT_STRING;
     }
 
     @GetMapping("/RemoveFromCourse")

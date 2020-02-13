@@ -48,8 +48,11 @@
         <th>
             <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "edit")}'></th:block>
         </th>
-        <th>
+        <th th:if="${user != null && user.isAdmin()}">
             <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "delete")}'></th:block>
+        </th>
+        <th>
+            <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "registerToCourse")}'></th:block>
         </th>
     </tr>
     </thead>
@@ -61,8 +64,11 @@
             <td><a th:href="@{/Course/Edit(id=${course.getId()})}"/>
                 <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "edit")}'></th:block>
             </td>
-            <td><a th:href="@{/Course/Delete(id=${course.getId()})}"/>
+            <td th:if="${user != null && user.isAdmin()}"><a th:href="@{/Course/Delete(id=${course.getId()})}"/>
                 <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "delete")}'></th:block>
+            </td>
+            <td><a th:href="@{/Course/RegisterNew(courseId=${course.getId()})}"/>
+                <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "registerToCourse")}'></th:block>
             </td>
         </tr>
         <th:block th:each="student : ${course.getStudents()}">
