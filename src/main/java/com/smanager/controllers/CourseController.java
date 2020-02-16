@@ -241,12 +241,11 @@ public class CourseController {
                 Boolean shouldBeUnregistered;
                 try {
                     shouldBeUnregistered = wrapper.getUnregisteredList().get(index);
-                } catch (IndexOutOfBoundsException ex) {
-                    shouldBeUnregistered = false;
-                } catch (NullPointerException ex) {
+                } catch (Exception ex) {
                     shouldBeUnregistered = false;
                 }
-                if (course != null && student != null && shouldBeUnregistered.booleanValue()) {
+                if (course != null && student != null &&
+                        shouldBeUnregistered != null && shouldBeUnregistered.booleanValue()) {
                     course.getStudents().remove(student);
                     courseRepository.save(course);
                 }

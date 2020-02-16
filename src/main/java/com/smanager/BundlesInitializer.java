@@ -95,6 +95,9 @@ public class BundlesInitializer {
                 new Bundle(language, "course", "saveToCourse", "Zapisz na kurs"),
                 new Bundle(language, "course", "registerStudents", "Studenci do zapisania"),
                 new Bundle(language, "course", "unregisterStudents", "Studenci do wypisania"),
+                new Bundle(language, "course", "displayStudents1", "Wyswietl "),
+                new Bundle(language, "course", "displayStudents2", " studentow"),
+                new Bundle(language, "course", "registeredStudents", "Zapisani studenci"),
 
                 new Bundle(language, "file", "id", "Id"),
                 new Bundle(language, "file", "filename", "Nazwa pliku"),
@@ -235,6 +238,9 @@ public class BundlesInitializer {
                 new Bundle(language, "course", "saveToCourse", "Register to course"),
                 new Bundle(language, "course", "registerStudents", "Register students"),
                 new Bundle(language, "course", "unregisterStudents", "Unregister students"),
+                new Bundle(language, "course", "displayStudents1", "Display "),
+                new Bundle(language, "course", "displayStudents2", " students"),
+                new Bundle(language, "course", "registeredStudents", "Registered students"),
 
                 new Bundle(language, "file", "id", "Id"),
                 new Bundle(language, "file", "filename", "File name"),
