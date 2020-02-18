@@ -19,13 +19,17 @@
             <i class="material-icons link-icon">attachment</i>
         </a>
     </td>
-    <td>
+    <td th:if="${!solution.isFinished()}">
         <a th:href="@{/Solution/Edit(id=${solution.getId()})}"/>
         <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "edit")}'></th:block>
     </td>
-    <td>
+    <td th:if="${solution.isFinished()}">
+    </td>
+    <td th:if="${!solution.isFinished()}">
         <a th:href="@{/Solution/Delete(id=${solution.getId()})}"/>
         <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "delete")}'></th:block>
+    </td>
+    <td th:if="${solution.isFinished()}">
     </td>
     <td>
         <a th:href="@{/Comment/Index(solutionId=${solution.getId()})}">

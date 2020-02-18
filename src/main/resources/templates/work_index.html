@@ -53,7 +53,7 @@
                                             </button>
                                         </a>
 
-                                        <a th:href="@{/Solution/Edit(id=${solution.getId()}, entryId=${course.getId()} + '' + ${assignment.getId()} + '' + ${solution.getId()})}">
+                                        <a th:if="${!solution.isFinished()}" th:href="@{/Solution/Edit(id=${solution.getId()}, entryId=${course.getId()} + '' + ${assignment.getId()} + '' + ${solution.getId()})}">
                                             <button class="btn btn-primary">
                                                 <th:block th:text='${T(com.smanager.Bundles).getMessage("solution", "edit")}'></th:block>
                                             </button>

@@ -122,6 +122,7 @@
                     <th:block th:text='${T(com.smanager.Bundles).getMessage("course", "removeFromCourse")}'></th:block>
                 </td>
                 <td></td>
+                <td th:if="${user != null && user.isAdmin()}"></td>
             </tr>
         </th:block>
     </th:block>

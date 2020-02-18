@@ -10,9 +10,9 @@
 <table class="table table-striped">
     <thead class="table-dark">
         <tr>
-            <th>Course</th>
-            <th>Grades</th>
-            <th>Grade</th>
+            <th th:text='${T(com.smanager.Bundles).getMessage("course", "course")}'>Course</th>
+            <th th:text='${T(com.smanager.Bundles).getMessage("course", "grades")}'>Grades</th>
+            <th th:text='${T(com.smanager.Bundles).getMessage("course", "grade")}'>Grade</th>
         </tr>
     </thead>
     <th:block th:each="course : ${courseGrades.keySet()}">
